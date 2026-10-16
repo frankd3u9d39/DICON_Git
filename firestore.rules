@@ -1,0 +1,146 @@
+rules_version = '2';
+
+// DICON GITH APP - Phase 1 Firestore rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userDoc().role in ['admin', 'super_admin'];
+    }
+    // Phase 2: evaluators see only innovations an admin assigned to them.
+    // Assignment doc ID convention: {innovationId}_{evaluatorUid}
+    function isAssignedEvaluator(innovationId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/assignments/$(innovationId + '_' + request.auth.uid));
+    }
+    // true if none of the listed fields were changed by this write
+    function untouched(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // ---------- users ----------
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      // Self-registration is always "innovator"
+      allow create: if isOwner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role == 'innovator'
+        && request.resource.data.isActive == true;
+
+      // Owner may edit profile but never role / uid / isActive
+      allow update: if (isOwner(uid) && untouched(['role', 'uid', 'isActive', 'createdAt']))
+        || isAdmin();
+
+      allow delete: if false;
+    }
+
+    // ---------- innovations ----------
+    // status flow for users: draft -> submitted; returned -> submitted
+    // everything after "submitted" is admin-controlled.
+    match /innovations/{id} {
+      allow read: if (signedIn() && resource.data.userId == request.auth.uid)
+        || isAdmin() || isAssignedEvaluator(id);
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status in ['draft', 'submitted']
+        && (request.resource.data.status == 'draft'
+            || request.resource.data.referenceNumber.matches('^GITH-[0-9]{4}-[0-9]{6}$'));
+
+      allow update: if (signedIn()
+          && resource.data.userId == request.auth.uid
+          && resource.data.status in ['draft', 'returned']
+          && request.resource.data.userId == resource.data.userId
+          && request.resource.data.status in ['draft', 'submitted']
+          && (request.resource.data.status == 'draft'
+              || request.resource.data.referenceNumber.matches('^GITH-[0-9]{4}-[0-9]{6}$')))
+        || isAdmin();
+
+      allow delete: if (signedIn()
+          && resource.data.userId == request.auth.uid
+          && resource.data.status == 'draft')
+        || isAdmin();
+    }
+
+    // ---------- referenceNumbers ----------
+    // Doc ID = the reference number. Create-only, so a duplicate can never be written
+    // (a second create on the same ID is treated as an update and denied).
+    match /referenceNumbers/{ref} {
+      allow create: if signedIn()
+        && ref.matches('^GITH-[0-9]{4}-[0-9]{6}$')
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow update, delete: if false;
+    }
+
+    // ---------- assignments (Phase 2) ----------
+    // Admin assigns an innovation to an evaluator. Doc ID = {innovationId}_{evaluatorId}.
+    match /assignments/{id} {
+      allow read: if (signedIn() && resource.data.evaluatorId == request.auth.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ---------- assessments (Phase 2) ----------
+    // Doc ID = {innovationId}_{evaluatorId}. Innovators can never read these.
+    // An evaluator edits their own draft score sheet until they set submitted = true; then it locks.
+    match /assessments/{id} {
+      allow read: if (signedIn() && resource.data.evaluatorId == request.auth.uid) || isAdmin();
+      allow create: if signedIn()
+        && request.resource.data.evaluatorId == request.auth.uid
+        && id == request.resource.data.innovationId + '_' + request.auth.uid
+        && exists(/databases/$(database)/documents/assignments/$(id));
+      allow update: if (signedIn()
+          && resource.data.evaluatorId == request.auth.uid
+          && resource.data.submitted == false
+          && request.resource.data.evaluatorId == resource.data.evaluatorId
+          && request.resource.data.innovationId == resource.data.innovationId)
+        || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------- notifications ----------
+    match /notifications/{id} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid || isAdmin();
+      allow create: if (signedIn()
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.isRead == false
+          && request.resource.data.type in ['welcome', 'profile_incomplete', 'submission_success'])
+        || isAdmin();
+      // users may only flip isRead
+      allow update: if (signedIn()
+          && resource.data.userId == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']))
+        || isAdmin();
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // ---------- reference data (public read: needed on the registration form) ----------
+    match /categories/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /states/{id}     { allow read: if true; allow write: if isAdmin(); }
+    match /lgas/{id}       { allow read: if true; allow write: if isAdmin(); }
+
+    // ---------- settings ----------
+    match /settings/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---------- auditLogs ----------
+    match /auditLogs/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}
