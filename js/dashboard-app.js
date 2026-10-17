@@ -596,7 +596,7 @@ class InnovatorDashboard {
       <div style="font-weight:800; font-size:16px; margin-bottom:12px; color:var(--deep-forest);">
         ${this.escapeHtml(document.getElementById('wiz-title').value)}
       </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+      <div class="wizard-summary-meta">
         <div><strong>Category:</strong> ${this.escapeHtml(document.getElementById('wiz-category').value)}</div>
         <div><strong>Stage:</strong> ${this.escapeHtml(document.getElementById('wiz-stage').value)}</div>
         <div><strong>Location:</strong> ${this.escapeHtml(document.getElementById('wiz-lga').value)}, ${this.escapeHtml(document.getElementById('wiz-state').value)} State</div>

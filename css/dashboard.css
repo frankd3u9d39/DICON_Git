@@ -951,6 +951,47 @@ button, input, select, textarea {
   margin-bottom: 28px;
 }
 
+/* Admin Metrics Grid (6 Metrics) */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dashboard-grid-equal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dashboard-grid-equal > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-categories-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wizard-summary-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+  min-width: 0;
+  max-width: 100%;
+}
+
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1643,12 +1684,20 @@ button, input, select, textarea {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .dashboard-grid-2-1 {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 860px) {
+  .dashboard-grid-equal {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
   .auth-split-grid {
     grid-template-columns: 1fr;
   }
@@ -1833,6 +1882,21 @@ button, input, select, textarea {
 
   .admin-topbar-label {
     display: none !important;
+  }
+
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .admin-categories-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .wizard-summary-meta {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .form-row {
