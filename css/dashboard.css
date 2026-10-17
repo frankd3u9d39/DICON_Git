@@ -478,6 +478,9 @@ button, input, select, textarea {
   display: flex;
   min-height: 100vh;
   background-color: var(--warm-canvas);
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -648,6 +651,9 @@ button, input, select, textarea {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* Topbar */
@@ -662,12 +668,18 @@ button, input, select, textarea {
   position: sticky;
   top: 0;
   z-index: 90;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .topbar-mobile-toggle {
@@ -677,23 +689,73 @@ button, input, select, textarea {
   font-size: 20px;
   color: var(--dark-ink);
   cursor: pointer;
+  flex-shrink: 0;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.topbar-mobile-toggle:hover {
+  background: var(--surface-alt);
+}
+
+.topbar-title-wrap {
+  min-width: 0;
 }
 
 .topbar-title-wrap h1 {
   font-size: 18px;
   font-weight: 800;
   color: var(--dark-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
 }
 
 .topbar-breadcrumb {
   font-size: 12px;
   color: var(--muted-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn-topbar-action {
+  background: var(--warm-amber);
+  color: #FFFFFF;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: auto;
+  transition: var(--transition);
+}
+
+.btn-topbar-action:hover {
+  background: var(--warm-amber-dark);
+}
+
+.btn-topbar-action .btn-text-short {
+  display: none;
 }
 
 .topbar-btn {
@@ -709,6 +771,8 @@ button, input, select, textarea {
   color: var(--dark-ink);
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .topbar-btn:hover {
@@ -720,6 +784,9 @@ button, input, select, textarea {
   position: relative;
   width: 38px;
   height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  flex-shrink: 0;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -728,27 +795,72 @@ button, input, select, textarea {
   border: 1px solid var(--border);
   cursor: pointer;
   color: var(--charcoal);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.btn-icon-badge:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .badge-dot {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 7px;
+  right: 7px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--warm-amber);
+  border: 2px solid var(--surface);
+  box-sizing: content-box;
+}
+
+.topbar-avatar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  transition: var(--transition);
+}
+
+.topbar-avatar-link:hover {
+  border-color: var(--primary);
+}
+
+.topbar-avatar-link img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 /* Workspace Content */
 .dashboard-content {
   padding: 32px;
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* View Sections */
 .dashboard-view {
   display: none;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
 .dashboard-view.active {
@@ -897,6 +1009,13 @@ button, input, select, textarea {
   grid-template-columns: 65% 35%;
   gap: 24px;
   margin-bottom: 28px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dashboard-grid-2-1 > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* Standard Content Card */
@@ -905,6 +1024,8 @@ button, input, select, textarea {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .card-header-bar {
@@ -1589,7 +1710,7 @@ button, input, select, textarea {
     gap: 10px;
   }
 
-  .btn-hero-action {
+  .welcome-hero-actions .btn-hero-action {
     width: 100%;
     justify-content: center;
   }
@@ -1632,17 +1753,91 @@ button, input, select, textarea {
 }
 
 @media (max-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .dashboard-topbar {
+    padding: 0 14px;
+    height: 58px;
+    gap: 8px;
+  }
+
+  .topbar-left {
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .topbar-title-wrap {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .topbar-title-wrap h1 {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .topbar-breadcrumb {
     display: none;
   }
 
-  .topbar-title-wrap h1 {
-    font-size: 15px;
+  .topbar-right {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .btn-topbar-action {
+    padding: 6px 10px;
+    font-size: 11px;
+    gap: 4px;
+    width: auto;
+  }
+
+  .btn-topbar-action .btn-text-full {
+    display: none;
+  }
+
+  .btn-topbar-action .btn-text-short {
+    display: inline;
+  }
+
+  .btn-icon-badge {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .btn-icon-badge svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .badge-dot {
+    top: 5px;
+    right: 5px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .topbar-avatar-link {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .admin-session-badge {
+    display: none !important;
+  }
+
+  .admin-topbar-label {
+    display: none !important;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .btn-hero-primary span {
@@ -1678,5 +1873,21 @@ button, input, select, textarea {
   .review-meta-grid {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .topbar-title-wrap h1 {
+    font-size: 13px;
+    max-width: 100px;
+  }
+
+  .btn-topbar-action {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .topbar-right {
+    gap: 4px;
   }
 }
