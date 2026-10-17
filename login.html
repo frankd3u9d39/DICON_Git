@@ -97,22 +97,13 @@
         <div class="auth-footer-prompt">
           New to GITH? <a href="/register">Create an account</a>
         </div>
-
-        <!-- Convenient Quick Demo Switcher for Evaluation -->
-        <div class="demo-accounts-box">
-          <div class="demo-box-title">Quick Test Credentials</div>
-          <div class="demo-box-buttons">
-            <button type="button" class="demo-quick-btn" id="btn-demo-innovator">Innovator Portal</button>
-            <button type="button" class="demo-quick-btn" id="btn-demo-admin">Admin Workspace</button>
-          </div>
-        </div>
       </div>
     </main>
   </div>
 
   <!-- Scripts -->
   <script type="module">
-    import { authService, DEFAULT_ACCOUNTS } from './js/auth-service.js';
+    import { authService } from './js/auth-service.js';
 
     // Show/hide password
     const toggleBtn = document.getElementById('toggle-password');
@@ -121,19 +112,6 @@
       const isPassword = passwordInput.type === 'password';
       passwordInput.type = isPassword ? 'text' : 'password';
       toggleBtn.textContent = isPassword ? 'Hide' : 'Show';
-    });
-
-    // Quick demo buttons
-    document.getElementById('btn-demo-innovator').addEventListener('click', () => {
-      document.getElementById('email').value = DEFAULT_ACCOUNTS.INNOVATOR.email;
-      document.getElementById('password').value = "password";
-      document.getElementById('auth-error-banner').style.display = 'none';
-    });
-
-    document.getElementById('btn-demo-admin').addEventListener('click', () => {
-      document.getElementById('email').value = DEFAULT_ACCOUNTS.ADMIN.email;
-      document.getElementById('password').value = "DiconAdmin2026!";
-      document.getElementById('auth-error-banner').style.display = 'none';
     });
 
     // Form submission
