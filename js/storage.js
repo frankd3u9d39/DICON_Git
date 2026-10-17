@@ -4,6 +4,7 @@
  */
 
 import { INITIAL_DEMO_USER, INITIAL_DEMO_INNOVATION, INITIAL_NOTIFICATIONS } from './data.js';
+import { firebaseService } from './firebase-config.js';
 
 const STORAGE_KEYS = {
   USER: 'dicon_gith_user',
@@ -55,6 +56,10 @@ class StorageService {
       localStorage.removeItem(STORAGE_KEYS.USER);
     } else {
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+      // Sync to live Firestore if connected
+      if (user.uid) {
+        firebaseService.saveUserDoc(user.uid, user).catch(err => console.warn("Firestore sync:", err));
+      }
     }
   }
 
@@ -197,6 +202,9 @@ class StorageService {
 
     // Clear active draft
     this.clearDraft();
+
+    // Sync to live Firestore if connected
+    firebaseService.saveInnovationDoc(innovation.innovationId, innovation).catch(err => console.warn("Firestore sync:", err));
 
     // Create success notification
     this.addNotification({
