@@ -255,20 +255,26 @@ class AppController {
 
   // ---- EVENT BINDINGS ----
   bindEvents() {
-    // Desktop Viewport Toggle
-    document.getElementById('btn-toggle-viewport').onclick = () => {
-      const app = document.getElementById('app-container');
-      app.classList.toggle('wide-mode');
-    };
+    // Desktop Viewport Toggle (if present)
+    const toggleBtn = document.getElementById('btn-toggle-viewport');
+    if (toggleBtn) {
+      toggleBtn.onclick = () => {
+        const app = document.getElementById('app-container');
+        if (app) app.classList.toggle('wide-mode');
+      };
+    }
 
-    // Reset Demo Button
-    document.getElementById('btn-reload-demo').onclick = () => {
-      if (confirm("Reset application to clean pre-seeded demo data?")) {
-        storage.resetToDemo();
-        this.showToast("Demo data reloaded successfully.", "success");
-        this.navigateTo('screen-home');
-      }
-    };
+    // Reset Demo Button (if present)
+    const reloadBtn = document.getElementById('btn-reload-demo');
+    if (reloadBtn) {
+      reloadBtn.onclick = () => {
+        if (confirm("Reset application to clean pre-seeded demo data?")) {
+          storage.resetToDemo();
+          this.showToast("Demo data reloaded successfully.", "success");
+          this.navigateTo('screen-home');
+        }
+      };
+    }
 
     // Welcome screen buttons
     document.getElementById('btn-welcome-start').onclick = () => {
