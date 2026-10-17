@@ -59,9 +59,19 @@ class AdminDashboard {
     // Mobile Drawer Toggle
     const mobileBtn = document.getElementById('mobile-sidebar-toggle');
     const sidebar = document.getElementById('dashboard-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+
     if (mobileBtn && sidebar) {
       mobileBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('mobile-open');
+        const isOpen = sidebar.classList.toggle('mobile-open');
+        if (backdrop) backdrop.classList.toggle('active', isOpen);
+      });
+    }
+
+    if (backdrop && sidebar) {
+      backdrop.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+        backdrop.classList.remove('active');
       });
     }
 
@@ -158,6 +168,8 @@ class AdminDashboard {
     // Auto-close mobile sidebar
     const sidebar = document.getElementById('dashboard-sidebar');
     if (sidebar) sidebar.classList.remove('mobile-open');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (backdrop) backdrop.classList.remove('active');
 
     // Refresh metrics when overview opens
     if (targetId === 'admin-view-overview') this.renderMetricsAndOverview();

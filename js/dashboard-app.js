@@ -72,9 +72,19 @@ class InnovatorDashboard {
     // Mobile Drawer Toggle
     const mobileBtn = document.getElementById('mobile-sidebar-toggle');
     const sidebar = document.getElementById('dashboard-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+
     if (mobileBtn && sidebar) {
       mobileBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('mobile-open');
+        const isOpen = sidebar.classList.toggle('mobile-open');
+        if (backdrop) backdrop.classList.toggle('active', isOpen);
+      });
+    }
+
+    if (backdrop && sidebar) {
+      backdrop.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+        backdrop.classList.remove('active');
       });
     }
 
@@ -153,6 +163,8 @@ class InnovatorDashboard {
     // Auto-close mobile sidebar if open
     const sidebar = document.getElementById('dashboard-sidebar');
     if (sidebar) sidebar.classList.remove('mobile-open');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (backdrop) backdrop.classList.remove('active');
 
     // Trigger view-specific refreshes
     if (viewName === 'overview') this.renderOverviewStats();
@@ -699,8 +711,9 @@ class InnovatorDashboard {
     const draft = storage.getDraft();
     if (!draft || !draft.innovationName) {
       container.innerHTML = `
-        <div style="text-align:center; padding:40px; color:var(--muted-gray);">
-          <div style="font-size:36px; margin-bottom:12px;">📝</div>
+          <div style="display:flex; justify-content:center; margin-bottom:12px; color:var(--muted-gray);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </div>
           <div style="font-size:16px; font-weight:700; color:var(--dark-ink);">No active drafts saved.</div>
           <p style="font-size:13px; margin-top:4px;">When you start an innovation submission and click 'Save Draft', it will appear here.</p>
         </div>

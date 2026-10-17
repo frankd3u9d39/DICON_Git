@@ -1493,9 +1493,30 @@ button, input, select, textarea {
   border-color: var(--deep-forest);
 }
 
-/* ==========================================================================
-   RESPONSIVE DESIGN (Tablets & Mobile)
-   ========================================================================== */
+/* Sidebar Backdrop for Mobile */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 95;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
+.stat-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+  stroke: currentColor;
+}
+
 @media (max-width: 1024px) {
   .stats-grid-4 {
     grid-template-columns: repeat(2, 1fr);
@@ -1516,16 +1537,18 @@ button, input, select, textarea {
   }
 
   .auth-form-panel {
-    padding: 32px 24px;
+    padding: 32px 20px;
   }
 
   .dashboard-sidebar {
     transform: translateX(-100%);
+    width: 280px;
+    box-shadow: none;
   }
 
   .dashboard-sidebar.mobile-open {
     transform: translateX(0);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
   }
 
   .dashboard-main {
@@ -1536,8 +1559,12 @@ button, input, select, textarea {
     display: block;
   }
 
+  .dashboard-topbar {
+    padding: 0 16px;
+  }
+
   .dashboard-content {
-    padding: 20px 16px;
+    padding: 20px 14px;
   }
 
   .stats-grid-4 {
@@ -1548,12 +1575,108 @@ button, input, select, textarea {
   .welcome-hero-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    padding: 24px 20px;
+    gap: 18px;
+    padding: 22px 18px;
+  }
+
+  .welcome-hero-text h2 {
+    font-size: 22px;
+  }
+
+  .welcome-hero-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-hero-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wizard-container {
+    padding: 20px 16px;
   }
 
   .wizard-steps-header {
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding-bottom: 12px;
+    justify-content: flex-start;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wizard-steps-header::before {
+    display: none;
+  }
+
+  .wizard-step-node {
+    flex: 0 0 auto;
+    min-width: 68px;
+  }
+
+  .review-drawer {
+    max-width: 100%;
+  }
+
+  .admin-action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .btn-admin-action {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .topbar-breadcrumb {
+    display: none;
+  }
+
+  .topbar-title-wrap h1 {
+    font-size: 15px;
+  }
+
+  .btn-hero-primary span {
+    font-size: 12px;
+  }
+
+  .filter-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input-wrap, .filter-select {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .card-body {
+    padding: 16px 14px;
+  }
+
+  .card-header-bar {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .data-table th, .data-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .review-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }
