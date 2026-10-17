@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Innovator Account — DICON GITH</title>
+  <meta name="description" content="Register your innovator profile with the Grassroot Innovations Talent Hunt.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-split-grid">
+    <!-- Left Brand Editorial Panel -->
+    <aside class="auth-brand-panel">
+      <div class="auth-brand-header">
+        <a href="/" style="display:flex; align-items:center; gap:12px;">
+          <img src="assets/logo.png" alt="DICON GITH Logo" class="auth-brand-logo">
+          <div>
+            <div class="auth-brand-title">DICON GITH</div>
+            <div class="auth-brand-sub">Grassroot Innovations</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="auth-brand-content">
+        <span class="auth-brand-eyebrow">JOIN THE TALENT HUNT</span>
+        <h1 class="auth-brand-headline">Your innovation journey starts here.</h1>
+        <p class="auth-brand-desc">
+          Create your GITH account and take the first step toward sharing your ideas with the world. Join thousands of inventors, engineers, and community problem-solvers across Nigeria.
+        </p>
+
+        <div class="auth-brand-photo-card">
+          <img src="assets/students.jpg" alt="Nigerian tech innovators collaborating">
+          <div class="auth-brand-photo-caption">
+            "Built for people who see possibilities and build practical solutions."
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-brand-footer">
+        <span>&copy; 2026 DICON GITH. National Grassroots Initiative.</span>
+        <a href="/" style="color:#FFFFFF; text-decoration:underline;">Back to Main Site</a>
+      </div>
+    </aside>
+
+    <!-- Right Registration Form Panel -->
+    <main class="auth-form-panel">
+      <div class="auth-form-container">
+        <div class="auth-form-header">
+          <h2 class="auth-title">Create Account</h2>
+          <p class="auth-subtext">Register as a grassroots innovator to submit your prototypes.</p>
+        </div>
+
+        <!-- Feedback Banners -->
+        <div id="auth-error-banner" class="auth-banner-error" role="alert"></div>
+
+        <form id="register-form" novalidate>
+          <div class="form-group">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" id="fullName" class="form-control" placeholder="e.g. Amina Yusuf or Engr. David Okafor" required>
+            <div class="form-error-msg" id="name-error">Please enter your full name.</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" id="email" class="form-control" placeholder="name@domain.com" required autocomplete="email">
+              <div class="form-error-msg" id="email-error">Valid email is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input type="tel" id="phoneNumber" class="form-control" placeholder="0801 234 5678" required autocomplete="tel">
+              <div class="form-error-msg" id="phone-error">Phone number is required.</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="state" class="form-label">State of Residence</label>
+              <select id="state" class="form-control" required>
+                <option value="">Select State</option>
+              </select>
+              <div class="form-error-msg" id="state-error">Please select your state.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="lga" class="form-label">Local Govt Area (LGA)</label>
+              <input type="text" id="lga" class="form-control" placeholder="e.g. Ikeja, Zaria, Kano Municipal" required>
+              <div class="form-error-msg" id="lga-error">LGA is required.</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <div class="form-input-wrap">
+                <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password">
+              </div>
+              <div class="form-error-msg" id="password-error">Minimum 6 characters.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <div class="form-input-wrap">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password">
+              </div>
+              <div class="form-error-msg" id="confirm-error">Passwords must match.</div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:4px; margin-bottom:24px;">
+            <label class="checkbox-wrap" style="align-items:flex-start;">
+              <input type="checkbox" id="terms-consent" required style="margin-top:3px;">
+              <span style="font-size:12px; line-height:1.4;">
+                I declare that my submissions represent my original or authorized work, and I agree to the GITH Privacy Policy and Participation Terms.
+              </span>
+            </label>
+            <div class="form-error-msg" id="terms-error">You must accept the participation terms.</div>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary-action">
+            <span id="btn-text">Create Account</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="auth-footer-prompt">
+          Already have an account? <a href="/login">Sign in</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { authService } from './js/auth-service.js';
+    import { NIGERIAN_STATES } from './js/data.js';
+
+    // Populate Nigerian states
+    const stateSelect = document.getElementById('state');
+    NIGERIAN_STATES.forEach(st => {
+      const opt = document.createElement('option');
+      opt.value = st;
+      opt.textContent = st;
+      stateSelect.appendChild(opt);
+    });
+
+    const form = document.getElementById('register-form');
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phoneNumber');
+    const lgaInput = document.getElementById('lga');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const termsCheckbox = document.getElementById('terms-consent');
+    const errorBanner = document.getElementById('auth-error-banner');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+
+      let hasError = false;
+
+      // Validate Full Name
+      if (!fullNameInput.value.trim()) {
+        fullNameInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        fullNameInput.classList.remove('is-invalid');
+      }
+
+      // Validate Email
+      if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+        emailInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        emailInput.classList.remove('is-invalid');
+      }
+
+      // Validate Phone
+      if (!phoneInput.value.trim()) {
+        phoneInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        phoneInput.classList.remove('is-invalid');
+      }
+
+      // Validate State
+      if (!stateSelect.value) {
+        stateSelect.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        stateSelect.classList.remove('is-invalid');
+      }
+
+      // Validate LGA
+      if (!lgaInput.value.trim()) {
+        lgaInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        lgaInput.classList.remove('is-invalid');
+      }
+
+      // Validate Password
+      if (!passwordInput.value || passwordInput.value.length < 6) {
+        passwordInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        passwordInput.classList.remove('is-invalid');
+      }
+
+      // Validate Confirm Password
+      if (passwordInput.value !== confirmInput.value) {
+        confirmInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        confirmInput.classList.remove('is-invalid');
+      }
+
+      // Validate Terms
+      if (!termsCheckbox.checked) {
+        document.getElementById('terms-error').style.display = 'block';
+        hasError = true;
+      } else {
+        document.getElementById('terms-error').style.display = 'none';
+      }
+
+      if (hasError) return;
+
+      submitBtn.disabled = true;
+      btnText.textContent = 'Creating Account...';
+
+      try {
+        await authService.register({
+          fullName: fullNameInput.value.trim(),
+          email: emailInput.value.trim(),
+          phoneNumber: phoneInput.value.trim(),
+          password: passwordInput.value,
+          state: stateSelect.value,
+          lga: lgaInput.value.trim()
+        });
+
+        btnText.textContent = 'Account Created! Redirecting...';
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 600);
+
+      } catch (err) {
+        errorBanner.textContent = err.message || 'Registration failed. Please try again.';
+        errorBanner.style.display = 'block';
+        submitBtn.disabled = false;
+        btnText.textContent = 'Create Account';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Innovator Portal — DICON GITH</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts: DM Serif Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    /* Toast styles */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: #17211D;
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-left: 4px solid var(--primary-green);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeInToast 0.25s ease;
+    }
+    @keyframes fadeInToast {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="dashboard-layout">
+
+  <!-- ==========================================================================
+       SIDEBAR NAVIGATION
+       ========================================================================== -->
+  <aside class="dashboard-sidebar" id="dashboard-sidebar">
+    <div class="sidebar-header">
+      <a href="/" style="display:flex; align-items:center; gap:10px;">
+        <img src="assets/logo.png" alt="DICON GITH" class="sidebar-logo">
+        <div>
+          <div class="sidebar-brand-name">DICON GITH</div>
+          <span class="sidebar-brand-badge badge-innovator">Innovator</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-scroll">
+      <!-- Section: WORKSPACE -->
+      <div class="sidebar-section-label">Workspace</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item active" data-view="view-overview">
+          <a href="#overview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="view-profile">
+          <a href="#profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="view-innovations">
+          <a href="#innovations">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            <span>My Innovations</span>
+            <span class="sidebar-nav-badge" id="badge-total-innovations">1</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="view-submit">
+          <a href="#submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Submit Innovation</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="view-drafts">
+          <a href="#drafts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>Drafts</span>
+            <span class="sidebar-nav-badge" id="badge-drafts-count">0</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: ACTIVITY -->
+      <div class="sidebar-section-label">Activity</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item" data-view="view-tracking">
+          <a href="#tracking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>Application Tracking</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="view-notifications">
+          <a href="#notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span>Notifications</span>
+            <span class="sidebar-nav-badge" id="badge-notif-count" style="background:var(--warm-amber); color:#fff;">1</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: ACCOUNT -->
+      <div class="sidebar-section-label">Account</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item" data-view="view-settings">
+          <a href="#settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="#" id="sidebar-logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- User Profile Footer -->
+    <div class="sidebar-user-footer">
+      <img src="assets/innovator_main.jpg" alt="User avatar" class="sidebar-user-avatar" id="sidebar-user-avatar">
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebar-user-name">Engr. Aminu Bello</div>
+        <div class="sidebar-user-role" id="sidebar-user-state">Kaduna State</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="dashboard-main">
+    <!-- Top Navigation Bar -->
+    <header class="dashboard-topbar">
+      <div class="topbar-left">
+        <button class="topbar-mobile-toggle" id="mobile-sidebar-toggle" aria-label="Toggle navigation menu">☰</button>
+        <div class="topbar-title-wrap">
+          <div class="topbar-breadcrumb">DICON GITH / Innovator Portal</div>
+          <h1 id="topbar-current-view">Workspace Overview</h1>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <button class="btn-hero-action btn-hero-primary" id="btn-quick-submit" style="padding:8px 14px; font-size:12px;">
+          <span>+ Submit Innovation</span>
+        </button>
+
+        <a href="#notifications" class="btn-icon-badge" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="badge-dot" id="topbar-notif-dot"></span>
+        </a>
+
+        <a href="#profile" style="display:flex; align-items:center; gap:8px;">
+          <img src="assets/innovator_main.jpg" alt="User Avatar" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid var(--border);" id="topbar-user-avatar">
+        </a>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="dashboard-content">
+
+      <!-- ====================================================================
+           VIEW 1: OVERVIEW
+           ==================================================================== -->
+      <section class="dashboard-view active" id="view-overview">
+        <!-- Welcome Hero -->
+        <div class="welcome-hero-card">
+          <div class="welcome-hero-text">
+            <h2 id="welcome-user-heading">Welcome back, Innovator</h2>
+            <p>
+              Manage your innovations and follow your journey with GITH. Your working prototypes are bringing practical local solutions to national attention.
+            </p>
+          </div>
+          <div class="welcome-hero-actions">
+            <button class="btn-hero-action btn-hero-primary" onclick="window.location.hash='#submit'">
+              Submit Innovation
+            </button>
+            <button class="btn-hero-action btn-hero-secondary" onclick="window.location.hash='#tracking'">
+              View Applications
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Statistics (4 Cards) -->
+        <div class="stats-grid-4">
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-forest">💡</div>
+            <div class="stat-details">
+              <div class="stat-value" id="stat-total">1</div>
+              <div class="stat-label">Total Innovations</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-blue">📋</div>
+            <div class="stat-details">
+              <div class="stat-value" id="stat-submitted">1</div>
+              <div class="stat-label">Submitted</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-amber">⏳</div>
+            <div class="stat-details">
+              <div class="stat-value" id="stat-review">1</div>
+              <div class="stat-label">Under Review</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-purple">📝</div>
+            <div class="stat-details">
+              <div class="stat-value" id="stat-drafts">0</div>
+              <div class="stat-label">Drafts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Column Section: Recent Innovations & Profile Completion -->
+        <div class="dashboard-grid-2-1">
+          <!-- Recent Innovations Card -->
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-header-title">Recent Innovations</div>
+              <a href="#innovations" class="card-header-action">View All</a>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Innovation Name</th>
+                    <th>Category</th>
+                    <th>Reference</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-innovations-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Profile Completion & Activity -->
+          <div>
+            <!-- Profile Completion Card -->
+            <div class="content-card" style="margin-bottom:24px;">
+              <div class="card-header-bar">
+                <div class="card-header-title">Profile Completion</div>
+                <a href="#profile" class="card-header-action">Edit Profile</a>
+              </div>
+              <div class="card-body">
+                <div class="profile-meter-box">
+                  <div class="meter-header">
+                    <span>Readiness Meter</span>
+                    <span id="profile-percent-text">85%</span>
+                  </div>
+                  <div class="meter-bar-track">
+                    <div class="meter-bar-fill" id="profile-meter-fill" style="width: 85%;"></div>
+                  </div>
+                </div>
+                <div class="missing-fields-notice" id="profile-missing-notice">
+                  Complete your skills and institutional background to strengthen your innovator profile.
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity Card -->
+            <div class="content-card">
+              <div class="card-header-bar">
+                <div class="card-header-title">Recent Activity</div>
+              </div>
+              <div class="card-body">
+                <ul class="activity-list" id="overview-activity-list">
+                  <!-- Populated by JS -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 2: MY PROFILE
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-profile">
+        <div class="content-card" style="max-width:800px; margin:0 auto;">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Innovator Profile</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Keep your personal, technical, and institutional background up to date.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <form id="profile-edit-form">
+              <div style="display:flex; align-items:center; gap:20px; margin-bottom:24px;">
+                <img src="assets/innovator_main.jpg" alt="Profile photo" id="profile-photo-preview" style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid var(--border);">
+                <div>
+                  <div style="font-size:14px; font-weight:700;">Profile Photograph</div>
+                  <div style="font-size:12px; color:var(--muted-gray); margin-bottom:8px;">Documentary, professional photo recommended.</div>
+                  <input type="text" id="profile-photo-url" class="form-control" style="font-size:12px; padding:6px 10px;" placeholder="Photo URL or assets path">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" id="prof-fullName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" id="prof-email" class="form-control" disabled style="background:#F3F4F6; cursor:not-allowed;">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" id="prof-phone" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Occupation / Role</label>
+                  <input type="text" id="prof-occupation" class="form-control" placeholder="e.g. Mechanical Engineer, Student">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">State</label>
+                  <select id="prof-state" class="form-control">
+                    <option value="">Select State</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">LGA</label>
+                  <input type="text" id="prof-lga" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Community / Town</label>
+                  <input type="text" id="prof-community" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Institution / Organization</label>
+                  <input type="text" id="prof-institution" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Biography & Technical Background</label>
+                <textarea id="prof-bio" class="form-control" rows="3" placeholder="Tell us about your background, previous projects, and what problems you are driven to solve..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Core Skills (Select all that apply)</label>
+                <div id="prof-skills-container" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;"></div>
+              </div>
+
+              <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:28px;">
+                <button type="submit" class="btn-primary-action" style="width:auto; padding:10px 24px;">
+                  Save Profile Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 3: MY INNOVATIONS
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-innovations">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">My Registered Innovations</div>
+              <div style="font-size:12px; color:var(--muted-gray);">All applications submitted under your GITH profile.</div>
+            </div>
+            <button class="btn-hero-action btn-hero-primary" onclick="window.location.hash='#submit'" style="padding:6px 12px; font-size:12px;">
+              + New Innovation
+            </button>
+          </div>
+
+          <div class="card-body" style="padding-bottom:12px;">
+            <div class="filter-search-row">
+              <div class="search-input-wrap">
+                <input type="text" id="innovations-search" class="form-control" placeholder="Search by name or reference number...">
+              </div>
+              <select id="innovations-filter-category" class="filter-select">
+                <option value="all">All Categories</option>
+              </select>
+              <select id="innovations-filter-status" class="filter-select">
+                <option value="all">All Statuses</option>
+                <option value="submitted">Submitted</option>
+                <option value="screening">Screening</option>
+                <option value="verification">Verification</option>
+                <option value="assessment">Assessment</option>
+                <option value="shortlisted">Shortlisted</option>
+                <option value="selected">Selected</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Innovation Title</th>
+                  <th>Category</th>
+                  <th>Dev Stage</th>
+                  <th>Submission Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="innovations-full-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 4: SUBMIT INNOVATION (6-STEP WIZARD)
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-submit">
+        <div class="wizard-container">
+          <!-- Wizard Steps Header -->
+          <div class="wizard-steps-header">
+            <div class="wizard-step-node active" data-step="1">
+              <div class="step-circle">1</div>
+              <div class="step-node-label">Basic Info</div>
+            </div>
+            <div class="wizard-step-node" data-step="2">
+              <div class="step-circle">2</div>
+              <div class="step-node-label">Problem</div>
+            </div>
+            <div class="wizard-step-node" data-step="3">
+              <div class="step-circle">3</div>
+              <div class="step-node-label">Solution</div>
+            </div>
+            <div class="wizard-step-node" data-step="4">
+              <div class="step-circle">4</div>
+              <div class="step-node-label">Materials</div>
+            </div>
+            <div class="wizard-step-node" data-step="5">
+              <div class="step-circle">5</div>
+              <div class="step-node-label">IP Status</div>
+            </div>
+            <div class="wizard-step-node" data-step="6">
+              <div class="step-circle">6</div>
+              <div class="step-node-label">Review</div>
+            </div>
+          </div>
+
+          <form id="submission-wizard-form">
+            <!-- Step 1: Basic Info -->
+            <div class="wizard-pane active" data-pane="1">
+              <h2 class="wizard-pane-title">Step 1 — Basic Information</h2>
+              <p class="wizard-pane-desc">Identify your innovation, its primary domain, and development readiness.</p>
+
+              <div class="form-group">
+                <label class="form-label">Innovation Name / Project Title *</label>
+                <input type="text" id="wiz-title" class="form-control" placeholder="e.g. Automated Cassava Peeling & Washing Machine" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Category *</label>
+                  <select id="wiz-category" class="form-control" required>
+                    <option value="">Select Category</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Development Stage *</label>
+                  <select id="wiz-stage" class="form-control" required>
+                    <option value="">Select Stage</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">State Where Built / Tested *</label>
+                  <select id="wiz-state" class="form-control" required>
+                    <option value="">Select State</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Local Government Area (LGA) *</label>
+                  <input type="text" id="wiz-lga" class="form-control" placeholder="e.g. Oshimili South" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Team / Organization Name (Optional)</label>
+                <input type="text" id="wiz-team" class="form-control" placeholder="Leave blank if individual inventor">
+              </div>
+            </div>
+
+            <!-- Step 2: Problem -->
+            <div class="wizard-pane" data-pane="2">
+              <h2 class="wizard-pane-title">Step 2 — Problem Being Solved</h2>
+              <p class="wizard-pane-desc">Explain the everyday grassroot challenge your project tackles.</p>
+
+              <div class="form-group">
+                <label class="form-label">What specific problem does this innovation address? *</label>
+                <textarea id="wiz-problem" class="form-control" rows="4" placeholder="Describe the local challenge in detail..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Target Users / Beneficiaries *</label>
+                <input type="text" id="wiz-target-users" class="form-control" placeholder="e.g. Smallholder grain farmers, rural health clinics" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Why does solving this problem matter nationally? *</label>
+                <textarea id="wiz-importance" class="form-control" rows="3" placeholder="Impact on food security, import substitution, energy access, etc." required></textarea>
+              </div>
+            </div>
+
+            <!-- Step 3: Solution -->
+            <div class="wizard-pane" data-pane="3">
+              <h2 class="wizard-pane-title">Step 3 — Proposed Solution</h2>
+              <p class="wizard-pane-desc">Detail how your invention works and its practical advantages.</p>
+
+              <div class="form-group">
+                <label class="form-label">Solution Description *</label>
+                <textarea id="wiz-solution" class="form-control" rows="4" placeholder="Describe your product, device, or digital solution..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">How does it work technically? *</label>
+                <textarea id="wiz-how-it-works" class="form-control" rows="3" placeholder="Explain the mechanical, electrical, or software workflow..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">What makes your approach unique compared to existing options? *</label>
+                <textarea id="wiz-uniqueness" class="form-control" rows="3" placeholder="Lower cost, locally sourced components, higher durability, etc." required></textarea>
+              </div>
+            </div>
+
+            <!-- Step 4: Supporting Materials -->
+            <div class="wizard-pane" data-pane="4">
+              <h2 class="wizard-pane-title">Step 4 — Supporting Materials</h2>
+              <p class="wizard-pane-desc">Upload prototype photography, documentation, or video demonstrations.</p>
+
+              <div class="form-group">
+                <label class="form-label">Prototype Photography</label>
+                <div class="file-upload-zone" id="zone-photo">
+                  <div class="upload-icon">📷</div>
+                  <div class="upload-title">Drop prototype photos here or click to select</div>
+                  <div class="upload-hint">PNG, JPG up to 10MB. Working images greatly strengthen review.</div>
+                  <input type="file" id="file-photo" accept="image/*" style="display:none;">
+                </div>
+                <div id="file-photo-status" style="font-size:12px; color:var(--primary-green); margin-top:6px; font-weight:600;"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Technical Specification / CAD / PDF Document</label>
+                <div class="file-upload-zone" id="zone-doc">
+                  <div class="upload-icon">📄</div>
+                  <div class="upload-title">Upload technical documentation or schematics</div>
+                  <div class="upload-hint">PDF or Word document up to 15MB.</div>
+                  <input type="file" id="file-doc" accept=".pdf,.doc,.docx" style="display:none;">
+                </div>
+                <div id="file-doc-status" style="font-size:12px; color:var(--primary-green); margin-top:6px; font-weight:600;"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Video Demonstration Link (YouTube, Google Drive, or Loom)</label>
+                <input type="url" id="wiz-video" class="form-control" placeholder="https://youtube.com/watch?v=...">
+              </div>
+            </div>
+
+            <!-- Step 5: Intellectual Property -->
+            <div class="wizard-pane" data-pane="5">
+              <h2 class="wizard-pane-title">Step 5 — Intellectual Property (IP)</h2>
+              <p class="wizard-pane-desc">Help us understand whether you have filed patents or need IP protection assistance.</p>
+
+              <div class="form-group">
+                <label class="form-label">Current IP Protection Status *</label>
+                <select id="wiz-ip-status" class="form-control" required>
+                  <option value="Not Yet">Not Yet Registered</option>
+                  <option value="Patent">Patent Granted / Pending</option>
+                  <option value="Copyright">Copyright</option>
+                  <option value="Industrial Design">Industrial Design</option>
+                  <option value="Trademark">Trademark</option>
+                  <option value="Not Applicable">Not Applicable</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-top:20px;">
+                <label class="checkbox-wrap">
+                  <input type="checkbox" id="wiz-ip-support" checked>
+                  <span style="font-size:13px; font-weight:600;">
+                    I require DICON GITH assistance with patent filing, IP drafting, and legal protection.
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 6: Review & Declaration -->
+            <div class="wizard-pane" data-pane="6">
+              <h2 class="wizard-pane-title">Step 6 — Review & Declaration</h2>
+              <p class="wizard-pane-desc">Carefully review your application details before submitting to the national review board.</p>
+
+              <div id="wizard-summary-box" style="background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; font-size:13px; margin-bottom:24px;">
+                <!-- Summary generated by JS -->
+              </div>
+
+              <div class="form-group" style="margin-bottom:24px;">
+                <label class="checkbox-wrap" style="align-items:flex-start;">
+                  <input type="checkbox" id="wiz-declaration" required style="margin-top:3px;">
+                  <span style="font-size:12px; line-height:1.5;">
+                    I hereby solemnly declare that all statements made in this submission are accurate and that the innovation represents original or authorized work. I understand that false declarations disqualify the submission.
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Wizard Navigation Footer -->
+            <div class="wizard-nav-footer">
+              <button type="button" class="btn-hero-action btn-hero-secondary" id="wiz-btn-prev" style="color:var(--dark-ink); border-color:var(--border);" disabled>
+                Back
+              </button>
+
+              <div style="display:flex; gap:12px;">
+                <button type="button" class="btn-hero-action btn-hero-secondary" id="wiz-btn-draft" style="color:var(--dark-ink); border-color:var(--border);">
+                  Save Draft
+                </button>
+                <button type="button" class="btn-hero-action btn-hero-primary" id="wiz-btn-next">
+                  Continue
+                </button>
+                <button type="submit" class="btn-hero-action btn-hero-primary" id="wiz-btn-submit" style="display:none; background:var(--primary-green);">
+                  Submit Innovation
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 5: DRAFTS
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-drafts">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Saved Application Drafts</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Unsubmitted applications saved locally or in the cloud.</div>
+            </div>
+          </div>
+          <div class="card-body" id="drafts-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 6: APPLICATION TRACKING
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-tracking">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Application Status Tracking</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Follow your submission through the 9 official GITH technical stages.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom:20px;">
+              <label class="form-label">Select Application to Track</label>
+              <select id="tracking-app-selector" class="form-control" style="max-width:400px;"></select>
+            </div>
+
+            <div class="tracking-pipeline" id="tracking-pipeline-container">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 7: NOTIFICATIONS
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-notifications">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div class="card-header-title">Notifications</div>
+            <button class="card-header-action" id="btn-mark-all-read" style="background:none; border:none;">Mark all as read</button>
+          </div>
+          <div class="card-body" id="notifications-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 8: SETTINGS
+           ==================================================================== -->
+      <section class="dashboard-view" id="view-settings">
+        <div class="content-card" style="max-width:700px; margin:0 auto;">
+          <div class="card-header-bar">
+            <div class="card-header-title">Account Preferences & Security</div>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom:24px;">
+              <h3 style="font-size:15px; font-weight:700; margin-bottom:12px;">Notification Settings</h3>
+              <label class="checkbox-wrap" style="margin-bottom:10px;">
+                <input type="checkbox" checked>
+                <span>Email alerts when application review status updates</span>
+              </label>
+              <label class="checkbox-wrap">
+                <input type="checkbox" checked>
+                <span>National talent hunt announcements and workshops</span>
+              </label>
+            </div>
+
+            <div style="padding-top:20px; border-top:1px solid var(--border); margin-bottom:24px;">
+              <h3 style="font-size:15px; font-weight:700; margin-bottom:12px;">Security & Password</h3>
+              <p style="font-size:13px; color:var(--muted-gray); margin-bottom:14px;">Password updates can be requested through password recovery.</p>
+              <a href="/forgot-password" class="btn-hero-action btn-hero-secondary" style="color:var(--dark-ink); border-color:var(--border); display:inline-block;">
+                Request Password Reset
+              </a>
+            </div>
+
+            <div style="padding-top:20px; border-top:1px solid var(--border);">
+              <h3 style="font-size:15px; font-weight:700; color:var(--status-rejected); margin-bottom:8px;">Sign Out</h3>
+              <button type="button" class="btn-hero-action" id="btn-settings-signout" style="background:var(--status-rejected); color:#FFFFFF; border:none;">
+                Sign Out of GITH Portal
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Main Innovator Dashboard Module -->
+  <script type="module" src="js/dashboard-app.js"></script>
+</body>
+</html>

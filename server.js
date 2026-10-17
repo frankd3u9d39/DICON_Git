@@ -25,6 +25,18 @@ const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
+  } else if (reqPath === '/login') {
+    reqPath = '/login.html';
+  } else if (reqPath === '/register') {
+    reqPath = '/register.html';
+  } else if (reqPath === '/forgot-password') {
+    reqPath = '/forgot-password.html';
+  } else if (reqPath === '/dashboard' || reqPath.startsWith('/dashboard/')) {
+    reqPath = '/dashboard.html';
+  } else if (reqPath === '/admin' || reqPath.startsWith('/admin/')) {
+    reqPath = '/admin.html';
+  } else if (reqPath === '/app') {
+    reqPath = '/app.html';
   }
 
   const filePath = path.join(PUBLIC_DIR, reqPath);

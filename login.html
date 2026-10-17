@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — DICON GITH</title>
+  <meta name="description" content="Sign in to your DICON GITH innovator or administrative portal.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts: DM Serif Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-split-grid">
+    <!-- Left Brand Editorial Panel -->
+    <aside class="auth-brand-panel">
+      <div class="auth-brand-header">
+        <a href="/" style="display:flex; align-items:center; gap:12px;">
+          <img src="assets/logo.png" alt="DICON GITH Logo" class="auth-brand-logo">
+          <div>
+            <div class="auth-brand-title">DICON GITH</div>
+            <div class="auth-brand-sub">Grassroot Innovations</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="auth-brand-content">
+        <span class="auth-brand-eyebrow">INNOVATOR ACCESS</span>
+        <h1 class="auth-brand-headline">Welcome back.</h1>
+        <p class="auth-brand-desc">
+          Continue your journey with the Grassroot Innovations Talent Hunt. Track your submissions, refine your prototype documentation, and connect with national development opportunities.
+        </p>
+
+        <div class="auth-brand-photo-card">
+          <img src="assets/innovator_main.jpg" alt="Nigerian innovator in technology lab">
+          <div class="auth-brand-photo-caption">
+            "Every working prototype began as a spark in a local community."
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-brand-footer">
+        <span>&copy; 2026 DICON GITH. Federal Republic of Nigeria.</span>
+        <a href="/" style="color:#FFFFFF; text-decoration:underline;">Back to Main Site</a>
+      </div>
+    </aside>
+
+    <!-- Right Login Form Panel -->
+    <main class="auth-form-panel">
+      <div class="auth-form-container">
+        <div class="auth-form-header">
+          <h2 class="auth-title">Sign In</h2>
+          <p class="auth-subtext">Enter your credentials to access your GITH portal.</p>
+        </div>
+
+        <!-- Feedback Banners -->
+        <div id="auth-error-banner" class="auth-banner-error" role="alert"></div>
+        <div id="auth-success-banner" class="auth-banner-success" role="alert"></div>
+
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <div class="form-input-wrap">
+              <input type="email" id="email" class="form-control" placeholder="name@domain.com" required autocomplete="email">
+            </div>
+            <div class="form-error-msg" id="email-error">Please enter a valid email address.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="form-input-wrap">
+              <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">Show</button>
+            </div>
+            <div class="form-error-msg" id="password-error">Password is required.</div>
+          </div>
+
+          <div class="form-extra-row">
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="remember-me" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary-action">
+            <span id="btn-text">Sign In</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="auth-footer-prompt">
+          New to GITH? <a href="/register">Create an account</a>
+        </div>
+
+        <!-- Convenient Quick Demo Switcher for Evaluation -->
+        <div class="demo-accounts-box">
+          <div class="demo-box-title">Quick Test Credentials</div>
+          <div class="demo-box-buttons">
+            <button type="button" class="demo-quick-btn" id="btn-demo-innovator">Innovator Portal</button>
+            <button type="button" class="demo-quick-btn" id="btn-demo-admin">Admin Workspace</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { authService, DEFAULT_ACCOUNTS } from './js/auth-service.js';
+
+    // Show/hide password
+    const toggleBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      toggleBtn.textContent = isPassword ? 'Hide' : 'Show';
+    });
+
+    // Quick demo buttons
+    document.getElementById('btn-demo-innovator').addEventListener('click', () => {
+      document.getElementById('email').value = DEFAULT_ACCOUNTS.INNOVATOR.email;
+      document.getElementById('password').value = "password";
+      document.getElementById('auth-error-banner').style.display = 'none';
+    });
+
+    document.getElementById('btn-demo-admin').addEventListener('click', () => {
+      document.getElementById('email').value = DEFAULT_ACCOUNTS.ADMIN.email;
+      document.getElementById('password').value = "DiconAdmin2026!";
+      document.getElementById('auth-error-banner').style.display = 'none';
+    });
+
+    // Form submission
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const errorBanner = document.getElementById('auth-error-banner');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const remember = document.getElementById('remember-me').checked;
+
+      // Basic validation
+      let hasError = false;
+      if (!email || !email.includes('@')) {
+        emailInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        emailInput.classList.remove('is-invalid');
+      }
+
+      if (!password) {
+        passwordInput.classList.add('is-invalid');
+        hasError = true;
+      } else {
+        passwordInput.classList.remove('is-invalid');
+      }
+
+      if (hasError) return;
+
+      // Loading state
+      submitBtn.disabled = true;
+      btnText.textContent = 'Verifying...';
+
+      try {
+        const result = await authService.login(email, password, remember);
+        btnText.textContent = 'Success! Redirecting...';
+
+        // Check URL redirect param if any
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectParam = urlParams.get('redirect');
+
+        setTimeout(() => {
+          if (redirectParam && !redirectParam.includes('login')) {
+            window.location.href = redirectParam;
+          } else if (result.role === 'admin' || result.role === 'super_admin') {
+            window.location.href = '/admin';
+          } else {
+            window.location.href = '/dashboard';
+          }
+        }, 500);
+
+      } catch (err) {
+        errorBanner.textContent = err.message || 'Authentication failed. Please check your credentials.';
+        errorBanner.style.display = 'block';
+        submitBtn.disabled = false;
+        btnText.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

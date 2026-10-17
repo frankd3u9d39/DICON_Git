@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Workspace — DICON GITH</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-layout">
+
+  <!-- ==========================================================================
+       ADMIN SIDEBAR NAVIGATION
+       ========================================================================== -->
+  <aside class="dashboard-sidebar" id="dashboard-sidebar">
+    <div class="sidebar-header">
+      <a href="/admin" style="display:flex; align-items:center; gap:10px;">
+        <img src="assets/logo.png" alt="DICON GITH" class="sidebar-logo">
+        <div>
+          <div class="sidebar-brand-name">DICON GITH</div>
+          <span class="sidebar-brand-badge badge-admin">Admin Workspace</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-scroll">
+      <!-- Section: OVERVIEW -->
+      <div class="sidebar-section-label">Overview</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item active" data-view="admin-view-overview">
+          <a href="#admin-overview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Dashboard Overview</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: APPLICATIONS -->
+      <div class="sidebar-section-label">Applications Queue</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="all">
+          <a href="#admin-applications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>All Innovations</span>
+            <span class="sidebar-nav-badge" id="admin-badge-all">0</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="submitted">
+          <a href="#admin-new">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span>New Submissions</span>
+            <span class="sidebar-nav-badge" id="admin-badge-new" style="background:var(--status-submitted); color:#fff;">0</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="screening">
+          <a href="#admin-screening">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Screening Queue</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="verification">
+          <a href="#admin-verification">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Verification Queue</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="shortlisted">
+          <a href="#admin-shortlisted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Shortlisted</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-applications" data-filter="selected">
+          <a href="#admin-selected">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>National Selection</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: PEOPLE -->
+      <div class="sidebar-section-label">People</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item" data-view="admin-view-innovators">
+          <a href="#admin-innovators">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>Registered Innovators</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: REPORTS -->
+      <div class="sidebar-section-label">Reports & System</div>
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item" data-view="admin-view-analytics">
+          <a href="#admin-analytics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>Analytics & Distribution</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-categories">
+          <a href="#admin-categories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Category Taxonomy</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-audit">
+          <a href="#admin-audit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Audit Trail</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a href="#" id="admin-logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Admin User Footer -->
+    <div class="sidebar-user-footer">
+      <img src="assets/logo.png" alt="Admin" class="sidebar-user-avatar" id="admin-avatar">
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="admin-user-name">Col. M. A. Danjuma</div>
+        <div class="sidebar-user-role" id="admin-user-role">Super Admin • DICON R&D</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MAIN CONTENT WORKSPACE
+       ========================================================================== -->
+  <main class="dashboard-main">
+    <!-- Topbar -->
+    <header class="dashboard-topbar">
+      <div class="topbar-left">
+        <button class="topbar-mobile-toggle" id="mobile-sidebar-toggle" aria-label="Toggle navigation menu">☰</button>
+        <div class="topbar-title-wrap">
+          <div class="topbar-breadcrumb">DICON GITH / Administration</div>
+          <h1 id="admin-topbar-title">GITH Administration</h1>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <a href="/dashboard" class="topbar-btn" title="View Innovator Perspective">
+          <span>Switch to Innovator View</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+
+        <div style="font-size:12px; font-weight:700; color:var(--deep-forest); background:var(--soft-pale-green); padding:6px 12px; border-radius:var(--radius-sm);">
+          Active Session: <span id="admin-session-display">DICON Headquarters</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="dashboard-content">
+
+      <!-- ====================================================================
+           VIEW 1: ADMIN OVERVIEW
+           ==================================================================== -->
+      <section class="dashboard-view active" id="admin-view-overview">
+        <!-- Admin Welcome Card -->
+        <div class="welcome-hero-card" style="background:linear-gradient(135deg, #0A2F20 0%, #116B45 100%);">
+          <div class="welcome-hero-text">
+            <h2>GITH Administration</h2>
+            <p>
+              Monitor national grassroots submissions, manage pipeline technical evaluation, and oversee innovator discovery across all 36 States and the FCT.
+            </p>
+          </div>
+          <div class="welcome-hero-actions">
+            <button class="btn-hero-action btn-hero-primary" onclick="window.location.hash='#admin-applications'">
+              Review Applications
+            </button>
+            <button class="btn-hero-action btn-hero-secondary" onclick="window.location.hash='#admin-analytics'">
+              View Distribution
+            </button>
+          </div>
+        </div>
+
+        <!-- Real Metrics Grid (6 Metrics) -->
+        <div class="stats-grid-4" style="grid-template-columns: repeat(3, 1fr); margin-bottom:24px;">
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-forest">👥</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-innovators">0</div>
+              <div class="stat-label">Registered Innovators</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-blue">💡</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-total-innos">0</div>
+              <div class="stat-label">Total Innovations</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-amber">📬</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-new-innos">0</div>
+              <div class="stat-label">New Submissions</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap icon-purple">🔬</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-in-review">0</div>
+              <div class="stat-label">In Review (Screen/Verify/Assess)</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background:#CCFBF1; color:#0F766E;">⭐</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-shortlisted">0</div>
+              <div class="stat-label">Shortlisted Candidates</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap" style="background:#DCFCE7; color:#15803D;">🏆</div>
+            <div class="stat-details">
+              <div class="stat-value" id="admin-stat-selected">0</div>
+              <div class="stat-label">National Selected Innovators</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Submissions for Review -->
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Incoming Submissions Awaiting Technical Review</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Click 'Review Application' to examine schematics and execute stage transitions.</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Ref Number</th>
+                  <th>Innovation Title</th>
+                  <th>Innovator</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Review</th>
+                </tr>
+              </thead>
+              <tbody id="admin-overview-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 2: APPLICATION MANAGEMENT & QUEUES
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-applications">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title" id="admin-apps-card-title">National Application Registry</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Comprehensive directory of all submitted grassroots projects.</div>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding-bottom:12px;">
+            <div class="filter-search-row">
+              <div class="search-input-wrap">
+                <input type="text" id="admin-apps-search" class="form-control" placeholder="Search by reference, innovation title, innovator, or state...">
+              </div>
+              <select id="admin-apps-cat-filter" class="filter-select">
+                <option value="all">All Categories</option>
+              </select>
+              <select id="admin-apps-state-filter" class="filter-select">
+                <option value="all">All States</option>
+              </select>
+              <select id="admin-apps-status-filter" class="filter-select">
+                <option value="all">All Statuses</option>
+                <option value="submitted">Submitted</option>
+                <option value="screening">Screening</option>
+                <option value="verification">Verification</option>
+                <option value="assessment">Assessment</option>
+                <option value="shortlisted">Shortlisted</option>
+                <option value="selected">Selected</option>
+                <option value="returned">Returned</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Ref Number</th>
+                  <th>Innovation Title</th>
+                  <th>Innovator</th>
+                  <th>Category</th>
+                  <th>State</th>
+                  <th>Stage</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-apps-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 3: INNOVATORS DIRECTORY
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-innovators">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Registered Innovators Roster</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Talent pool verified across 36 states and the Federal Capital Territory.</div>
+            </div>
+          </div>
+
+          <div class="card-body" style="padding-bottom:12px;">
+            <div class="search-input-wrap" style="max-width:380px;">
+              <input type="text" id="admin-innovators-search" class="form-control" placeholder="Search by name, state, or email...">
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Innovator Name</th>
+                  <th>Contact Email</th>
+                  <th>State & LGA</th>
+                  <th>Occupation</th>
+                  <th>Readiness</th>
+                  <th>Innovations</th>
+                  <th>Registration Date</th>
+                </tr>
+              </thead>
+              <tbody id="admin-innovators-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 4: ANALYTICS & DISTRIBUTION
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-analytics">
+        <div class="dashboard-grid-2-1" style="grid-template-columns:1fr 1fr;">
+          <!-- Category Breakdown Card -->
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-header-title">Submissions by Innovation Domain</div>
+            </div>
+            <div class="card-body">
+              <div id="analytics-category-chart" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- State Breakdown Card -->
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-header-title">Geographic Spread by State</div>
+            </div>
+            <div class="card-body">
+              <div id="analytics-state-chart" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 5: CATEGORIES TAXONOMY
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-categories">
+        <div class="content-card" style="max-width:750px; margin:0 auto;">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Innovation Categories Taxonomy</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Approved strategic domains for the GITH national competition.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="admin-categories-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 6: AUDIT TRAIL LOGS
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-audit">
+        <div class="content-card">
+          <div class="card-header-bar">
+            <div>
+              <div class="card-header-title">Administrative Audit Log</div>
+              <div style="font-size:12px; color:var(--muted-gray);">Immutable record of all review stage transitions and evaluations.</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Administrator</th>
+                  <th>Action</th>
+                  <th>Reference</th>
+                  <th>Status Transition</th>
+                  <th>Evaluation Note</th>
+                </tr>
+              </thead>
+              <tbody id="admin-audit-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       APPLICATION REVIEW DRAWER (ADMIN MODAL)
+       ========================================================================== -->
+  <div class="review-drawer-backdrop" id="review-drawer-backdrop">
+    <div class="review-drawer">
+      <div class="review-drawer-header">
+        <div>
+          <span style="font-size:11px; font-weight:800; color:var(--muted-gray); text-transform:uppercase;">Technical Review</span>
+          <h2 style="font-size:16px; font-weight:800; color:var(--dark-ink);" id="modal-app-title">Innovation Title</h2>
+        </div>
+        <button id="modal-close-btn" style="background:none; border:none; font-size:22px; cursor:pointer; color:var(--dark-ink);">✕</button>
+      </div>
+
+      <div class="review-drawer-body" id="modal-drawer-body">
+        <!-- Section 1: Overview & Meta -->
+        <div class="review-section">
+          <div class="review-section-title">Application Metadata</div>
+          <div class="review-meta-grid">
+            <div class="review-meta-item">
+              <strong>Reference Number</strong>
+              <code style="font-weight:700; color:var(--deep-forest);" id="modal-ref-num">GITH-2026-000000</code>
+            </div>
+            <div class="review-meta-item">
+              <strong>Current Pipeline Status</strong>
+              <span class="status-pill pill-submitted" id="modal-status-pill">Submitted</span>
+            </div>
+            <div class="review-meta-item">
+              <strong>Innovator Name</strong>
+              <span id="modal-innovator-name">Aminu Bello</span>
+            </div>
+            <div class="review-meta-item">
+              <strong>Location</strong>
+              <span id="modal-location">Kaduna North, Kaduna</span>
+            </div>
+            <div class="review-meta-item">
+              <strong>Category</strong>
+              <span id="modal-category">Renewable Energy</span>
+            </div>
+            <div class="review-meta-item">
+              <strong>Development Stage</strong>
+              <span id="modal-stage">Prototype</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Problem & Solution -->
+        <div class="review-section">
+          <div class="review-section-title">Problem Statement</div>
+          <p style="font-size:13px; color:var(--charcoal); margin-bottom:12px;" id="modal-problem"></p>
+
+          <div class="review-section-title">Proposed Solution & Working Principle</div>
+          <p style="font-size:13px; color:var(--charcoal); margin-bottom:12px;" id="modal-solution"></p>
+
+          <div class="review-section-title">Technical Uniqueness</div>
+          <p style="font-size:13px; color:var(--charcoal);" id="modal-uniqueness"></p>
+        </div>
+
+        <!-- Section 3: Intellectual Property -->
+        <div class="review-section">
+          <div class="review-section-title">Intellectual Property Status</div>
+          <div style="font-size:13px;">
+            Status: <strong id="modal-ip-status">Not Yet Registered</strong> • Legal support needed: <strong id="modal-ip-support">Yes</strong>
+          </div>
+        </div>
+
+        <!-- Section 4: Evaluation Notes Input -->
+        <div class="review-section">
+          <div class="review-section-title">Administrative Evaluation Note *</div>
+          <textarea id="modal-eval-note" class="form-control" rows="2" placeholder="Required for Returning, Rejecting, or Shortlisting candidate..."></textarea>
+        </div>
+
+        <!-- Section 5: Status Audit Trail -->
+        <div>
+          <div class="review-section-title">Status Transition History</div>
+          <ul class="activity-list" id="modal-status-history">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Action Footer with Authorized Transitions -->
+      <div class="review-drawer-footer">
+        <div style="font-size:11px; font-weight:800; color:var(--muted-gray); text-transform:uppercase;">
+          Authorized Administrative Actions
+        </div>
+        <div class="admin-action-row">
+          <button class="btn-admin-action btn-action-screening" data-status="screening">Move to Screening</button>
+          <button class="btn-admin-action btn-action-verify" data-status="verification">Move to Verification</button>
+          <button class="btn-admin-action btn-action-assess" data-status="assessment">Move to Assessment</button>
+          <button class="btn-admin-action btn-action-shortlist" data-status="shortlisted">Shortlist Candidate</button>
+          <button class="btn-admin-action btn-action-select" data-status="selected">Select for National Award</button>
+          <button class="btn-admin-action btn-action-return" data-status="returned">Return for Correction</button>
+          <button class="btn-admin-action btn-action-reject" data-status="rejected">Reject Submission</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/admin-app.js"></script>
+</body>
+</html>
