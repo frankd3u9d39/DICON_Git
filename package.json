@@ -1,0 +1,10 @@
+{
+  "name": "dicon-gith-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DICON Grassroot Innovations Talent Hunt (GITH) Application",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
