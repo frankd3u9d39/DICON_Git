@@ -562,6 +562,66 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       STATUS TRANSITION CONFIRMATION POP-UP MODAL
+       ========================================================================== -->
+  <div class="admin-confirm-modal-backdrop" id="status-confirm-modal-backdrop">
+    <div class="admin-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div class="confirm-modal-header">
+        <div class="confirm-modal-icon-badge" id="confirm-modal-icon">
+          <!-- Dynamic SVG -->
+        </div>
+        <div class="confirm-modal-title-wrap">
+          <h3 id="confirm-modal-title">Confirm Status Transition</h3>
+          <div id="confirm-modal-subtitle" class="confirm-modal-subtitle">Innovation Name • Reference</div>
+        </div>
+        <button id="btn-close-confirm-modal" class="confirm-modal-close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="confirm-modal-body">
+        <div class="confirm-transition-pill-row">
+          <span class="confirm-pill-from" id="confirm-from-status">Submitted</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <span class="confirm-pill-to" id="confirm-to-status">Screening</span>
+        </div>
+
+        <p id="confirm-modal-message" class="confirm-modal-message">
+          Are you sure you want to transition this innovation?
+        </p>
+
+        <div class="confirm-modal-note-group">
+          <label for="confirm-modal-note" class="confirm-note-label">
+            <span>Administrative Evaluation Note</span>
+            <span id="confirm-note-requirement" class="confirm-note-req">(Optional)</span>
+          </label>
+          <textarea id="confirm-modal-note" class="form-control" rows="3" placeholder="Add justification, comments, or technical guidance..."></textarea>
+          <div id="confirm-modal-error" class="confirm-modal-error" style="display:none;">
+            An administrative evaluation note is required for this action.
+          </div>
+        </div>
+      </div>
+
+      <div class="confirm-modal-footer">
+        <button type="button" class="btn-cancel-modal" id="btn-cancel-confirm-modal">
+          Cancel
+        </button>
+        <button type="button" class="btn-confirm-modal" id="btn-submit-confirm-modal">
+          Confirm Transition
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Administrative Floating Toast Banner -->
+  <div class="admin-toast-banner" id="admin-toast-banner">
+    <div class="admin-toast-icon" id="admin-toast-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <span id="admin-toast-message">Action completed successfully.</span>
+  </div>
+
   <!-- Mobile Sidebar Backdrop Overlay -->
   <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 

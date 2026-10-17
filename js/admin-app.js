@@ -12,6 +12,8 @@ class AdminDashboard {
   constructor() {
     this.currentUser = null;
     this.activeApplication = null;
+    this.pendingTransitionStatus = null;
+    this.toastTimer = null;
     this.auditLogs = JSON.parse(localStorage.getItem('dicon_gith_audit_logs') || '[]');
 
     this.init();
@@ -306,7 +308,7 @@ class AdminDashboard {
     }
   }
 
-  // ---- REVIEW DRAWER (MODAL) ----
+  // ---- REVIEW DRAWER & CONFIRMATION MODAL ----
   bindReviewDrawerEvents() {
     const backdrop = document.getElementById('review-drawer-backdrop');
     const closeBtn = document.getElementById('modal-close-btn');
@@ -321,13 +323,250 @@ class AdminDashboard {
       if (e.target === backdrop) backdrop.classList.remove('active');
     });
 
-    // Action buttons in footer
+    // Action buttons in footer -> Open Confirmation Pop-Up Modal
     document.querySelectorAll('.btn-admin-action').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const nextStatus = e.currentTarget.getAttribute('data-status');
-        this.executeStatusTransition(nextStatus);
+        this.openStatusConfirmModal(nextStatus);
       });
     });
+
+    // Confirmation Pop-Up Modal Controls
+    const confirmBackdrop = document.getElementById('status-confirm-modal-backdrop');
+    const confirmCloseBtn = document.getElementById('btn-close-confirm-modal');
+    const confirmCancelBtn = document.getElementById('btn-cancel-confirm-modal');
+    const confirmSubmitBtn = document.getElementById('btn-submit-confirm-modal');
+    const confirmNoteInput = document.getElementById('confirm-modal-note');
+
+    if (confirmCloseBtn) {
+      confirmCloseBtn.addEventListener('click', () => this.closeStatusConfirmModal());
+    }
+    if (confirmCancelBtn) {
+      confirmCancelBtn.addEventListener('click', () => this.closeStatusConfirmModal());
+    }
+    if (confirmBackdrop) {
+      confirmBackdrop.addEventListener('click', (e) => {
+        if (e.target === confirmBackdrop) this.closeStatusConfirmModal();
+      });
+    }
+
+    if (confirmNoteInput) {
+      confirmNoteInput.addEventListener('input', () => {
+        const errorEl = document.getElementById('confirm-modal-error');
+        if (errorEl) errorEl.style.display = 'none';
+        confirmNoteInput.style.borderColor = '';
+      });
+    }
+
+    if (confirmSubmitBtn) {
+      confirmSubmitBtn.addEventListener('click', () => {
+        this.submitStatusTransition();
+      });
+    }
+  }
+
+  openStatusConfirmModal(nextStatus) {
+    if (!this.activeApplication) return;
+    this.pendingTransitionStatus = nextStatus;
+
+    const inno = this.activeApplication;
+    const currentStatus = inno.status || 'submitted';
+
+    // Status configurations
+    const statusConfigs = {
+      screening: {
+        title: 'Move to Technical Screening',
+        message: 'Advance this innovation to formal screening to verify document compliance, eligibility, and completeness.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+        bg: '#EDE9FE',
+        color: '#6D28D9',
+        btnText: 'Move to Screening',
+        requiredNote: false
+      },
+      verification: {
+        title: 'Move to Field Verification',
+        message: 'Schedule and authorize physical site inspection, innovator identity verification, and prototype plausibility checks.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>',
+        bg: '#FEF3C7',
+        color: '#B45309',
+        btnText: 'Move to Verification',
+        requiredNote: false
+      },
+      assessment: {
+        title: 'Move to Defense Assessment',
+        message: 'Submit candidate details to the Armed Forces Technical Assessment Committee for defense applicability scoring.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>',
+        bg: '#DBEAFE',
+        color: '#1D4ED8',
+        btnText: 'Move to Assessment',
+        requiredNote: false
+      },
+      shortlisted: {
+        title: 'Shortlist Candidate for Award',
+        message: 'Approve candidate to the official shortlist for final pitch demonstration and high-level evaluation.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
+        bg: '#CCFBF1',
+        color: '#0F766E',
+        btnText: 'Shortlist Candidate',
+        requiredNote: false
+      },
+      selected: {
+        title: 'Select for National Defense Award',
+        message: 'Formally select this grassroots innovation for the National Defense Innovation Award & R&D incubation contract.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 14.66V17c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2.34"></path><path d="M12 2v20"></path></svg>',
+        bg: '#DCFCE7',
+        color: '#15803D',
+        btnText: 'Confirm Selection',
+        requiredNote: false
+      },
+      returned: {
+        title: 'Return Submission for Correction',
+        message: 'Reopen this application for editing and notify the innovator to revise required sections.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>',
+        bg: '#FFEDD5',
+        color: '#C2410C',
+        btnText: 'Return for Correction',
+        requiredNote: true
+      },
+      rejected: {
+        title: 'Reject Submission',
+        message: 'Formally decline this application from the current talent hunt cycle. Please document the official evaluation reasoning.',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        bg: '#FEE2E2',
+        color: '#B91C1C',
+        btnText: 'Reject Submission',
+        requiredNote: true
+      }
+    };
+
+    const cfg = statusConfigs[nextStatus] || {
+      title: `Transition to ${nextStatus}`,
+      message: `Are you sure you want to transition this innovation to status '${nextStatus.toUpperCase()}'?`,
+      icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>',
+      bg: '#E2E8F0',
+      color: '#334155',
+      btnText: 'Confirm Transition',
+      requiredNote: false
+    };
+
+    // Update Header
+    const iconBadge = document.getElementById('confirm-modal-icon');
+    if (iconBadge) {
+      iconBadge.innerHTML = cfg.icon;
+      iconBadge.style.background = cfg.bg;
+      iconBadge.style.color = cfg.color;
+    }
+
+    const titleEl = document.getElementById('confirm-modal-title');
+    if (titleEl) titleEl.textContent = cfg.title;
+
+    const subtitleEl = document.getElementById('confirm-modal-subtitle');
+    if (subtitleEl) subtitleEl.textContent = `${inno.innovationName} • Ref: ${inno.referenceNumber}`;
+
+    // Update Pills
+    const fromPill = document.getElementById('confirm-from-status');
+    if (fromPill) fromPill.textContent = currentStatus.toUpperCase();
+
+    const toPill = document.getElementById('confirm-to-status');
+    if (toPill) {
+      toPill.textContent = nextStatus.toUpperCase();
+      toPill.style.background = cfg.bg;
+      toPill.style.color = cfg.color;
+    }
+
+    // Update Message
+    const msgEl = document.getElementById('confirm-modal-message');
+    if (msgEl) msgEl.textContent = cfg.message;
+
+    // Requirement label
+    const reqLabel = document.getElementById('confirm-note-requirement');
+    if (reqLabel) {
+      reqLabel.textContent = cfg.requiredNote ? '(Required)' : '(Optional)';
+      reqLabel.style.color = cfg.requiredNote ? '#DC2626' : 'var(--muted-gray)';
+    }
+
+    // Reset Note Input & Error
+    const noteInput = document.getElementById('confirm-modal-note');
+    const drawerNote = document.getElementById('modal-eval-note');
+    if (noteInput) {
+      noteInput.value = drawerNote ? drawerNote.value.trim() : '';
+      noteInput.style.borderColor = '';
+    }
+
+    const errorEl = document.getElementById('confirm-modal-error');
+    if (errorEl) errorEl.style.display = 'none';
+
+    // Update Submit Button
+    const submitBtn = document.getElementById('btn-submit-confirm-modal');
+    if (submitBtn) {
+      submitBtn.textContent = cfg.btnText;
+      submitBtn.style.background = cfg.color;
+    }
+
+    // Open Modal
+    const backdrop = document.getElementById('status-confirm-modal-backdrop');
+    if (backdrop) backdrop.classList.add('active');
+  }
+
+  closeStatusConfirmModal() {
+    const backdrop = document.getElementById('status-confirm-modal-backdrop');
+    if (backdrop) backdrop.classList.remove('active');
+    this.pendingTransitionStatus = null;
+  }
+
+  submitStatusTransition() {
+    if (!this.pendingTransitionStatus || !this.activeApplication) return;
+
+    const nextStatus = this.pendingTransitionStatus;
+    const noteInput = document.getElementById('confirm-modal-note');
+    const note = noteInput ? noteInput.value.trim() : '';
+    const isSensitive = ['returned', 'rejected'].includes(nextStatus);
+
+    if (isSensitive && !note) {
+      const errorEl = document.getElementById('confirm-modal-error');
+      if (errorEl) {
+        errorEl.textContent = `An administrative evaluation note is required for ${nextStatus === 'returned' ? 'returning' : 'rejecting'} this submission.`;
+        errorEl.style.display = 'block';
+      }
+      if (noteInput) {
+        noteInput.style.borderColor = '#DC2626';
+        noteInput.focus();
+      }
+      return;
+    }
+
+    // Close Modal
+    this.closeStatusConfirmModal();
+
+    // Execute Transition
+    this.executeStatusTransition(nextStatus, note);
+  }
+
+  showToast(message, type = 'success') {
+    const banner = document.getElementById('admin-toast-banner');
+    const msgEl = document.getElementById('admin-toast-message');
+    const iconEl = document.getElementById('admin-toast-icon');
+
+    if (!banner || !msgEl) return;
+
+    msgEl.textContent = message;
+
+    if (iconEl) {
+      if (type === 'error') {
+        iconEl.style.background = '#EF4444';
+        iconEl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+      } else {
+        iconEl.style.background = '#10B981';
+        iconEl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      }
+    }
+
+    banner.classList.add('active');
+
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => {
+      banner.classList.remove('active');
+    }, 3800);
   }
 
   openReviewDrawer(innoId) {
@@ -392,21 +631,11 @@ class AdminDashboard {
     });
   }
 
-  executeStatusTransition(nextStatus) {
+  executeStatusTransition(nextStatus, noteOverride) {
     if (!this.activeApplication) return;
 
     const inno = this.activeApplication;
-    const note = document.getElementById('modal-eval-note').value.trim();
-
-    // Enforce note for sensitive transitions
-    if (['returned', 'rejected'].includes(nextStatus) && !note) {
-      alert(`An administrative evaluation note is required when returning or rejecting an application.`);
-      return;
-    }
-
-    if (!confirm(`Are you sure you want to transition '${inno.innovationName}' to status: [${nextStatus.toUpperCase()}]?`)) {
-      return;
-    }
+    const note = noteOverride !== undefined ? noteOverride : (document.getElementById('modal-eval-note')?.value.trim() || '');
 
     const prevStatus = inno.status;
     const now = new Date().toISOString();
@@ -461,7 +690,8 @@ class AdminDashboard {
     this.renderApplicationsTable();
     this.renderAuditLogs();
 
-    alert(`Success: '${inno.innovationName}' successfully updated to ${nextStatus.toUpperCase()}.`);
+    // 6. Show clean toast banner instead of alert()
+    this.showToast(`Status updated: "${inno.innovationName}" is now ${nextStatus.toUpperCase()}`);
   }
 
   // ---- INNOVATORS DIRECTORY ----
