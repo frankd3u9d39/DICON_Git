@@ -144,6 +144,17 @@ class AppController {
 
   // ---- SPLASH SCREEN LOGIC (§4) ----
   runSplashSequence() {
+    // If arriving with a direct hash (e.g. #screen-login, #screen-submit)
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      if (hash === 'screen-submit') {
+        this.initSubmitInnovation();
+      } else {
+        this.navigateTo(hash);
+      }
+      return;
+    }
+
     setTimeout(() => {
       const user = storage.getUser();
       const onboardingSeen = storage.isOnboardingSeen();
@@ -157,7 +168,7 @@ class AppController {
       } else {
         this.navigateTo('screen-welcome');
       }
-    }, 2000);
+    }, 1800);
   }
 
   // ---- POPULATE DROPDOWNS ----
