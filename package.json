@@ -4,6 +4,7 @@
   "private": true,
   "description": "DICON Grassroot Innovations Talent Hunt (GITH) Application",
   "scripts": {
+    "build": "echo 'Static build ready'",
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node --test tests/*.test.mjs"
