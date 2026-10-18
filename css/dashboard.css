@@ -295,6 +295,11 @@ button, input, select, textarea {
   box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15);
 }
 
+:focus-visible {
+  outline: 2px solid var(--primary-green) !important;
+  outline-offset: 2px !important;
+}
+
 .form-control.is-invalid {
   border-color: var(--status-rejected);
   background-color: #FEF2F2;
@@ -308,7 +313,10 @@ button, input, select, textarea {
   font-weight: 500;
 }
 
-.form-control.is-invalid + .form-error-msg {
+.form-control.is-invalid + .form-error-msg,
+.form-input-wrap:has(.form-control.is-invalid) + .form-error-msg,
+.form-input-wrap.is-invalid + .form-error-msg,
+.form-group.has-error .form-error-msg {
   display: block;
 }
 

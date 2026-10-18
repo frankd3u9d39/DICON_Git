@@ -8,6 +8,20 @@ import { storage } from './storage.js';
 import { GITH_CATEGORIES, NIGERIAN_STATES } from './data.js';
 import { firebaseService } from './firebase-config.js';
 
+// Authorized State Machine Transitions
+const VALID_TRANSITIONS = {
+  submitted: ['screening', 'returned', 'rejected'],
+  screening: ['verification', 'returned', 'rejected'],
+  verification: ['assessment', 'returned', 'rejected'],
+  assessment: ['shortlisted', 'returned', 'rejected'],
+  shortlisted: ['selected', 'rejected'],
+  selected: ['mentorship', 'incubation'],
+  returned: ['screening', 'rejected'],
+  rejected: ['screening'],
+  mentorship: ['incubation'],
+  incubation: []
+};
+
 class AdminDashboard {
   constructor() {
     this.currentUser = null;
@@ -29,7 +43,6 @@ class AdminDashboard {
     }
 
     if (user.role !== 'admin' && user.role !== 'super_admin') {
-      alert("Access Denied: The GITH Administrator Workspace requires authorized security credentials. Redirecting to your Innovator Portal.");
       window.location.href = '/dashboard';
       return;
     }
@@ -132,7 +145,7 @@ class AdminDashboard {
     // Update active nav item
     document.querySelectorAll('.sidebar-nav-item').forEach(item => {
       const itemHash = (item.querySelector('a')?.getAttribute('href') || '').replace('#', '');
-      if (itemHash === hash || item.getAttribute('data-view') === targetId && filterStatus === 'all') {
+      if (itemHash === hash || (item.getAttribute('data-view') === targetId && filterStatus === 'all')) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');
@@ -211,7 +224,7 @@ class AdminDashboard {
     document.getElementById('admin-badge-all').textContent = totalInnos;
     document.getElementById('admin-badge-new').textContent = newInnos;
 
-    // Populate Overview Table (Recent 5 awaiting review)
+    // Populate Overview Table (Recent 6)
     const tbody = document.getElementById('admin-overview-tbody');
     tbody.innerHTML = '';
 
@@ -323,10 +336,23 @@ class AdminDashboard {
       if (e.target === backdrop) backdrop.classList.remove('active');
     });
 
-    // Action buttons in footer -> Open Confirmation Pop-Up Modal
+    // Action buttons in footer -> Validate transition then open modal
     document.querySelectorAll('.btn-admin-action').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const nextStatus = e.currentTarget.getAttribute('data-status');
+        if (!this.activeApplication) return;
+
+        const currentStatus = this.activeApplication.status || 'submitted';
+        const allowed = VALID_TRANSITIONS[currentStatus] || [];
+
+        if (!allowed.includes(nextStatus)) {
+          this.showToast(
+            `Transition from ${currentStatus.toUpperCase()} to ${nextStatus.toUpperCase()} is not allowed. Valid next steps: ${allowed.join(', ') || 'None (Terminal)'}`,
+            'error'
+          );
+          return;
+        }
+
         this.openStatusConfirmModal(nextStatus);
       });
     });
@@ -372,7 +398,6 @@ class AdminDashboard {
     const inno = this.activeApplication;
     const currentStatus = inno.status || 'submitted';
 
-    // Status configurations
     const statusConfigs = {
       screening: {
         title: 'Move to Technical Screening',
@@ -449,7 +474,6 @@ class AdminDashboard {
       requiredNote: false
     };
 
-    // Update Header
     const iconBadge = document.getElementById('confirm-modal-icon');
     if (iconBadge) {
       iconBadge.innerHTML = cfg.icon;
@@ -463,7 +487,6 @@ class AdminDashboard {
     const subtitleEl = document.getElementById('confirm-modal-subtitle');
     if (subtitleEl) subtitleEl.textContent = `${inno.innovationName} • Ref: ${inno.referenceNumber}`;
 
-    // Update Pills
     const fromPill = document.getElementById('confirm-from-status');
     if (fromPill) fromPill.textContent = currentStatus.toUpperCase();
 
@@ -474,18 +497,15 @@ class AdminDashboard {
       toPill.style.color = cfg.color;
     }
 
-    // Update Message
     const msgEl = document.getElementById('confirm-modal-message');
     if (msgEl) msgEl.textContent = cfg.message;
 
-    // Requirement label
     const reqLabel = document.getElementById('confirm-note-requirement');
     if (reqLabel) {
       reqLabel.textContent = cfg.requiredNote ? '(Required)' : '(Optional)';
       reqLabel.style.color = cfg.requiredNote ? '#DC2626' : 'var(--muted-gray)';
     }
 
-    // Reset Note Input & Error
     const noteInput = document.getElementById('confirm-modal-note');
     const drawerNote = document.getElementById('modal-eval-note');
     if (noteInput) {
@@ -496,14 +516,12 @@ class AdminDashboard {
     const errorEl = document.getElementById('confirm-modal-error');
     if (errorEl) errorEl.style.display = 'none';
 
-    // Update Submit Button
     const submitBtn = document.getElementById('btn-submit-confirm-modal');
     if (submitBtn) {
       submitBtn.textContent = cfg.btnText;
       submitBtn.style.background = cfg.color;
     }
 
-    // Open Modal
     const backdrop = document.getElementById('status-confirm-modal-backdrop');
     if (backdrop) backdrop.classList.add('active');
   }
@@ -535,10 +553,7 @@ class AdminDashboard {
       return;
     }
 
-    // Close Modal
     this.closeStatusConfirmModal();
-
-    // Execute Transition
     this.executeStatusTransition(nextStatus, note);
   }
 
@@ -591,6 +606,90 @@ class AdminDashboard {
     document.getElementById('modal-uniqueness').textContent = inno.uniqueness || 'No uniqueness detailed.';
     document.getElementById('modal-ip-status').textContent = inno.ipStatus || 'Not Yet Registered';
     document.getElementById('modal-ip-support').textContent = inno.requiresIpSupport ? 'Yes (Requested)' : 'No';
+
+    // Populate Media & Supporting Documents Section
+    const mediaContainer = document.getElementById('modal-media-container');
+    if (mediaContainer) {
+      mediaContainer.innerHTML = '';
+
+      let hasMedia = false;
+
+      // Images
+      if (inno.imageUrls && inno.imageUrls.length > 0) {
+        hasMedia = true;
+        const imgWrap = document.createElement('div');
+        imgWrap.innerHTML = `
+          <div style="font-size:12px; font-weight:700; margin-bottom:6px; color:var(--dark-ink);">Prototype Photography:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            ${inno.imageUrls.map(url => `
+              <a href="${url}" target="_blank" rel="noopener noreferrer">
+                <img src="${url}" alt="Prototype preview" style="width:96px; height:72px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+              </a>
+            `).join('')}
+          </div>
+        `;
+        mediaContainer.appendChild(imgWrap);
+      }
+
+      // Documents
+      if (inno.documentUrls && inno.documentUrls.length > 0) {
+        hasMedia = true;
+        const docWrap = document.createElement('div');
+        docWrap.innerHTML = `
+          <div style="font-size:12px; font-weight:700; margin-top:8px; margin-bottom:6px; color:var(--dark-ink);">Technical Documents:</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${inno.documentUrls.map(doc => `
+              <div style="display:flex; align-items:center; gap:8px; background:var(--surface-alt); padding:6px 12px; border-radius:6px; border:1px solid var(--border); font-size:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <span style="font-weight:600;">${this.escapeHtml(typeof doc === 'string' ? doc : (doc.name || 'Specification Document'))}</span>
+                <span style="color:var(--muted-gray); font-size:11px;">${typeof doc === 'object' && doc.size ? `(${doc.size})` : ''}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        mediaContainer.appendChild(docWrap);
+      }
+
+      // Videos
+      if (inno.videoUrls && inno.videoUrls.length > 0) {
+        hasMedia = true;
+        const vidWrap = document.createElement('div');
+        vidWrap.innerHTML = `
+          <div style="font-size:12px; font-weight:700; margin-top:8px; margin-bottom:6px; color:var(--dark-ink);">Video Demonstration:</div>
+          <div>
+            ${inno.videoUrls.map(url => `
+              <a href="${url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--primary-green); text-decoration:underline;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>${this.escapeHtml(url)}</span>
+              </a>
+            `).join('')}
+          </div>
+        `;
+        mediaContainer.appendChild(vidWrap);
+      }
+
+      if (!hasMedia) {
+        mediaContainer.innerHTML = `<div style="font-size:12px; color:var(--muted-gray); font-style:italic;">No prototype media, schematics, or video links attached to this submission.</div>`;
+      }
+    }
+
+    // Configure Authorized Transition Buttons
+    const allowedTransitions = VALID_TRANSITIONS[inno.status] || [];
+    document.querySelectorAll('.btn-admin-action').forEach(btn => {
+      const targetStatus = btn.getAttribute('data-status');
+      const isAllowed = allowedTransitions.includes(targetStatus);
+      if (isAllowed) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.title = `Advance innovation to ${targetStatus}`;
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        btn.style.cursor = 'not-allowed';
+        btn.title = `Cannot advance directly from ${inno.status} to ${targetStatus}`;
+      }
+    });
 
     document.getElementById('modal-eval-note').value = '';
 
@@ -677,11 +776,12 @@ class AdminDashboard {
     this.auditLogs.unshift(auditRecord);
     localStorage.setItem('dicon_gith_audit_logs', JSON.stringify(this.auditLogs));
 
-    // 4. Notify Innovator
+    // 4. Notify Innovator (scoped to user)
     storage.addNotification({
       title: `Application Status Updated: ${nextStatus.toUpperCase()}`,
       message: `Your innovation '${inno.innovationName}' (${inno.referenceNumber}) has moved to '${nextStatus}'. ${note ? 'Note: ' + note : ''}`,
-      type: "status_update"
+      type: "status_update",
+      targetUserId: inno.userId
     });
 
     // 5. Update UI
@@ -690,7 +790,6 @@ class AdminDashboard {
     this.renderApplicationsTable();
     this.renderAuditLogs();
 
-    // 6. Show clean toast banner instead of alert()
     this.showToast(`Status updated: "${inno.innovationName}" is now ${nextStatus.toUpperCase()}`);
   }
 
@@ -719,6 +818,7 @@ class AdminDashboard {
     filtered.forEach(u => {
       const userInnos = storage.getInnovations(u.uid);
       const completion = storage.calculateProfileCompletion(u);
+      const isActive = u.isActive !== false;
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -734,7 +834,66 @@ class AdminDashboard {
         </td>
         <td><strong>${userInnos.length}</strong></td>
         <td>${new Date(u.createdAt || Date.now()).toLocaleDateString()}</td>
+        <td>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn-table-action btn-view-user-apps" style="font-size:11px; padding:4px 8px;">View Apps</button>
+            <button class="btn-table-action btn-toggle-user-status" style="font-size:11px; padding:4px 8px; color:${isActive ? 'var(--status-rejected)' : 'var(--primary-green)'};">
+              ${isActive ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        </td>
       `;
+
+      // View Apps action
+      tr.querySelector('.btn-view-user-apps').addEventListener('click', () => {
+        window.location.hash = '#admin-applications';
+        const searchBox = document.getElementById('admin-apps-search');
+        if (searchBox) {
+          searchBox.value = u.fullName;
+          this.renderApplicationsTable();
+        }
+      });
+
+      // Toggle status action
+      tr.querySelector('.btn-toggle-user-status').addEventListener('click', () => {
+        const actionWord = isActive ? 'deactivate' : 'activate';
+        if (confirm(`Are you sure you want to ${actionWord} the account for ${u.fullName}?`)) {
+          u.isActive = !isActive;
+          // Update in registry
+          const regIdx = registry.findIndex(item => item.uid === u.uid);
+          if (regIdx !== -1) {
+            registry[regIdx].isActive = u.isActive;
+            localStorage.setItem('dicon_gith_users_registry', JSON.stringify(registry));
+          }
+
+          // If active user session matches, update session
+          const currUser = storage.getUser();
+          if (currUser && currUser.uid === u.uid) {
+            currUser.isActive = u.isActive;
+            storage.setUser(currUser);
+          }
+
+          // Record audit log
+          this.auditLogs.unshift({
+            logId: `audit-${Date.now()}`,
+            referenceNumber: 'USER-' + u.uid,
+            innovationId: u.uid,
+            adminName: this.currentUser.fullName || 'Admin',
+            adminEmail: this.currentUser.email,
+            prevStatus: isActive ? 'active' : 'deactivated',
+            newStatus: u.isActive ? 'active' : 'deactivated',
+            actionTitle: `Account ${u.isActive ? 'Activated' : 'Deactivated'}`,
+            note: `Administrator altered account status for ${u.fullName} (${u.email}).`,
+            timestamp: new Date().toISOString()
+          });
+          localStorage.setItem('dicon_gith_audit_logs', JSON.stringify(this.auditLogs));
+
+          this.renderInnovatorsDirectory();
+          this.renderAuditLogs();
+          this.showToast(`Account for ${u.fullName} is now ${u.isActive ? 'Active' : 'Deactivated'}.`);
+        }
+      });
+
       tbody.appendChild(tr);
     });
 
@@ -863,6 +1022,7 @@ class AdminDashboard {
   populateDropdowns() {
     const stateFilter = document.getElementById('admin-apps-state-filter');
     if (stateFilter) {
+      stateFilter.innerHTML = '<option value="all">All States</option>';
       NIGERIAN_STATES.forEach(st => {
         const opt = document.createElement('option');
         opt.value = st;
@@ -873,6 +1033,7 @@ class AdminDashboard {
 
     const catFilter = document.getElementById('admin-apps-cat-filter');
     if (catFilter) {
+      catFilter.innerHTML = '<option value="all">All Categories</option>';
       GITH_CATEGORIES.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat;

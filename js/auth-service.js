@@ -1,10 +1,34 @@
 /**
  * DICON GITH - Central Authentication & RBAC Service
- * Supports Firebase Live Auth, Firestore user profiles, and resilient local storage.
+ * Supports Firebase Live Auth, Firestore user profiles, and resilient secure local storage.
  */
 
 import { firebaseService, firebaseConfig } from './firebase-config.js';
 import { storage } from './storage.js';
+
+// Password hashing utility (SHA-256 with salt)
+export async function hashPassword(password, salt = 'dicon_gith_salt_2026') {
+  const combined = String(password || '') + salt;
+  if (typeof crypto !== 'undefined' && crypto.subtle) {
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(combined);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      // Fallback
+    }
+  }
+  // Fallback for non-subtle crypto environments (e.g. older testing tools)
+  let hash = 0;
+  for (let i = 0; i < combined.length; i++) {
+    const char = combined.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return 'h_' + Math.abs(hash).toString(16);
+}
 
 // Pre-seeded Admin and Demo accounts for verification
 export const DEFAULT_ACCOUNTS = {
@@ -18,6 +42,7 @@ export const DEFAULT_ACCOUNTS = {
     state: "Kaduna",
     photoUrl: "assets/logo.png",
     phoneNumber: "+234 803 000 0001",
+    isActive: true,
     createdAt: "2026-01-15T08:00:00.000Z"
   },
   INNOVATOR: {
@@ -34,6 +59,7 @@ export const DEFAULT_ACCOUNTS = {
     skills: ["Hardware Engineering", "Electronics & Circuitry", "Renewable Energy & Solar"],
     phoneNumber: "+234 802 345 6789",
     photoUrl: "assets/innovator_main.jpg",
+    isActive: true,
     createdAt: "2026-02-10T10:30:00.000Z"
   }
 };
@@ -49,14 +75,12 @@ class AuthService {
     if (this.initialized) return;
     await firebaseService.initLive();
 
-    // Check existing stored user session
+    // Check existing stored user session (do NOT auto-login if empty)
     const stored = storage.getUser();
-    if (stored) {
+    if (stored && stored.uid && stored.email) {
       this.currentUser = stored;
     } else {
-      // Default to initial innovator for immediate testing if nothing set
-      this.currentUser = DEFAULT_ACCOUNTS.INNOVATOR;
-      storage.setUser(this.currentUser);
+      this.currentUser = null;
     }
 
     // Listen for live Firebase auth changes if connected
@@ -74,6 +98,7 @@ class AuthService {
                 email: firebaseUser.email,
                 fullName: firebaseUser.displayName || firebaseUser.email.split('@')[0],
                 role: 'innovator',
+                isActive: true,
                 createdAt: new Date().toISOString()
               };
               await firebaseService.saveUserDoc(firebaseUser.uid, this.currentUser);
@@ -90,7 +115,13 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return this.currentUser || storage.getUser();
+    if (this.currentUser) return this.currentUser;
+    const stored = storage.getUser();
+    if (stored && stored.uid && stored.email) {
+      this.currentUser = stored;
+      return this.currentUser;
+    }
+    return null;
   }
 
   isAuthenticated() {
@@ -115,10 +146,16 @@ class AuthService {
     await this.init();
 
     const normalizedEmail = (email || '').trim().toLowerCase();
+    if (!normalizedEmail) {
+      throw new Error("Email address is required.");
+    }
+    if (!password) {
+      throw new Error("Password is required.");
+    }
 
-    // 1. Check for Admin credentials
+    // 1. Check for Admin credentials (Strict verification)
     if (normalizedEmail === DEFAULT_ACCOUNTS.ADMIN.email.toLowerCase()) {
-      if (password === "DiconAdmin2026!" || password === "password" || password === "admin123") {
+      if (password === "DiconAdmin2026!") {
         this.currentUser = { ...DEFAULT_ACCOUNTS.ADMIN };
         storage.setUser(this.currentUser);
         return { success: true, user: this.currentUser, role: this.currentUser.role };
@@ -132,7 +169,6 @@ class AuthService {
       try {
         const liveUser = await firebaseService.login(normalizedEmail, password);
         if (liveUser) {
-          // Fetch profile document
           let profile = null;
           try {
             const doc = await firebaseService.db.collection('users').doc(liveUser.uid).get();
@@ -148,20 +184,26 @@ class AuthService {
             email: liveUser.email,
             fullName: (profile && profile.fullName) || liveUser.displayName || normalizedEmail.split('@')[0],
             role: (profile && profile.role) || 'innovator',
+            isActive: profile ? profile.isActive !== false : true,
             ...(profile || {})
           };
+
+          if (this.currentUser.isActive === false) {
+            throw new Error("This account has been deactivated. Please contact DICON administration.");
+          }
 
           storage.setUser(this.currentUser);
           return { success: true, user: this.currentUser, role: this.currentUser.role };
         }
       } catch (fbErr) {
-        // If Firebase explicitly rejects wrong password/user not found
-        console.warn("Firebase Auth response:", fbErr.message);
         if (fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/user-not-found') {
           throw new Error("Invalid email or password. Please try again.");
         }
         if (fbErr.code === 'auth/invalid-email') {
           throw new Error("The email address is improperly formatted.");
+        }
+        if (fbErr.message && fbErr.message.includes("deactivated")) {
+          throw fbErr;
         }
       }
     }
@@ -171,21 +213,34 @@ class AuthService {
     const match = usersRegistry.find(u => u.email.toLowerCase() === normalizedEmail);
 
     if (match) {
-      if (match.password === password || password === "password" || password === "demo123") {
-        const { password: _, ...userSafe } = match;
+      if (match.isActive === false) {
+        throw new Error("This account has been deactivated. Please contact DICON administration.");
+      }
+
+      const passHash = await hashPassword(password);
+      const isMatch = (match.passwordHash && match.passwordHash === passHash) ||
+                      (match.password && match.password === password);
+
+      if (isMatch) {
+        // Safe copy without password or hash
+        const { password: _p, passwordHash: _ph, ...userSafe } = match;
         this.currentUser = userSafe;
         storage.setUser(this.currentUser);
         return { success: true, user: this.currentUser, role: this.currentUser.role };
       } else {
-        throw new Error("Invalid password. Please check your credentials.");
+        throw new Error("Invalid email or password. Please try again.");
       }
     }
 
     // 4. Check Demo Innovator account
     if (normalizedEmail === DEFAULT_ACCOUNTS.INNOVATOR.email.toLowerCase()) {
-      this.currentUser = { ...DEFAULT_ACCOUNTS.INNOVATOR };
-      storage.setUser(this.currentUser);
-      return { success: true, user: this.currentUser, role: 'innovator' };
+      if (password === "Innovator2026!") {
+        this.currentUser = { ...DEFAULT_ACCOUNTS.INNOVATOR };
+        storage.setUser(this.currentUser);
+        return { success: true, user: this.currentUser, role: 'innovator' };
+      } else {
+        throw new Error("Invalid password for demo innovator account.");
+      }
     }
 
     throw new Error("No account found matching this email. Please register first.");
@@ -195,14 +250,39 @@ class AuthService {
    * Register a new Innovator account
    * Note: Public registration ALWAYS assigns role: 'innovator'
    */
-  async register({ fullName, email, phoneNumber, password, state, lga }) {
+  async register({ fullName, email, phoneNumber, phone, password, state, lga }) {
     await this.init();
 
     const normalizedEmail = (email || '').trim().toLowerCase();
 
-    // Check duplicate
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!normalizedEmail || !emailRegex.test(normalizedEmail)) {
+      throw new Error("A valid email address is required.");
+    }
+
+    // Prevent privilege escalation / registration with reserved administrative addresses
+    if (normalizedEmail === DEFAULT_ACCOUNTS.ADMIN.email.toLowerCase() ||
+        normalizedEmail.endsWith('@dicon.gov.ng')) {
+      throw new Error("Registration with this domain or email is reserved for official DICON administration. Public accounts cannot register with administrative emails.");
+    }
+
+    // Password strength check (min 8 characters)
+    if (!password || password.length < 8) {
+      throw new Error("Password must be at least 8 characters long.");
+    }
+
+    // Phone number validation
+    const rawPhone = phoneNumber || phone || '';
+    const cleanPhone = rawPhone.trim().replace(/[\s-]/g, '');
+    if (!cleanPhone || cleanPhone.length < 10) {
+      throw new Error("Please enter a valid phone number (at least 10 digits).");
+    }
+
+    // Check duplicate in registry and default demo accounts
     const usersRegistry = JSON.parse(localStorage.getItem('dicon_gith_users_registry') || '[]');
-    if (usersRegistry.some(u => u.email.toLowerCase() === normalizedEmail)) {
+    if (usersRegistry.some(u => u.email.toLowerCase() === normalizedEmail) ||
+        normalizedEmail === DEFAULT_ACCOUNTS.INNOVATOR.email.toLowerCase()) {
       throw new Error("An account with this email address already exists.");
     }
 
@@ -225,13 +305,15 @@ class AuthService {
 
     const newUser = {
       uid,
+      id: uid,
       email: normalizedEmail,
       fullName: (fullName || '').trim(),
-      phoneNumber: (phoneNumber || '').trim(),
+      phoneNumber: (phoneNumber || phone || '').trim(),
       state: state || '',
       lga: lga || '',
       community: '',
-      role: 'innovator', // Enforce strictly 'innovator'
+      role: 'innovator', // Strictly enforced
+      isActive: true,
       bio: '',
       occupation: '',
       institution: '',
@@ -241,8 +323,9 @@ class AuthService {
       updatedAt: new Date().toISOString()
     };
 
-    // Store in local registry
-    usersRegistry.push({ ...newUser, password });
+    // Store in local registry with SHA-256 password hash (never plain text!)
+    const passwordHash = await hashPassword(password);
+    usersRegistry.push({ ...newUser, passwordHash });
     localStorage.setItem('dicon_gith_users_registry', JSON.stringify(usersRegistry));
 
     // Set active session
@@ -254,22 +337,28 @@ class AuthService {
       firebaseService.saveUserDoc(uid, newUser).catch(err => console.warn("Firestore sync:", err));
     }
 
-    // Add welcome notification
+    // Add welcome notification for this specific user
     storage.addNotification({
       title: "Welcome to DICON GITH",
       message: `Your account has been created successfully. Complete your profile and submit your first grassroots innovation!`,
-      type: "announcement"
+      type: "announcement",
+      targetUserId: uid
     });
 
     return { success: true, user: newUser };
   }
 
   /**
-   * Password Recovery
+   * Password Recovery: Dispatch Reset Instruction
    */
   async sendPasswordReset(email) {
     await this.init();
     const normalizedEmail = (email || '').trim().toLowerCase();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!normalizedEmail || !emailRegex.test(normalizedEmail)) {
+      throw new Error("Please enter a valid email address.");
+    }
 
     if (firebaseService.isLiveConnected && firebaseService.auth) {
       try {
@@ -279,11 +368,125 @@ class AuthService {
       }
     }
 
-    // Always return success to prevent email enumeration attacks
+    // Generate simulated reset token stored locally for seamless offline/local testing
+    const resetTokens = JSON.parse(localStorage.getItem('dicon_gith_reset_tokens') || '{}');
+    const token = 'rst-' + Math.random().toString(36).substring(2, 10);
+    resetTokens[normalizedEmail] = {
+      token,
+      expiresAt: Date.now() + 3600 * 1000 // 1 hour
+    };
+    localStorage.setItem('dicon_gith_reset_tokens', JSON.stringify(resetTokens));
+
+    // Always return success message to prevent user enumeration
     return {
       success: true,
-      message: `If an account exists for ${normalizedEmail}, a password reset link has been dispatched.`
+      token,
+      resetToken: token,
+      message: `If an account exists for ${normalizedEmail}, password reset instructions have been dispatched.`
     };
+  }
+
+  async requestPasswordReset(email) {
+    return this.sendPasswordReset(email);
+  }
+
+  /**
+   * Complete Password Reset with New Password
+   */
+  async resetPassword({ email, token, newPassword, confirmPassword }) {
+    await this.init();
+    const normalizedEmail = (email || '').trim().toLowerCase();
+
+    if (!normalizedEmail) {
+      throw new Error("Email address is required.");
+    }
+    if (!newPassword || newPassword.length < 8) {
+      throw new Error("New password must be at least 8 characters long.");
+    }
+    if (newPassword !== confirmPassword) {
+      throw new Error("Password confirmation does not match.");
+    }
+
+    // If token provided, verify token
+    if (token) {
+      const resetTokens = JSON.parse(localStorage.getItem('dicon_gith_reset_tokens') || '{}');
+      const record = resetTokens[normalizedEmail];
+      if (!record || record.token !== token) {
+        throw new Error("Invalid or unrecognized password reset token.");
+      }
+      if (Date.now() > record.expiresAt) {
+        throw new Error("This password reset token has expired. Please request a new link.");
+      }
+      delete resetTokens[normalizedEmail];
+      localStorage.setItem('dicon_gith_reset_tokens', JSON.stringify(resetTokens));
+    }
+
+    // Update in users registry
+    const usersRegistry = JSON.parse(localStorage.getItem('dicon_gith_users_registry') || '[]');
+    const matchIndex = usersRegistry.findIndex(u => u.email.toLowerCase() === normalizedEmail);
+
+    if (matchIndex === -1 && normalizedEmail !== DEFAULT_ACCOUNTS.INNOVATOR.email.toLowerCase()) {
+      throw new Error("No account found matching this email address.");
+    }
+
+    const passwordHash = await hashPassword(newPassword);
+
+    if (matchIndex !== -1) {
+      usersRegistry[matchIndex].passwordHash = passwordHash;
+      delete usersRegistry[matchIndex].password; // remove any legacy plaintext
+      usersRegistry[matchIndex].updatedAt = new Date().toISOString();
+    } else {
+      // First-time reset of demo innovator account
+      usersRegistry.push({
+        ...DEFAULT_ACCOUNTS.INNOVATOR,
+        passwordHash,
+        updatedAt: new Date().toISOString()
+      });
+    }
+    localStorage.setItem('dicon_gith_users_registry', JSON.stringify(usersRegistry));
+
+    return {
+      success: true,
+      message: "Password has been reset successfully. You can now log in with your new password."
+    };
+  }
+
+  /**
+   * Get safe list of registered innovators (for admin view)
+   */
+  getUsers() {
+    const list = JSON.parse(localStorage.getItem('dicon_gith_users_registry') || '[]');
+    return list.map(u => {
+      const { password, passwordHash, ...safe } = u;
+      return safe;
+    });
+  }
+
+  /**
+   * Update Profile Details
+   */
+  updateProfile(profileData) {
+    const updated = storage.updateProfile(profileData);
+    if (updated) {
+      this.currentUser = updated;
+    }
+    return updated;
+  }
+
+  /**
+   * Set user status (e.g. active, suspended)
+   */
+  setUserStatus(uid, status) {
+    const list = JSON.parse(localStorage.getItem('dicon_gith_users_registry') || '[]');
+    const match = list.find(u => (u.uid === uid || u.id === uid));
+    if (match) {
+      match.isActive = status === 'active';
+      match.status = status;
+      match.updatedAt = new Date().toISOString();
+      localStorage.setItem('dicon_gith_users_registry', JSON.stringify(list));
+      return match;
+    }
+    return null;
   }
 
   /**

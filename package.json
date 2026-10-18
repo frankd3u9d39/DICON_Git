@@ -5,6 +5,7 @@
   "description": "DICON Grassroot Innovations Talent Hunt (GITH) Application",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node --test tests/*.test.mjs"
   }
 }

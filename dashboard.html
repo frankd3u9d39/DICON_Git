@@ -328,58 +328,62 @@
                 <div>
                   <div style="font-size:14px; font-weight:700;">Profile Photograph</div>
                   <div style="font-size:12px; color:var(--muted-gray); margin-bottom:8px;">Documentary, professional photo recommended.</div>
-                  <input type="text" id="profile-photo-url" class="form-control" style="font-size:12px; padding:6px 10px;" placeholder="Photo URL or assets path">
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <button type="button" id="btn-upload-avatar" class="btn-table-action" style="padding:4px 10px; font-size:12px;">Upload Photo</button>
+                    <input type="file" id="profile-photo-file" accept="image/*" style="display:none;" aria-label="Upload profile photo file">
+                    <input type="text" id="profile-photo-url" class="form-control" style="font-size:12px; padding:6px 10px;" placeholder="Or image URL" aria-label="Profile photo URL">
+                  </div>
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Full Name</label>
+                  <label for="prof-fullName" class="form-label">Full Name</label>
                   <input type="text" id="prof-fullName" class="form-control" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Email Address</label>
+                  <label for="prof-email" class="form-label">Email Address</label>
                   <input type="email" id="prof-email" class="form-control" disabled style="background:#F3F4F6; cursor:not-allowed;">
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Phone Number</label>
+                  <label for="prof-phone" class="form-label">Phone Number</label>
                   <input type="tel" id="prof-phone" class="form-control">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Occupation / Role</label>
+                  <label for="prof-occupation" class="form-label">Occupation / Role</label>
                   <input type="text" id="prof-occupation" class="form-control" placeholder="e.g. Mechanical Engineer, Student">
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">State</label>
+                  <label for="prof-state" class="form-label">State</label>
                   <select id="prof-state" class="form-control">
                     <option value="">Select State</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">LGA</label>
+                  <label for="prof-lga" class="form-label">LGA</label>
                   <input type="text" id="prof-lga" class="form-control">
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Community / Town</label>
+                  <label for="prof-community" class="form-label">Community / Town</label>
                   <input type="text" id="prof-community" class="form-control">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Institution / Organization</label>
+                  <label for="prof-institution" class="form-label">Institution / Organization</label>
                   <input type="text" id="prof-institution" class="form-control">
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">Biography & Technical Background</label>
+                <label for="prof-bio" class="form-label">Biography & Technical Background</label>
                 <textarea id="prof-bio" class="form-control" rows="3" placeholder="Tell us about your background, previous projects, and what problems you are driven to solve..."></textarea>
               </div>
 
@@ -495,19 +499,19 @@
               <p class="wizard-pane-desc">Identify your innovation, its primary domain, and development readiness.</p>
 
               <div class="form-group">
-                <label class="form-label">Innovation Name / Project Title *</label>
+                <label for="wiz-title" class="form-label">Innovation Name / Project Title *</label>
                 <input type="text" id="wiz-title" class="form-control" placeholder="e.g. Automated Cassava Peeling & Washing Machine" required>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Category *</label>
+                  <label for="wiz-category" class="form-label">Category *</label>
                   <select id="wiz-category" class="form-control" required>
                     <option value="">Select Category</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Development Stage *</label>
+                  <label for="wiz-stage" class="form-label">Development Stage *</label>
                   <select id="wiz-stage" class="form-control" required>
                     <option value="">Select Stage</option>
                   </select>
@@ -516,19 +520,19 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">State Where Built / Tested *</label>
+                  <label for="wiz-state" class="form-label">State Where Built / Tested *</label>
                   <select id="wiz-state" class="form-control" required>
                     <option value="">Select State</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Local Government Area (LGA) *</label>
+                  <label for="wiz-lga" class="form-label">Local Government Area (LGA) *</label>
                   <input type="text" id="wiz-lga" class="form-control" placeholder="e.g. Oshimili South" required>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">Team / Organization Name (Optional)</label>
+                <label for="wiz-team" class="form-label">Team / Organization Name (Optional)</label>
                 <input type="text" id="wiz-team" class="form-control" placeholder="Leave blank if individual inventor">
               </div>
             </div>
@@ -539,17 +543,17 @@
               <p class="wizard-pane-desc">Explain the everyday grassroot challenge your project tackles.</p>
 
               <div class="form-group">
-                <label class="form-label">What specific problem does this innovation address? *</label>
+                <label for="wiz-problem" class="form-label">What specific problem does this innovation address? *</label>
                 <textarea id="wiz-problem" class="form-control" rows="4" placeholder="Describe the local challenge in detail..." required></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label">Target Users / Beneficiaries *</label>
+                <label for="wiz-target-users" class="form-label">Target Users / Beneficiaries *</label>
                 <input type="text" id="wiz-target-users" class="form-control" placeholder="e.g. Smallholder grain farmers, rural health clinics" required>
               </div>
 
               <div class="form-group">
-                <label class="form-label">Why does solving this problem matter nationally? *</label>
+                <label for="wiz-importance" class="form-label">Why does solving this problem matter nationally? *</label>
                 <textarea id="wiz-importance" class="form-control" rows="3" placeholder="Impact on food security, import substitution, energy access, etc." required></textarea>
               </div>
             </div>
@@ -560,17 +564,17 @@
               <p class="wizard-pane-desc">Detail how your invention works and its practical advantages.</p>
 
               <div class="form-group">
-                <label class="form-label">Solution Description *</label>
+                <label for="wiz-solution" class="form-label">Solution Description *</label>
                 <textarea id="wiz-solution" class="form-control" rows="4" placeholder="Describe your product, device, or digital solution..." required></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label">How does it work technically? *</label>
+                <label for="wiz-how-it-works" class="form-label">How does it work technically? *</label>
                 <textarea id="wiz-how-it-works" class="form-control" rows="3" placeholder="Explain the mechanical, electrical, or software workflow..." required></textarea>
               </div>
 
               <div class="form-group">
-                <label class="form-label">What makes your approach unique compared to existing options? *</label>
+                <label for="wiz-uniqueness" class="form-label">What makes your approach unique compared to existing options? *</label>
                 <textarea id="wiz-uniqueness" class="form-control" rows="3" placeholder="Lower cost, locally sourced components, higher durability, etc." required></textarea>
               </div>
             </div>
@@ -582,32 +586,32 @@
 
               <div class="form-group">
                 <label class="form-label">Prototype Photography</label>
-                <div class="file-upload-zone" id="zone-photo">
+                <div class="file-upload-zone" id="zone-photo" tabindex="0" role="button" aria-label="Upload prototype photo">
                   <div class="upload-icon">
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                   </div>
                   <div class="upload-title">Drop prototype photos here or click to select</div>
-                  <div class="upload-hint">PNG, JPG up to 10MB. Working images greatly strengthen review.</div>
-                  <input type="file" id="file-photo" accept="image/*" style="display:none;">
+                  <div class="upload-hint">PNG, JPG, WebP up to 10MB. Working images greatly strengthen review.</div>
+                  <input type="file" id="file-photo" accept="image/png,image/jpeg,image/webp" style="display:none;" aria-label="Choose photo file">
                 </div>
                 <div id="file-photo-status" style="font-size:12px; color:var(--primary-green); margin-top:6px; font-weight:600;"></div>
               </div>
 
               <div class="form-group">
                 <label class="form-label">Technical Specification / CAD / PDF Document</label>
-                <div class="file-upload-zone" id="zone-doc">
+                <div class="file-upload-zone" id="zone-doc" tabindex="0" role="button" aria-label="Upload technical document">
                   <div class="upload-icon">
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                   </div>
                   <div class="upload-title">Upload technical documentation or schematics</div>
                   <div class="upload-hint">PDF or Word document up to 15MB.</div>
-                  <input type="file" id="file-doc" accept=".pdf,.doc,.docx" style="display:none;">
+                  <input type="file" id="file-doc" accept=".pdf,.doc,.docx,application/pdf" style="display:none;" aria-label="Choose document file">
                 </div>
                 <div id="file-doc-status" style="font-size:12px; color:var(--primary-green); margin-top:6px; font-weight:600;"></div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">Video Demonstration Link (YouTube, Google Drive, or Loom)</label>
+                <label for="wiz-video" class="form-label">Video Demonstration Link (YouTube, Google Drive, or Loom)</label>
                 <input type="url" id="wiz-video" class="form-control" placeholder="https://youtube.com/watch?v=...">
               </div>
             </div>
@@ -618,7 +622,7 @@
               <p class="wizard-pane-desc">Help us understand whether you have filed patents or need IP protection assistance.</p>
 
               <div class="form-group">
-                <label class="form-label">Current IP Protection Status *</label>
+                <label for="wiz-ip-status" class="form-label">Current IP Protection Status *</label>
                 <select id="wiz-ip-status" class="form-control" required>
                   <option value="Not Yet">Not Yet Registered</option>
                   <option value="Patent">Patent Granted / Pending</option>

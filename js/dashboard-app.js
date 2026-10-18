@@ -19,6 +19,9 @@ class InnovatorDashboard {
     this.totalSteps = 6;
     this.selectedSkills = [];
     this.activeTrackingId = null;
+    this.uploadedPhoto = null;
+    this.uploadedDoc = null;
+    this.editingInnovationId = null;
 
     this.init();
   }
@@ -58,6 +61,9 @@ class InnovatorDashboard {
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
+    if (type === 'error') {
+      toast.style.borderLeftColor = 'var(--status-rejected)';
+    }
     toast.innerHTML = `<span>${message}</span>`;
     container.appendChild(toast);
     setTimeout(() => {
@@ -179,6 +185,7 @@ class InnovatorDashboard {
     const stateSelects = [document.getElementById('prof-state'), document.getElementById('wiz-state')];
     stateSelects.forEach(select => {
       if (!select) return;
+      select.innerHTML = '<option value="">Select State</option>';
       NIGERIAN_STATES.forEach(st => {
         const opt = document.createElement('option');
         opt.value = st;
@@ -191,6 +198,11 @@ class InnovatorDashboard {
     const catSelects = [document.getElementById('wiz-category'), document.getElementById('innovations-filter-category')];
     catSelects.forEach(select => {
       if (!select) return;
+      if (select.id === 'innovations-filter-category') {
+        select.innerHTML = '<option value="all">All Categories</option>';
+      } else {
+        select.innerHTML = '<option value="">Select Category</option>';
+      }
       GITH_CATEGORIES.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat;
@@ -202,6 +214,7 @@ class InnovatorDashboard {
     // Development Stages
     const stageSelect = document.getElementById('wiz-stage');
     if (stageSelect) {
+      stageSelect.innerHTML = '<option value="">Select Stage</option>';
       DEVELOPMENT_STAGES.forEach(stg => {
         const opt = document.createElement('option');
         opt.value = stg;
@@ -247,14 +260,19 @@ class InnovatorDashboard {
 
     // Sidebar & Topbar
     document.getElementById('sidebar-user-name').textContent = user.fullName || 'GITH Innovator';
-    document.getElementById('sidebar-user-state').textContent = `${user.state || 'Nigeria'} (${user.lga || 'National'})`;
+    document.getElementById('sidebar-user-state').textContent = `${user.state || 'Nigeria'}${user.lga ? ` (${user.lga})` : ''}`;
     document.getElementById('welcome-user-heading').textContent = `Welcome back, ${(user.fullName || '').split(' ')[0] || 'Innovator'}`;
 
     if (user.photoUrl) {
-      document.getElementById('sidebar-user-avatar').src = user.photoUrl;
-      document.getElementById('topbar-user-avatar').src = user.photoUrl;
-      document.getElementById('profile-photo-preview').src = user.photoUrl;
-      document.getElementById('profile-photo-url').value = user.photoUrl;
+      const sidebarAvatar = document.getElementById('sidebar-user-avatar');
+      const topbarAvatar = document.getElementById('topbar-user-avatar');
+      const profilePreview = document.getElementById('profile-photo-preview');
+      const profileUrl = document.getElementById('profile-photo-url');
+
+      if (sidebarAvatar) sidebarAvatar.src = user.photoUrl;
+      if (topbarAvatar) topbarAvatar.src = user.photoUrl;
+      if (profilePreview) profilePreview.src = user.photoUrl;
+      if (profileUrl) profileUrl.value = user.photoUrl;
     }
 
     // Form inputs
@@ -276,6 +294,10 @@ class InnovatorDashboard {
         btn.style.background = 'var(--deep-forest)';
         btn.style.color = '#FFFFFF';
         btn.style.borderColor = 'var(--deep-forest)';
+      } else {
+        btn.style.background = 'var(--surface-alt)';
+        btn.style.color = 'var(--dark-ink)';
+        btn.style.borderColor = 'var(--border)';
       }
     });
 
@@ -291,12 +313,39 @@ class InnovatorDashboard {
       missingNotice.style.color = "var(--deep-forest)";
     } else {
       missingNotice.textContent = "Add your skills, occupation, and institution to complete your profile.";
+      missingNotice.style.background = "var(--surface-alt)";
+      missingNotice.style.color = "var(--charcoal)";
     }
   }
 
   bindProfileEvents() {
     const form = document.getElementById('profile-edit-form');
     if (!form) return;
+
+    // Profile photo upload button and file listener
+    const avatarBtn = document.getElementById('btn-upload-avatar');
+    const avatarInput = document.getElementById('profile-photo-file');
+    if (avatarBtn && avatarInput) {
+      avatarBtn.addEventListener('click', () => avatarInput.click());
+      avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+          this.showToast('Profile photo must be less than 5MB.', 'error');
+          avatarInput.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          const preview = document.getElementById('profile-photo-preview');
+          const urlInput = document.getElementById('profile-photo-url');
+          if (preview) preview.src = re.target.result;
+          if (urlInput) urlInput.value = re.target.result;
+          this.showToast('Photo selected! Click "Save Profile Changes" to save.');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -326,11 +375,11 @@ class InnovatorDashboard {
     if (!user) return;
 
     const allInnos = storage.getInnovations(user.uid);
-    const draft = storage.getDraft();
+    const draft = storage.getDraft(user.uid);
 
     const submittedCount = allInnos.filter(i => i.status !== 'draft').length;
     const reviewCount = allInnos.filter(i => ['submitted', 'screening', 'verification', 'assessment'].includes(i.status)).length;
-    const draftsCount = draft ? 1 : 0;
+    const draftsCount = draft && draft.innovationName ? 1 : 0;
 
     document.getElementById('stat-total').textContent = submittedCount + draftsCount;
     document.getElementById('stat-submitted').textContent = submittedCount;
@@ -355,33 +404,37 @@ class InnovatorDashboard {
           <td><code style="font-size:12px; font-weight:700;">${inno.referenceNumber}</code></td>
           <td><span class="status-pill pill-${inno.status}">${inno.status}</span></td>
           <td>
-            <button class="btn-table-action" onclick="window.location.hash='#tracking'">Track</button>
+            <button class="btn-table-action" data-track-id="${inno.innovationId}">Track</button>
           </td>
         `;
+        tr.querySelector('button').addEventListener('click', () => {
+          this.activeTrackingId = inno.innovationId;
+          window.location.hash = '#tracking';
+        });
         tbody.appendChild(tr);
       });
     }
 
-    // Populate Recent Activity
+    // Populate Recent Activity from real user notifications and events
     const actList = document.getElementById('overview-activity-list');
     actList.innerHTML = '';
-    const activities = [
-      { title: "Profile Verified", desc: "Your basic contact details were confirmed.", time: "1 day ago" },
-      { title: "Innovation Stored", desc: allInnos[0] ? `'${allInnos[0].innovationName}' registered with DICON.` : "Prototype registered.", time: "2 days ago" },
-      { title: "GITH Account Created", desc: "Welcome to the national grassroots hunt.", time: "Initial sign up" }
-    ];
+    const userNotifs = storage.getNotifications(user.uid).slice(0, 4);
 
-    activities.forEach(act => {
-      const li = document.createElement('li');
-      li.className = 'activity-item';
-      li.innerHTML = `
-        <div class="activity-dot"></div>
-        <div class="activity-title">${act.title}</div>
-        <div class="activity-desc">${act.desc}</div>
-        <div class="activity-time">${act.time}</div>
-      `;
-      actList.appendChild(li);
-    });
+    if (userNotifs.length === 0 && allInnos.length === 0) {
+      actList.innerHTML = `<li style="font-size:13px; color:var(--muted-gray); padding:16px 0;">No account activity recorded yet. Complete your profile and submit your first innovation.</li>`;
+    } else {
+      userNotifs.forEach(n => {
+        const li = document.createElement('li');
+        li.className = 'activity-item';
+        li.innerHTML = `
+          <div class="activity-dot"></div>
+          <div class="activity-title">${this.escapeHtml(n.title)}</div>
+          <div class="activity-desc">${this.escapeHtml(n.message)}</div>
+          <div class="activity-time">${new Date(n.createdAt).toLocaleDateString()}</div>
+        `;
+        actList.appendChild(li);
+      });
+    }
   }
 
   // ---- INNOVATIONS TABLE & FILTERS ----
@@ -438,13 +491,18 @@ class InnovatorDashboard {
         <td>${dateStr}</td>
         <td><span class="status-pill pill-${inno.status}">${inno.status}</span></td>
         <td>
-          <button class="btn-table-action" onclick="window.location.hash='#tracking'">Track</button>
+          <button class="btn-table-action" data-track-id="${inno.innovationId}">Track</button>
         </td>
       `;
+
+      tr.querySelector('button').addEventListener('click', () => {
+        this.activeTrackingId = inno.innovationId;
+        window.location.hash = '#tracking';
+      });
+
       tbody.appendChild(tr);
     });
 
-    // Bind event listeners for search/filter inputs once
     if (!this._tableEventsBound) {
       if (searchInput) searchInput.addEventListener('input', () => this.renderInnovationsTable());
       if (catFilter) catFilter.addEventListener('change', () => this.renderInnovationsTable());
@@ -460,15 +518,53 @@ class InnovatorDashboard {
     const draftBtn = document.getElementById('wiz-btn-draft');
     const form = document.getElementById('submission-wizard-form');
 
-    // File Upload Zone Mock/Real Triggers
+    // Clickable Step Nodes in Wizard Header
+    document.querySelectorAll('.wizard-step-node').forEach(node => {
+      node.style.cursor = 'pointer';
+      node.addEventListener('click', () => {
+        const targetStep = parseInt(node.getAttribute('data-step'), 10);
+        if (targetStep < this.currentStep) {
+          this.goToWizardStep(targetStep);
+        } else if (targetStep === this.currentStep + 1 && this.validateWizardStep(this.currentStep)) {
+          this.goToWizardStep(targetStep);
+        }
+      });
+    });
+
+    // File Upload Zones with drag/drop, keyboard, and real FileReader
     const photoZone = document.getElementById('zone-photo');
     const photoInput = document.getElementById('file-photo');
     if (photoZone && photoInput) {
       photoZone.addEventListener('click', () => photoInput.click());
-      photoInput.addEventListener('change', () => {
-        if (photoInput.files.length > 0) {
-          document.getElementById('file-photo-status').textContent = `✓ Selected: ${photoInput.files[0].name}`;
+      photoZone.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          photoInput.click();
         }
+      });
+
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Size check (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          this.showToast('Photo file exceeds the 10MB limit. Please choose a smaller file.', 'error');
+          photoInput.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          this.uploadedPhoto = {
+            name: file.name,
+            size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+            url: re.target.result
+          };
+          document.getElementById('file-photo-status').textContent = `✓ Selected: ${file.name} (${this.uploadedPhoto.size})`;
+          this.showToast('Prototype photo loaded successfully!');
+        };
+        reader.readAsDataURL(file);
       });
     }
 
@@ -476,10 +572,35 @@ class InnovatorDashboard {
     const docInput = document.getElementById('file-doc');
     if (docZone && docInput) {
       docZone.addEventListener('click', () => docInput.click());
-      docInput.addEventListener('change', () => {
-        if (docInput.files.length > 0) {
-          document.getElementById('file-doc-status').textContent = `✓ Selected: ${docInput.files[0].name}`;
+      docZone.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          docInput.click();
         }
+      });
+
+      docInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Size check (max 15MB)
+        if (file.size > 15 * 1024 * 1024) {
+          this.showToast('Document file exceeds the 15MB limit. Please choose a smaller file.', 'error');
+          docInput.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          this.uploadedDoc = {
+            name: file.name,
+            size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+            url: re.target.result
+          };
+          document.getElementById('file-doc-status').textContent = `✓ Selected: ${file.name} (${this.uploadedDoc.size})`;
+          this.showToast('Technical document loaded successfully!');
+        };
+        reader.readAsDataURL(file);
       });
     }
 
@@ -522,30 +643,62 @@ class InnovatorDashboard {
 
   validateWizardStep(step) {
     if (step === 1) {
-      const title = document.getElementById('wiz-title').value.trim();
-      const cat = document.getElementById('wiz-category').value;
-      const stage = document.getElementById('wiz-stage').value;
-      const state = document.getElementById('wiz-state').value;
-      const lga = document.getElementById('wiz-lga').value.trim();
+      const title = document.getElementById('wiz-title');
+      const cat = document.getElementById('wiz-category');
+      const stage = document.getElementById('wiz-stage');
+      const state = document.getElementById('wiz-state');
+      const lga = document.getElementById('wiz-lga');
 
-      if (!title || !cat || !stage || !state || !lga) {
-        alert("Please complete all required fields marked with * in Step 1.");
+      let valid = true;
+      [title, cat, stage, state, lga].forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('is-invalid');
+          valid = false;
+        } else {
+          field.classList.remove('is-invalid');
+        }
+      });
+
+      if (!valid) {
+        this.showToast("Please complete all required fields marked with * in Step 1.", "error");
         return false;
       }
     } else if (step === 2) {
-      const prob = document.getElementById('wiz-problem').value.trim();
-      const target = document.getElementById('wiz-target-users').value.trim();
-      const imp = document.getElementById('wiz-importance').value.trim();
-      if (!prob || !target || !imp) {
-        alert("Please complete all problem details in Step 2.");
+      const prob = document.getElementById('wiz-problem');
+      const target = document.getElementById('wiz-target-users');
+      const imp = document.getElementById('wiz-importance');
+
+      let valid = true;
+      [prob, target, imp].forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('is-invalid');
+          valid = false;
+        } else {
+          field.classList.remove('is-invalid');
+        }
+      });
+
+      if (!valid) {
+        this.showToast("Please complete all problem details in Step 2.", "error");
         return false;
       }
     } else if (step === 3) {
-      const sol = document.getElementById('wiz-solution').value.trim();
-      const how = document.getElementById('wiz-how-it-works').value.trim();
-      const uniq = document.getElementById('wiz-uniqueness').value.trim();
-      if (!sol || !how || !uniq) {
-        alert("Please describe your solution in Step 3.");
+      const sol = document.getElementById('wiz-solution');
+      const how = document.getElementById('wiz-how-it-works');
+      const uniq = document.getElementById('wiz-uniqueness');
+
+      let valid = true;
+      [sol, how, uniq].forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('is-invalid');
+          valid = false;
+        } else {
+          field.classList.remove('is-invalid');
+        }
+      });
+
+      if (!valid) {
+        this.showToast("Please describe your solution and its uniqueness in Step 3.", "error");
         return false;
       }
     }
@@ -610,10 +763,15 @@ class InnovatorDashboard {
         <strong>Solution Overview:</strong>
         <p style="color:var(--muted-gray); margin-top:2px;">${this.escapeHtml(document.getElementById('wiz-solution').value)}</p>
       </div>
+      ${this.uploadedPhoto ? `<div style="margin-top:10px; font-weight:600; color:var(--primary-green);">✓ Photography Attached: ${this.escapeHtml(this.uploadedPhoto.name)}</div>` : ''}
+      ${this.uploadedDoc ? `<div style="margin-top:4px; font-weight:600; color:var(--primary-green);">✓ Document Attached: ${this.escapeHtml(this.uploadedDoc.name)}</div>` : ''}
     `;
   }
 
   saveCurrentDraft() {
+    const user = this.currentUser;
+    const uid = user ? user.uid : 'anon';
+
     const draftData = {
       innovationName: document.getElementById('wiz-title').value.trim(),
       category: document.getElementById('wiz-category').value,
@@ -628,16 +786,21 @@ class InnovatorDashboard {
       howItWorks: document.getElementById('wiz-how-it-works').value.trim(),
       uniqueness: document.getElementById('wiz-uniqueness').value.trim(),
       ipStatus: document.getElementById('wiz-ip-status').value,
-      requiresIpSupport: document.getElementById('wiz-ip-support').checked
+      requiresIpSupport: document.getElementById('wiz-ip-support').checked,
+      uploadedPhoto: this.uploadedPhoto,
+      uploadedDoc: this.uploadedDoc
     };
 
-    storage.saveDraft(draftData);
+    storage.saveDraft(draftData, uid);
     this.showToast('Draft saved successfully! You can resume anytime.');
     this.renderOverviewStats();
+    this.renderDrafts();
   }
 
   restoreExistingDraft() {
-    const draft = storage.getDraft();
+    const user = this.currentUser;
+    const uid = user ? user.uid : null;
+    const draft = storage.getDraft(uid);
     if (!draft) return;
 
     if (draft.innovationName) document.getElementById('wiz-title').value = draft.innovationName;
@@ -656,12 +819,22 @@ class InnovatorDashboard {
     if (typeof draft.requiresIpSupport === 'boolean') {
       document.getElementById('wiz-ip-support').checked = draft.requiresIpSupport;
     }
+    if (draft.uploadedPhoto) {
+      this.uploadedPhoto = draft.uploadedPhoto;
+      const el = document.getElementById('file-photo-status');
+      if (el) el.textContent = `✓ Saved in draft: ${draft.uploadedPhoto.name}`;
+    }
+    if (draft.uploadedDoc) {
+      this.uploadedDoc = draft.uploadedDoc;
+      const el = document.getElementById('file-doc-status');
+      if (el) el.textContent = `✓ Saved in draft: ${draft.uploadedDoc.name}`;
+    }
   }
 
   submitFinalInnovation() {
     const declaration = document.getElementById('wiz-declaration');
     if (!declaration.checked) {
-      alert("Please confirm the legal declaration before final submission.");
+      this.showToast("Please confirm the legal declaration before submitting.", "error");
       return;
     }
 
@@ -680,15 +853,42 @@ class InnovatorDashboard {
       uniqueness: document.getElementById('wiz-uniqueness').value.trim(),
       ipStatus: document.getElementById('wiz-ip-status').value,
       requiresIpSupport: document.getElementById('wiz-ip-support').checked,
+      imageUrls: this.uploadedPhoto ? [this.uploadedPhoto.url] : [],
+      documentUrls: this.uploadedDoc ? [{ name: this.uploadedDoc.name, size: this.uploadedDoc.size, url: this.uploadedDoc.url }] : [],
       videoUrls: document.getElementById('wiz-video').value ? [document.getElementById('wiz-video').value] : []
     };
 
     try {
-      const created = storage.submitInnovation(data);
+      // If editing a returned innovation, update it; otherwise create new
+      let created;
+      if (this.editingInnovationId) {
+        const allInnos = storage.getInnovations();
+        const idx = allInnos.findIndex(i => i.innovationId === this.editingInnovationId);
+        if (idx !== -1) {
+          allInnos[idx] = {
+            ...allInnos[idx],
+            ...data,
+            status: 'submitted',
+            updatedAt: new Date().toISOString()
+          };
+          localStorage.setItem('dicon_gith_innovations', JSON.stringify(allInnos));
+          created = allInnos[idx];
+          this.editingInnovationId = null;
+        } else {
+          created = storage.submitInnovation(data);
+        }
+      } else {
+        created = storage.submitInnovation(data);
+      }
+
       this.showToast(`Application Submitted! Ref: ${created.referenceNumber}`, 'success');
 
-      // Reset wizard form
+      // Reset wizard form and uploaded files
       document.getElementById('submission-wizard-form').reset();
+      this.uploadedPhoto = null;
+      this.uploadedDoc = null;
+      document.getElementById('file-photo-status').textContent = '';
+      document.getElementById('file-doc-status').textContent = '';
       this.goToWizardStep(1);
 
       // Refresh overview and list
@@ -696,10 +896,11 @@ class InnovatorDashboard {
       this.renderInnovationsTable();
 
       // Navigate to tracking
+      this.activeTrackingId = created.innovationId;
       window.location.hash = '#tracking';
 
     } catch (err) {
-      alert(`Submission error: ${err.message}`);
+      this.showToast(`Submission error: ${err.message}`, 'error');
     }
   }
 
@@ -708,9 +909,12 @@ class InnovatorDashboard {
     const container = document.getElementById('drafts-container');
     if (!container) return;
 
-    const draft = storage.getDraft();
+    const user = this.currentUser;
+    const draft = storage.getDraft(user ? user.uid : null);
+
     if (!draft || !draft.innovationName) {
       container.innerHTML = `
+        <div style="text-align:center; padding:36px 20px; color:var(--muted-gray);">
           <div style="display:flex; justify-content:center; margin-bottom:12px; color:var(--muted-gray);">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
           </div>
@@ -726,19 +930,24 @@ class InnovatorDashboard {
         <div>
           <div style="font-size:15px; font-weight:700;">${this.escapeHtml(draft.innovationName)}</div>
           <div style="font-size:12px; color:var(--muted-gray); margin-top:3px;">
-            Category: ${this.escapeHtml(draft.category || 'Unassigned')} • Last saved: ${new Date(draft.updatedAt).toLocaleTimeString()}
+            Category: ${this.escapeHtml(draft.category || 'Unassigned')} • Last saved: ${new Date(draft.updatedAt || Date.now()).toLocaleTimeString()}
           </div>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-primary-action" style="padding:8px 16px; width:auto;" onclick="window.location.hash='#submit'">Resume Application</button>
+          <button class="btn-primary-action" style="padding:8px 16px; width:auto;" id="btn-resume-draft">Resume Application</button>
           <button class="btn-table-action" style="color:var(--status-rejected);" id="btn-delete-draft">Discard</button>
         </div>
       </div>
     `;
 
+    document.getElementById('btn-resume-draft').addEventListener('click', () => {
+      this.restoreExistingDraft();
+      window.location.hash = '#submit';
+    });
+
     document.getElementById('btn-delete-draft').addEventListener('click', () => {
       if (confirm("Are you sure you want to discard this saved draft?")) {
-        storage.clearDraft();
+        storage.clearDraft(user ? user.uid : null);
         this.renderDrafts();
         this.renderOverviewStats();
         this.showToast('Draft discarded.');
@@ -777,10 +986,13 @@ class InnovatorDashboard {
 
     selector.value = this.activeTrackingId || innos[0].innovationId;
 
-    selector.addEventListener('change', (e) => {
-      this.activeTrackingId = e.target.value;
-      this.renderTrackingPipeline(storage.getInnovationById(this.activeTrackingId));
-    });
+    if (!this._trackingSelectorBound) {
+      selector.addEventListener('change', (e) => {
+        this.activeTrackingId = e.target.value;
+        this.renderTrackingPipeline(storage.getInnovationById(this.activeTrackingId));
+      });
+      this._trackingSelectorBound = true;
+    }
 
     this.renderTrackingPipeline(storage.getInnovationById(selector.value));
   }
@@ -790,10 +1002,35 @@ class InnovatorDashboard {
     if (!container || !inno) return;
 
     const currentStatus = inno.status || 'submitted';
-    const statusOrder = ['submitted', 'screening', 'verification', 'assessment', 'shortlisted', 'selected'];
+    const statusOrder = ['submitted', 'screening', 'verification', 'assessment', 'shortlisted', 'selected', 'mentorship', 'incubation'];
     const currentIdx = statusOrder.indexOf(currentStatus);
 
+    let statusBannerHtml = '';
+    if (currentStatus === 'returned') {
+      statusBannerHtml = `
+        <div style="background:#FFF7ED; border-left:4px solid #EA580C; padding:16px 20px; border-radius:6px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:700; color:#C2410C; font-size:14px; margin-bottom:4px;">Application Returned for Correction</div>
+              <div style="font-size:13px; color:#431407;">Your submission requires minor revision or additional documentation per the technical review panel.</div>
+            </div>
+            <button class="btn-primary-action" id="btn-edit-returned" style="padding:8px 16px; width:auto; background:#EA580C; flex-shrink:0;">
+              Edit & Resubmit
+            </button>
+          </div>
+        </div>
+      `;
+    } else if (currentStatus === 'rejected') {
+      statusBannerHtml = `
+        <div style="background:#FEF2F2; border-left:4px solid #DC2626; padding:16px 20px; border-radius:6px; margin-bottom:20px;">
+          <div style="font-weight:700; color:#991B1B; font-size:14px; margin-bottom:4px;">Application Not Selected for Current Cycle</div>
+          <div style="font-size:13px; color:#450A0A;">This innovation was evaluated by the DICON technical panel and is not advancing in this cycle. You may submit new or refined prototypes in subsequent talent hunt cycles.</div>
+        </div>
+      `;
+    }
+
     container.innerHTML = `
+      ${statusBannerHtml}
       <div style="background:var(--surface-alt); padding:16px 20px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:12px; font-weight:700; color:var(--muted-gray); text-transform:uppercase;">Application Reference</div>
@@ -803,10 +1040,49 @@ class InnovatorDashboard {
       </div>
     `;
 
+    // Handle returned innovation edit button
+    const editBtn = container.querySelector('#btn-edit-returned');
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        this.editingInnovationId = inno.innovationId;
+        document.getElementById('wiz-title').value = inno.innovationName || '';
+        document.getElementById('wiz-category').value = inno.category || '';
+        document.getElementById('wiz-stage').value = inno.developmentStage || '';
+        document.getElementById('wiz-state').value = inno.state || '';
+        document.getElementById('wiz-lga').value = inno.lga || '';
+        document.getElementById('wiz-team').value = inno.teamName || '';
+        document.getElementById('wiz-problem').value = inno.problemDescription || '';
+        document.getElementById('wiz-target-users').value = inno.targetUsers || '';
+        document.getElementById('wiz-importance').value = inno.problemImportance || '';
+        document.getElementById('wiz-solution').value = inno.solutionDescription || '';
+        document.getElementById('wiz-how-it-works').value = inno.howItWorks || '';
+        document.getElementById('wiz-uniqueness').value = inno.uniqueness || '';
+        document.getElementById('wiz-ip-status').value = inno.ipStatus || 'Not Yet';
+        document.getElementById('wiz-ip-support').checked = !!inno.requiresIpSupport;
+
+        this.goToWizardStep(1);
+        window.location.hash = '#submit';
+        this.showToast('Application details loaded for correction. Update and resubmit when ready.');
+      });
+    }
+
+    // Render pipeline steps
     PIPELINE_STAGES.slice(1, 7).forEach((stage, idx) => {
-      const isCompleted = currentIdx > idx;
-      const isCurrent = currentIdx === idx;
-      const isPending = currentIdx < idx;
+      let isCompleted = false;
+      let isCurrent = false;
+      let isPending = true;
+
+      if (currentStatus === 'returned' || currentStatus === 'rejected') {
+        if (idx === 0) isCurrent = true;
+      } else if (currentIdx !== -1) {
+        if (currentIdx > idx) {
+          isCompleted = true;
+          isPending = false;
+        } else if (currentIdx === idx) {
+          isCurrent = true;
+          isPending = false;
+        }
+      }
 
       let nodeClass = 'pipeline-node';
       if (isCompleted) nodeClass += ' completed';
@@ -839,8 +1115,9 @@ class InnovatorDashboard {
 
     if (!container) return;
 
-    const notifs = storage.getNotifications();
-    const unread = storage.getUnreadCount();
+    const user = this.currentUser;
+    const notifs = storage.getNotifications(user ? user.uid : null);
+    const unread = storage.getUnreadCount(user ? user.uid : null);
 
     if (badge) badge.textContent = unread;
     if (dot) dot.style.display = unread > 0 ? 'block' : 'none';
@@ -884,7 +1161,8 @@ class InnovatorDashboard {
     const markAllBtn = document.getElementById('btn-mark-all-read');
     if (markAllBtn) {
       markAllBtn.addEventListener('click', () => {
-        storage.markAllNotificationsRead();
+        const user = this.currentUser;
+        storage.markAllNotificationsRead(user ? user.uid : null);
         this.renderNotifications();
         this.showToast('All notifications marked as read.');
       });

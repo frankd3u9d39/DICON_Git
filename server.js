@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const PUBLIC_DIR = __dirname;
+const PUBLIC_DIR = path.resolve(__dirname);
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -16,13 +16,42 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.webp': 'image/webp',
+  '.avif': 'image/avif',
+  '.woff': 'font/woff',
   '.woff2': 'font/woff2',
-  '.pdf': 'application/pdf'
+  '.ttf': 'font/ttf',
+  '.pdf': 'application/pdf',
+  '.txt': 'text/plain; charset=utf-8'
 };
 
+// Sensitive files and directories that should never be publicly served
+const BLOCKED_PATHS = [
+  '/server.js',
+  '/package.json',
+  '/package-lock.json',
+  '/.git',
+  '/.env',
+  '/node_modules',
+  '/tests'
+];
+
+function isBlocked(reqPath) {
+  const lower = reqPath.toLowerCase();
+  return BLOCKED_PATHS.some(blocked => lower === blocked || lower.startsWith(blocked + '/'));
+}
+
 const server = http.createServer((req, res) => {
+  const rawUrl = req.url || '';
+  if (rawUrl.includes('..') || rawUrl.toLowerCase().includes('%2e')) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Forbidden: Traversal Attempt Detected');
+    return;
+  }
+
   // Normalize path
-  let reqPath = decodeURI(req.url.split('?')[0]);
+  let reqPath = decodeURI(rawUrl.split('?')[0]);
+
+  // Route aliases
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
   } else if (reqPath === '/login') {
@@ -39,11 +68,18 @@ const server = http.createServer((req, res) => {
     reqPath = '/app.html';
   }
 
-  const filePath = path.join(PUBLIC_DIR, reqPath);
+  // Security check: block internal source code & configs
+  if (isBlocked(reqPath)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Access Denied');
+    return;
+  }
+
+  const filePath = path.resolve(PUBLIC_DIR, '.' + reqPath);
 
   // Security: prevent path traversal outside project directory
-  if (!filePath.startsWith(PUBLIC_DIR)) {
-    res.writeHead(403, { 'Content-Type': 'text/plain' });
+  if (!filePath.toLowerCase().startsWith(PUBLIC_DIR.toLowerCase())) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Forbidden');
     return;
   }
@@ -56,17 +92,22 @@ const server = http.createServer((req, res) => {
         const indexPath = path.join(PUBLIC_DIR, 'index.html');
         fs.readFile(indexPath, (indexErr, content) => {
           if (indexErr) {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
             res.end('Not Found');
           } else {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.writeHead(200, {
+              'Content-Type': 'text/html; charset=utf-8',
+              'X-Content-Type-Options': 'nosniff',
+              'X-Frame-Options': 'SAMEORIGIN',
+              'Referrer-Policy': 'strict-origin-when-cross-origin'
+            });
             res.end(content);
           }
         });
         return;
       }
 
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('File Not Found');
       return;
     }
@@ -77,7 +118,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': contentType,
       'Cache-Control': 'no-cache',
-      'Access-Control-Allow-Origin': '*'
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'SAMEORIGIN',
+      'Referrer-Policy': 'strict-origin-when-cross-origin'
     });
 
     const stream = fs.createReadStream(filePath);
@@ -85,6 +128,10 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`DICON GITH Server running at http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`DICON GITH Server running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = server;

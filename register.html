@@ -102,17 +102,19 @@
             <div class="form-group">
               <label for="password" class="form-label">Password</label>
               <div class="form-input-wrap">
-                <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password">
+                <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password" aria-describedby="password-error">
+                <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">Show</button>
               </div>
-              <div class="form-error-msg" id="password-error">Minimum 6 characters.</div>
+              <div class="form-error-msg" id="password-error" style="display:none;">Minimum 8 characters required.</div>
             </div>
 
             <div class="form-group">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <div class="form-input-wrap">
-                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password" aria-describedby="confirm-error">
+                <button type="button" id="toggle-confirm" class="password-toggle-btn" aria-label="Toggle confirm password visibility">Show</button>
               </div>
-              <div class="form-error-msg" id="confirm-error">Passwords must match.</div>
+              <div class="form-error-msg" id="confirm-error" style="display:none;">Passwords must match.</div>
             </div>
           </div>
 
@@ -123,7 +125,7 @@
                 I declare that my submissions represent my original or authorized work, and I agree to the GITH Privacy Policy and Participation Terms.
               </span>
             </label>
-            <div class="form-error-msg" id="terms-error">You must accept the participation terms.</div>
+            <div class="form-error-msg" id="terms-error" style="display:none;">You must accept the participation terms.</div>
           </div>
 
           <button type="submit" id="submit-btn" class="btn-primary-action">
@@ -153,17 +155,45 @@
       stateSelect.appendChild(opt);
     });
 
+    // Password visibility toggles
+    const togglePass = document.getElementById('toggle-password');
+    const passInput = document.getElementById('password');
+    if (togglePass && passInput) {
+      togglePass.addEventListener('click', () => {
+        const isPass = passInput.type === 'password';
+        passInput.type = isPass ? 'text' : 'password';
+        togglePass.textContent = isPass ? 'Hide' : 'Show';
+      });
+    }
+
+    const toggleConfirm = document.getElementById('toggle-confirm');
+    const confirmInput = document.getElementById('confirmPassword');
+    if (toggleConfirm && confirmInput) {
+      toggleConfirm.addEventListener('click', () => {
+        const isPass = confirmInput.type === 'password';
+        confirmInput.type = isPass ? 'text' : 'password';
+        toggleConfirm.textContent = isPass ? 'Hide' : 'Show';
+      });
+    }
+
     const form = document.getElementById('register-form');
     const fullNameInput = document.getElementById('fullName');
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phoneNumber');
     const lgaInput = document.getElementById('lga');
-    const passwordInput = document.getElementById('password');
-    const confirmInput = document.getElementById('confirmPassword');
     const termsCheckbox = document.getElementById('terms-consent');
     const errorBanner = document.getElementById('auth-error-banner');
     const submitBtn = document.getElementById('submit-btn');
     const btnText = document.getElementById('btn-text');
+
+    const nameError = document.getElementById('name-error');
+    const emailError = document.getElementById('email-error');
+    const phoneError = document.getElementById('phone-error');
+    const stateError = document.getElementById('state-error');
+    const lgaError = document.getElementById('lga-error');
+    const passError = document.getElementById('password-error');
+    const confirmError = document.getElementById('confirm-error');
+    const termsError = document.getElementById('terms-error');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -172,67 +202,90 @@
       let hasError = false;
 
       // Validate Full Name
-      if (!fullNameInput.value.trim()) {
+      if (!fullNameInput.value.trim() || fullNameInput.value.trim().length < 3) {
         fullNameInput.classList.add('is-invalid');
+        nameError.style.display = 'block';
         hasError = true;
       } else {
         fullNameInput.classList.remove('is-invalid');
+        nameError.style.display = 'none';
       }
 
       // Validate Email
-      if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailVal = emailInput.value.trim();
+      if (!emailVal || !emailRegex.test(emailVal)) {
         emailInput.classList.add('is-invalid');
+        emailError.textContent = 'Please enter a valid email address.';
+        emailError.style.display = 'block';
+        hasError = true;
+      } else if (emailVal.toLowerCase() === 'admin@dicon.gov.ng' || emailVal.toLowerCase().endsWith('@dicon.gov.ng')) {
+        emailInput.classList.add('is-invalid');
+        emailError.textContent = 'Official @dicon.gov.ng emails cannot register for public innovator accounts.';
+        emailError.style.display = 'block';
         hasError = true;
       } else {
         emailInput.classList.remove('is-invalid');
+        emailError.style.display = 'none';
       }
 
       // Validate Phone
-      if (!phoneInput.value.trim()) {
+      const cleanPhone = phoneInput.value.trim().replace(/[\s-]/g, '');
+      if (!cleanPhone || cleanPhone.length < 10) {
         phoneInput.classList.add('is-invalid');
+        phoneError.style.display = 'block';
         hasError = true;
       } else {
         phoneInput.classList.remove('is-invalid');
+        phoneError.style.display = 'none';
       }
 
       // Validate State
       if (!stateSelect.value) {
         stateSelect.classList.add('is-invalid');
+        stateError.style.display = 'block';
         hasError = true;
       } else {
         stateSelect.classList.remove('is-invalid');
+        stateError.style.display = 'none';
       }
 
       // Validate LGA
       if (!lgaInput.value.trim()) {
         lgaInput.classList.add('is-invalid');
+        lgaError.style.display = 'block';
         hasError = true;
       } else {
         lgaInput.classList.remove('is-invalid');
+        lgaError.style.display = 'none';
       }
 
-      // Validate Password
-      if (!passwordInput.value || passwordInput.value.length < 6) {
-        passwordInput.classList.add('is-invalid');
+      // Validate Password (min 8 chars)
+      if (!passInput.value || passInput.value.length < 8) {
+        passInput.classList.add('is-invalid');
+        passError.style.display = 'block';
         hasError = true;
       } else {
-        passwordInput.classList.remove('is-invalid');
+        passInput.classList.remove('is-invalid');
+        passError.style.display = 'none';
       }
 
       // Validate Confirm Password
-      if (passwordInput.value !== confirmInput.value) {
+      if (passInput.value !== confirmInput.value) {
         confirmInput.classList.add('is-invalid');
+        confirmError.style.display = 'block';
         hasError = true;
       } else {
         confirmInput.classList.remove('is-invalid');
+        confirmError.style.display = 'none';
       }
 
       // Validate Terms
       if (!termsCheckbox.checked) {
-        document.getElementById('terms-error').style.display = 'block';
+        termsError.style.display = 'block';
         hasError = true;
       } else {
-        document.getElementById('terms-error').style.display = 'none';
+        termsError.style.display = 'none';
       }
 
       if (hasError) return;
@@ -243,9 +296,9 @@
       try {
         await authService.register({
           fullName: fullNameInput.value.trim(),
-          email: emailInput.value.trim(),
+          email: emailVal,
           phoneNumber: phoneInput.value.trim(),
-          password: passwordInput.value,
+          password: passInput.value,
           state: stateSelect.value,
           lga: lgaInput.value.trim()
         });
@@ -253,7 +306,7 @@
         btnText.textContent = 'Account Created! Redirecting...';
         setTimeout(() => {
           window.location.href = '/dashboard';
-        }, 600);
+        }, 500);
 
       } catch (err) {
         errorBanner.textContent = err.message || 'Registration failed. Please try again.';

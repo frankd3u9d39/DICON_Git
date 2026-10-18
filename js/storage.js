@@ -28,7 +28,6 @@ class StorageService {
   }
 
   resetToDemo() {
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(INITIAL_DEMO_USER));
     localStorage.setItem(STORAGE_KEYS.ONBOARDING, 'true');
     localStorage.setItem(STORAGE_KEYS.INNOVATIONS, JSON.stringify([INITIAL_DEMO_INNOVATION]));
     localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(INITIAL_NOTIFICATIONS));
@@ -135,27 +134,46 @@ class StorageService {
     return list.find(item => item.innovationId === id || item.referenceNumber === id) || null;
   }
 
-  getDraft() {
-    const raw = localStorage.getItem(STORAGE_KEYS.DRAFT);
-    return raw ? JSON.parse(raw) : null;
+  _getDraftKey(userId = null) {
+    const uid = userId || (this.getUser() ? this.getUser().uid : 'anon');
+    return `${STORAGE_KEYS.DRAFT}_${uid}`;
   }
 
-  saveDraft(draftData) {
+  getDraft(userId = null) {
+    const key = this._getDraftKey(userId);
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw);
+    // Legacy fallback only if same user
+    const legacy = localStorage.getItem(STORAGE_KEYS.DRAFT);
+    if (legacy) {
+      try {
+        const parsed = JSON.parse(legacy);
+        const activeUid = userId || (this.getUser() ? this.getUser().uid : 'anon');
+        if (parsed.userId === activeUid) return parsed;
+      } catch (e) {}
+    }
+    return null;
+  }
+
+  saveDraft(draftData, userId = null) {
     const user = this.getUser();
-    const existing = this.getDraft() || {};
+    const uid = userId || (user ? user.uid : 'anon');
+    const existing = this.getDraft(uid) || {};
     const updated = {
       ...existing,
       ...draftData,
       status: 'draft',
-      userId: user ? user.uid : 'anon',
+      userId: uid,
       innovatorName: user ? user.fullName : '',
       updatedAt: new Date().toISOString()
     };
-    localStorage.setItem(STORAGE_KEYS.DRAFT, JSON.stringify(updated));
+    localStorage.setItem(this._getDraftKey(uid), JSON.stringify(updated));
     return updated;
   }
 
-  clearDraft() {
+  clearDraft(userId = null) {
+    const key = this._getDraftKey(userId);
+    localStorage.removeItem(key);
     localStorage.removeItem(STORAGE_KEYS.DRAFT);
   }
 
@@ -168,20 +186,24 @@ class StorageService {
     const now = new Date().toISOString();
 
     const innovation = {
+      id: innovationId,
       innovationId,
       referenceNumber: refNumber,
-      userId: user.uid,
+      userId: user.uid || user.id,
       innovatorName: user.fullName || "GITH Innovator",
-      innovationName: data.innovationName || "Untitled Innovation",
+      title: data.title || data.innovationName || "Untitled Innovation",
+      innovationName: data.innovationName || data.title || "Untitled Innovation",
       category: data.category || "Other",
       state: data.state || user.state || "",
       lga: data.lga || user.lga || "",
       community: data.community || user.community || "",
       teamName: data.teamName || "",
-      problemDescription: data.problemDescription || "",
+      problemDescription: data.problemDescription || data.problem || "",
+      problem: data.problem || data.problemDescription || "",
       targetUsers: data.targetUsers || "",
       problemImportance: data.problemImportance || "",
-      solutionDescription: data.solutionDescription || "",
+      solutionDescription: data.solutionDescription || data.solution || "",
+      solution: data.solution || data.solutionDescription || "",
       howItWorks: data.howItWorks || "",
       uniqueness: data.uniqueness || "",
       developmentStage: data.developmentStage || "Prototype",
@@ -191,6 +213,14 @@ class StorageService {
       videoUrls: data.videoUrls || [],
       documentUrls: data.documentUrls || [],
       status: "submitted",
+      statusHistory: [
+        {
+          prevStatus: null,
+          newStatus: 'submitted',
+          note: 'Application submitted into the GITH registry.',
+          timestamp: now
+        }
+      ],
       submittedAt: now,
       createdAt: now,
       updatedAt: now
@@ -201,7 +231,7 @@ class StorageService {
     localStorage.setItem(STORAGE_KEYS.INNOVATIONS, JSON.stringify(list));
 
     // Clear active draft
-    this.clearDraft();
+    this.clearDraft(user.uid || user.id);
 
     // Sync to live Firestore if connected
     firebaseService.saveInnovationDoc(innovation.innovationId, innovation).catch(err => console.warn("Firestore sync:", err));
@@ -210,28 +240,93 @@ class StorageService {
     this.addNotification({
       title: "Innovation Submitted Successfully",
       message: `Your application '${innovation.innovationName}' has been submitted. Reference: ${refNumber}`,
-      type: "submission_success"
+      type: "submission_success",
+      targetUserId: user.uid || user.id
     });
 
     return innovation;
   }
 
+  addInnovation(data) {
+    if (!this.getUser()) {
+      this.setUser({ uid: data.userId || 'user-auto', id: data.userId || 'user-auto', fullName: data.creatorName || 'Innovator' });
+    }
+    return this.submitInnovation(data);
+  }
+
+  getUserInnovations(userId) {
+    return this.getInnovations(userId);
+  }
+
+  updateInnovationStatus(id, nextStatus, note = '', adminUser = null) {
+    const list = this.getInnovations();
+    const item = list.find(i => i.innovationId === id || i.id === id || i.referenceNumber === id);
+    if (!item) return null;
+
+    const prevStatus = item.status;
+    const now = new Date().toISOString();
+    item.status = nextStatus;
+    item.updatedAt = now;
+    if (!item.statusHistory) item.statusHistory = [];
+    item.statusHistory.push({
+      prevStatus,
+      newStatus: nextStatus,
+      note,
+      timestamp: now,
+      by: adminUser ? adminUser.fullName || adminUser.email : 'Admin'
+    });
+
+    localStorage.setItem(STORAGE_KEYS.INNOVATIONS, JSON.stringify(list));
+
+    // Record audit log
+    const auditLogs = JSON.parse(localStorage.getItem('dicon_gith_audit_logs') || '[]');
+    auditLogs.unshift({
+      logId: `audit-${Date.now()}`,
+      referenceNumber: item.referenceNumber,
+      innovationId: item.innovationId,
+      prevStatus,
+      newStatus: nextStatus,
+      note,
+      timestamp: now
+    });
+    localStorage.setItem('dicon_gith_audit_logs', JSON.stringify(auditLogs));
+
+    // Notify user
+    this.addNotification({
+      title: `Application Status Updated: ${nextStatus.toUpperCase()}`,
+      message: `Your innovation '${item.innovationName || item.title}' (${item.referenceNumber}) has moved to '${nextStatus}'. ${note ? 'Note: ' + note : ''}`,
+      type: "status_update",
+      targetUserId: item.userId
+    });
+
+    return item;
+  }
+
+  setNotifications(list) {
+    localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(list));
+  }
+
   // ---- NOTIFICATIONS ----
-  getNotifications() {
+  getNotifications(userId = null) {
     const raw = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
-    return raw ? JSON.parse(raw) : [];
+    const list = raw ? JSON.parse(raw) : [];
+    const activeUid = userId || (this.getUser() ? this.getUser().uid : null);
+    if (activeUid) {
+      return list.filter(n => n.userId === activeUid || n.userId === 'global');
+    }
+    return list;
   }
 
-  getUnreadCount() {
-    return this.getNotifications().filter(n => !n.isRead).length;
+  getUnreadCount(userId = null) {
+    return this.getNotifications(userId).filter(n => !n.isRead).length;
   }
 
-  addNotification({ title, message, type = "announcement" }) {
+  addNotification({ title, message, type = "announcement", targetUserId = null }) {
     const user = this.getUser();
-    const list = this.getNotifications();
+    const list = JSON.parse(localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS) || '[]');
     const notif = {
       notificationId: `notif-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-      userId: user ? user.uid : "global",
+      userId: targetUserId || (user ? user.uid : "global"),
       title,
       message,
       type,
@@ -244,7 +339,8 @@ class StorageService {
   }
 
   markNotificationRead(id) {
-    const list = this.getNotifications();
+    const raw = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+    const list = raw ? JSON.parse(raw) : [];
     const found = list.find(n => n.notificationId === id);
     if (found) {
       found.isRead = true;
@@ -252,11 +348,18 @@ class StorageService {
     }
   }
 
-  markAllNotificationsRead() {
-    const list = this.getNotifications();
-    list.forEach(n => { n.isRead = true; });
+  markAllNotificationsRead(userId = null) {
+    const raw = localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+    const list = raw ? JSON.parse(raw) : [];
+    const activeUid = userId || (this.getUser() ? this.getUser().uid : null);
+    list.forEach(n => {
+      if (!activeUid || n.userId === activeUid || n.userId === 'global') {
+        n.isRead = true;
+      }
+    });
     localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(list));
   }
 }
 
 export const storage = new StorageService();
+export const storageService = storage;
