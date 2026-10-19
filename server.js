@@ -64,8 +64,8 @@ const server = http.createServer((req, res) => {
     reqPath = '/dashboard.html';
   } else if (reqPath === '/admin' || reqPath.startsWith('/admin/')) {
     reqPath = '/admin.html';
-  } else if (reqPath === '/app') {
-    reqPath = '/app.html';
+  } else if (reqPath === '/app' || reqPath.startsWith('/app/')) {
+    reqPath = '/dashboard.html';
   }
 
   // Security check: block internal source code & configs

@@ -12,6 +12,7 @@
     { "source": "/dashboard/:path*", "destination": "/dashboard.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/admin/:path*", "destination": "/admin.html" },
-    { "source": "/app", "destination": "/app.html" }
+    { "source": "/app", "destination": "/dashboard.html" },
+    { "source": "/app/:path*", "destination": "/dashboard.html" }
   ]
 }

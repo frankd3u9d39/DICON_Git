@@ -13,6 +13,23 @@
   
   <!-- App Styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    (function () {
+      var hash = window.location.hash || '';
+      if (hash.indexOf('register') !== -1) {
+        window.location.replace('/register');
+      } else if (hash.indexOf('login') !== -1) {
+        window.location.replace('/login');
+      } else if (hash.indexOf('submit') !== -1) {
+        window.location.replace('/dashboard#submit');
+      } else if (hash.indexOf('application') !== -1) {
+        window.location.replace('/dashboard#innovations');
+      } else {
+        window.location.replace('/dashboard');
+      }
+      document.documentElement.style.display = 'none';
+    })();
+  </script>
 </head>
 <body>
 
