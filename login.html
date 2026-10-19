@@ -97,9 +97,13 @@
         <!-- Verified Accounts Quick Fill for QA -->
         <div style="margin-top:20px; padding:12px; background:var(--surface-alt); border:1px solid var(--border); border-radius:8px; font-size:12px;">
           <div style="font-weight:700; color:var(--dark-ink); margin-bottom:6px;">Evaluation Credentials:</div>
-          <div style="display:flex; flex-direction:column; gap:4px; color:var(--muted-gray);">
+          <div style="display:flex; flex-direction:column; gap:4px; color:var(--muted-gray); margin-bottom:10px;">
             <div><strong>Admin:</strong> <code>admin@dicon.gov.ng</code> (Pass: <code>DiconAdmin2026!</code>)</div>
             <div><strong>Innovator:</strong> <code>aminu.bello@example.com</code> (Pass: <code>Innovator2026!</code>)</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" id="btn-fill-innovator" style="flex:1; padding:7px 10px; background:#FFFFFF; border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; color:var(--dark-ink);">Fill Innovator</button>
+            <button type="button" id="btn-fill-admin" style="flex:1; padding:7px 10px; background:#FFFFFF; border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; color:var(--dark-ink);">Fill Admin</button>
           </div>
         </div>
 
@@ -123,7 +127,7 @@
       toggleBtn.textContent = isPassword ? 'Hide' : 'Show';
     });
 
-    // Form submission
+    // Form elements
     const form = document.getElementById('login-form');
     const emailInput = document.getElementById('email');
     const errorBanner = document.getElementById('auth-error-banner');
@@ -131,6 +135,27 @@
     const btnText = document.getElementById('btn-text');
     const emailError = document.getElementById('email-error');
     const passwordError = document.getElementById('password-error');
+
+    // Quick fill handlers
+    document.getElementById('btn-fill-innovator')?.addEventListener('click', () => {
+      emailInput.value = 'aminu.bello@example.com';
+      passwordInput.value = 'Innovator2026!';
+      emailInput.classList.remove('is-invalid');
+      passwordInput.classList.remove('is-invalid');
+      emailError.style.display = 'none';
+      passwordError.style.display = 'none';
+      errorBanner.style.display = 'none';
+    });
+
+    document.getElementById('btn-fill-admin')?.addEventListener('click', () => {
+      emailInput.value = 'admin@dicon.gov.ng';
+      passwordInput.value = 'DiconAdmin2026!';
+      emailInput.classList.remove('is-invalid');
+      passwordInput.classList.remove('is-invalid');
+      emailError.style.display = 'none';
+      passwordError.style.display = 'none';
+      errorBanner.style.display = 'none';
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();

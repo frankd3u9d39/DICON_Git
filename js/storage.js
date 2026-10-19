@@ -177,8 +177,8 @@ class StorageService {
     localStorage.removeItem(STORAGE_KEYS.DRAFT);
   }
 
-  submitInnovation(data) {
-    const user = this.getUser();
+  submitInnovation(data, overrideUser = null) {
+    const user = overrideUser || this.getUser();
     if (!user) throw new Error("Authentication required.");
 
     const refNumber = this.generateReferenceNumber();
@@ -248,10 +248,12 @@ class StorageService {
   }
 
   addInnovation(data) {
-    if (!this.getUser()) {
-      this.setUser({ uid: data.userId || 'user-auto', id: data.userId || 'user-auto', fullName: data.creatorName || 'Innovator' });
-    }
-    return this.submitInnovation(data);
+    const user = this.getUser() || {
+      uid: data.userId || 'user-auto',
+      id: data.userId || 'user-auto',
+      fullName: data.creatorName || data.innovatorName || 'Innovator'
+    };
+    return this.submitInnovation(data, user);
   }
 
   getUserInnovations(userId) {

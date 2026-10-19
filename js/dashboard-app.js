@@ -32,6 +32,7 @@ class InnovatorDashboard {
       return;
     }
 
+    document.documentElement.style.display = '';
     this.currentUser = authService.getCurrentUser();
 
     // 2. Setup UI

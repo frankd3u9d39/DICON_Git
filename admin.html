@@ -12,6 +12,23 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/dashboard.css">
+  <!-- Immediate Synchronous Authentication Guard: Blocks render and redirects if not signed in or not admin -->
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('dicon_gith_user');
+        var user = raw ? JSON.parse(raw) : null;
+        if (!user || !user.uid || !user.email || (user.role !== 'admin' && user.role !== 'super_admin')) {
+          var dest = window.location.pathname + window.location.search + window.location.hash;
+          window.location.replace('/login?redirect=' + encodeURIComponent(dest));
+          document.documentElement.style.display = 'none';
+        }
+      } catch (e) {
+        window.location.replace('/login');
+        document.documentElement.style.display = 'none';
+      }
+    })();
+  </script>
 </head>
 <body class="dashboard-layout">
 
@@ -127,10 +144,10 @@
 
     <!-- Admin User Footer -->
     <div class="sidebar-user-footer">
-      <img src="assets/logo.png" alt="Admin" class="sidebar-user-avatar" id="admin-avatar">
+      <img src="/assets/logo.png" alt="Admin" class="sidebar-user-avatar" id="admin-avatar">
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name" id="admin-user-name">Col. M. A. Danjuma</div>
-        <div class="sidebar-user-role" id="admin-user-role">Super Admin • DICON R&D</div>
+        <div class="sidebar-user-name" id="admin-user-name">Admin Reviewer</div>
+        <div class="sidebar-user-role" id="admin-user-role">DICON Review Board</div>
       </div>
     </div>
   </aside>

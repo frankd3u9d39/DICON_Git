@@ -562,6 +562,27 @@
           }
         });
       });
+
+      // Auth-aware Navigation: direct unauthenticated submit requests through login
+      try {
+        const raw = localStorage.getItem('dicon_gith_user');
+        const user = raw ? JSON.parse(raw) : null;
+        const isLoggedIn = user && user.uid && user.email;
+        const loginLinks = document.querySelectorAll('a[href="/login"]');
+        const submitLinks = document.querySelectorAll('a[href="/dashboard#submit"]');
+
+        if (isLoggedIn) {
+          const dest = (user.role === 'admin' || user.role === 'super_admin') ? '/admin' : '/dashboard';
+          loginLinks.forEach(link => {
+            link.textContent = 'Dashboard';
+            link.setAttribute('href', dest);
+          });
+        } else {
+          submitLinks.forEach(link => {
+            link.setAttribute('href', '/login?redirect=%2Fdashboard%23submit');
+          });
+        }
+      } catch (err) {}
     });
   </script>
 </body>

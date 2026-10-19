@@ -12,6 +12,23 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/dashboard.css">
+  <!-- Immediate Synchronous Authentication Guard: Blocks render and redirects if not signed in -->
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('dicon_gith_user');
+        var user = raw ? JSON.parse(raw) : null;
+        if (!user || !user.uid || !user.email) {
+          var dest = window.location.pathname + window.location.search + window.location.hash;
+          window.location.replace('/login?redirect=' + encodeURIComponent(dest));
+          document.documentElement.style.display = 'none';
+        }
+      } catch (e) {
+        window.location.replace('/login');
+        document.documentElement.style.display = 'none';
+      }
+    })();
+  </script>
   <style>
     /* Toast styles */
     .toast-container {
@@ -51,7 +68,7 @@
   <aside class="dashboard-sidebar" id="dashboard-sidebar">
     <div class="sidebar-header">
       <a href="/" style="display:flex; align-items:center; gap:10px;">
-        <img src="assets/logo.png" alt="DICON GITH" class="sidebar-logo">
+        <img src="/assets/logo.png" alt="DICON GITH" class="sidebar-logo">
         <div>
           <div class="sidebar-brand-name">DICON GITH</div>
           <span class="sidebar-brand-badge badge-innovator">Innovator</span>
@@ -79,7 +96,7 @@
           <a href="#innovations">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             <span>My Innovations</span>
-            <span class="sidebar-nav-badge" id="badge-total-innovations">1</span>
+            <span class="sidebar-nav-badge" id="badge-total-innovations">0</span>
           </a>
         </li>
         <li class="sidebar-nav-item" data-view="view-submit">
@@ -110,7 +127,7 @@
           <a href="#notifications">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             <span>Notifications</span>
-            <span class="sidebar-nav-badge" id="badge-notif-count" style="background:var(--warm-amber); color:#fff;">1</span>
+            <span class="sidebar-nav-badge" id="badge-notif-count" style="background:var(--warm-amber); color:#fff;">0</span>
           </a>
         </li>
       </ul>
@@ -135,10 +152,10 @@
 
     <!-- User Profile Footer -->
     <div class="sidebar-user-footer">
-      <img src="assets/innovator_main.jpg" alt="User avatar" class="sidebar-user-avatar" id="sidebar-user-avatar">
+      <img src="/assets/innovator_main.jpg" alt="User avatar" class="sidebar-user-avatar" id="sidebar-user-avatar">
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name" id="sidebar-user-name">Engr. Aminu Bello</div>
-        <div class="sidebar-user-role" id="sidebar-user-state">Kaduna State</div>
+        <div class="sidebar-user-name" id="sidebar-user-name">Innovator</div>
+        <div class="sidebar-user-role" id="sidebar-user-state">Workspace</div>
       </div>
     </div>
   </aside>
@@ -172,7 +189,7 @@
         </a>
 
         <a href="#profile" class="topbar-avatar-link" aria-label="Innovator Profile" title="View Profile">
-          <img src="assets/innovator_main.jpg" alt="User Avatar" id="topbar-user-avatar">
+          <img src="/assets/innovator_main.jpg" alt="User Avatar" id="topbar-user-avatar">
         </a>
       </div>
     </header>
@@ -187,7 +204,7 @@
         <!-- Welcome Hero -->
         <div class="welcome-hero-card">
           <div class="welcome-hero-text">
-            <h2 id="welcome-user-heading">Welcome back, Innovator</h2>
+            <h2 id="welcome-user-heading">Welcome, Innovator</h2>
             <p>
               Manage your innovations and follow your journey with GITH. Your working prototypes are bringing practical local solutions to national attention.
             </p>
@@ -209,7 +226,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path></svg>
             </div>
             <div class="stat-details">
-              <div class="stat-value" id="stat-total">1</div>
+              <div class="stat-value" id="stat-total">0</div>
               <div class="stat-label">Total Innovations</div>
             </div>
           </div>
@@ -219,7 +236,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
             </div>
             <div class="stat-details">
-              <div class="stat-value" id="stat-submitted">1</div>
+              <div class="stat-value" id="stat-submitted">0</div>
               <div class="stat-label">Submitted</div>
             </div>
           </div>
@@ -229,7 +246,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
             <div class="stat-details">
-              <div class="stat-value" id="stat-review">1</div>
+              <div class="stat-value" id="stat-review">0</div>
               <div class="stat-label">Under Review</div>
             </div>
           </div>

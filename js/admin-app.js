@@ -47,6 +47,7 @@ class AdminDashboard {
       return;
     }
 
+    document.documentElement.style.display = '';
     this.currentUser = user;
 
     // 2. Setup UI

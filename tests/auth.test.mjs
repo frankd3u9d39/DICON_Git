@@ -201,3 +201,26 @@ test('AuthService: Two-stage password reset lifecycle', async () => {
   assert.equal(newLogin.success, true);
   assert.equal(newLogin.user.email, 'aminu.bello@example.com');
 });
+
+test('AuthService: requireAuth guard rejects unauthenticated sessions and redirects to /login', async () => {
+  setupTestEnvironment();
+  await authService.init();
+
+  // Ensure logged out
+  await authService.logout();
+  assert.equal(authService.isAuthenticated(), false);
+  assert.equal(authService.getCurrentUser(), null);
+
+  // Mock window.location
+  let redirectedTo = null;
+  globalThis.window.location = {
+    pathname: '/dashboard',
+    href: '',
+    replace: (url) => { redirectedTo = url; }
+  };
+
+  const isAllowed = authService.requireAuth(['innovator']);
+  assert.equal(isAllowed, false);
+  assert.match(globalThis.window.location.href, /\/login\?redirect=%2Fdashboard/);
+});
+
