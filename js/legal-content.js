@@ -6,54 +6,7 @@
 
 import { firebaseService } from './firebase-config.js';
 
-export const DEFAULT_PRIVACY_POLICY = `DICON GITH APP — PRIVACY POLICY
-Grassroot Innovations Talent Hunt (GITH)
-Defence Industries Corporation of Nigeria (DICON)
-
-1. INTRODUCTION & SCOPE
-The Grassroot Innovations Talent Hunt (GITH), operating under the auspices of the Defence Industries Corporation of Nigeria (DICON), is committed to safeguarding the personal data and intellectual property information of all applicants, innovators, evaluators, and institutional partners. This Privacy Policy outlines how personal data is collected, processed, protected, and managed across the GITH platform and associated national administrative workflows.
-
-2. INFORMATION WE COLLECT
-We collect personal information necessary to establish identity, review innovation submissions, and communicate assessment outcomes:
-* Personal Identification: Full name, phone number, email address, physical address, state of origin, state of residence, and Local Government Area (LGA).
-* Demographic & Profile Records: Occupation, educational background, institutional affiliation, core technical skills, and gender.
-* Technical & Innovation Records: Innovation name, problem statement, technical solution description, schematics, prototype imagery, video demonstrations, and intellectual property status.
-* Administrative & System Logs: Timestamps, authentication events, role-based review decisions, and diagnostic telemetry.
-
-3. PURPOSE & LEGAL BASIS OF DATA PROCESSING
-Personal information is processed strictly for the administration of the GITH programme, including:
-* Creating, maintaining, and authenticating innovator profiles.
-* Conducting administrative screening, technical evaluation, and site verification of submitted innovations.
-* Communicating status transitions, evaluation notes, shortlisting notices, and national award selections.
-* Facilitating linkages to institutional mentorship, incubation, prototyping facilities, and ecosystem partners.
-* Compiling statistical and research data on grassroots innovation trends across Nigeria.
-
-4. DATA STORAGE & CLOUD INFRASTRUCTURE
-All data is stored securely using cloud infrastructure provided by Google Firebase and Cloud Firestore. Access is governed by strict identity verification, role-based access rules, and automated audit logs.
-
-5. INTELLECTUAL PROPERTY & CONFIDENTIALITY
-Innovation disclosures, technical schematics, and supporting documents are treated with institutional confidentiality. Technical reviewers and administrative board members are bound by confidentiality protocols during the screening and assessment phases.
-
-6. USER RIGHTS
-In accordance with applicable Nigerian data protection regulations, users have the right to:
-* Access and review their registered personal profile data.
-* Request correction of inaccurate personal records.
-* Request clarification regarding the processing of their submissions.
-* Lodge inquiries through the designated official GITH support channel.
-
-7. RETENTION PERIOD
-Records are maintained for the active duration of the applicant's participation in the GITH cycle and retained as required for official innovation records, audit compliance, and talent registry management.
-
-8. COOKIES & LOCAL STORAGE
-The platform utilizes secure local storage and essential session tokens to preserve authentication states, draft application progress, and UI preferences.
-
-9. THIRD-PARTY DISCLOSURES
-Personal data is not sold, rented, or traded. Information is shared solely with authorized evaluators, institutional mentors, and partner research facilities authorized by DICON.
-
-10. CHILDREN & STUDENT INNOVATORS
-Submissions from minors or student innovators under the age of 18 must be accompanied by appropriate parental, guardian, or institutional consent.
-
-11. DATA SECURITY
+export const DEFAULT_PRIVACY_POLICY = `11. DATA SECURITY
 
 We take the protection of personal information seriously.
 
@@ -92,26 +45,7 @@ Preserve relevant evidence.
 Investigate the cause.
 Implement corrective measures.`;
 
-export const DEFAULT_TERMS_AND_CONDITIONS = `DICON GITH APP — TERMS & CONDITIONS
-Grassroot Innovations Talent Hunt (GITH)
-Defence Industries Corporation of Nigeria (DICON)
-
-1. ACCEPTANCE OF TERMS
-By accessing the GITH platform, registering an innovator profile, or submitting an application, you agree to comply with and be bound by these Terms and Conditions.
-
-2. ELIGIBILITY & REGISTRATION
-Innovators must provide accurate, current, and complete profile information. You are responsible for maintaining the confidentiality of your login credentials and for all activities conducted through your account.
-
-3. SUBMISSIONS & ORIGINALITY
-All submissions must represent original work or innovations for which the applicant has documented authorization. Misrepresentation or submission of proprietary third-party work without consent constitutes grounds for immediate disqualification.
-
-4. INTELLECTUAL PROPERTY RIGHTS
-Applicants retain intellectual property rights to their original inventions. Participation in GITH does not automatically constitute patent, trademark, or copyright registration. Applicants are advised to evaluate appropriate IP protection strategies.
-
-5. EVALUATION & DISCRETION
-Participation or submission does not guarantee selection, funding, access to facilities, IP protection, or commercialization. Assessment outcomes are determined by the authorized technical review panel in accordance with programme criteria.
-
-20. INDEMNITY
+export const DEFAULT_TERMS_AND_CONDITIONS = `20. INDEMNITY
 
 To the extent permitted by applicable law, you may be responsible for losses or claims arising directly from your unlawful conduct, material misrepresentation, or infringement of another person's rights.
 
@@ -341,7 +275,7 @@ GITH — Grassroot Innovations Talent Hunt
 
 Discovering Innovators. Connecting Institutions. Developing Solutions. Creating Impact.`;
 
-const STORAGE_PREFIX = 'dicon_gith_policy_';
+const STORAGE_PREFIX = 'dicon_gith_policy_v2_';
 
 class LegalContentService {
   constructor() {

@@ -10,7 +10,7 @@ test('LegalContentService: Privacy Policy contains Section 11 Data Security & Se
   setupTestEnvironment();
   const policy = await legalContentService.getPolicy('privacy');
   
-  assert.ok(policy.content.includes('11. DATA SECURITY'));
+  assert.ok(policy.content.startsWith('11. DATA SECURITY'));
   assert.ok(policy.content.includes('Firebase Authentication and secure account-management procedures.'));
   assert.ok(policy.content.includes('Properly configured Firestore security rules.'));
   assert.ok(policy.content.includes('12. DATA BREACHES'));
@@ -21,7 +21,7 @@ test('LegalContentService: Terms and Conditions contains Sections 20-24 and DICO
   setupTestEnvironment();
   const terms = await legalContentService.getPolicy('terms');
   
-  assert.ok(terms.content.includes('20. INDEMNITY'));
+  assert.ok(terms.content.startsWith('20. INDEMNITY'));
   assert.ok(terms.content.includes('material misrepresentation, or infringement of another person\'s rights.'));
   assert.ok(terms.content.includes('21. COMPLAINTS AND DISPUTE RESOLUTION'));
   assert.ok(terms.content.includes('Governing Law: The laws of the Federal Republic of Nigeria.'));
