@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/legal.css">
 </head>
 <body class="auth-page">
 
@@ -121,8 +122,8 @@
           <div class="form-group" style="margin-top:4px; margin-bottom:24px;">
             <label class="checkbox-wrap" style="align-items:flex-start;">
               <input type="checkbox" id="terms-consent" required style="margin-top:3px;">
-              <span style="font-size:12px; line-height:1.4;">
-                I declare that my submissions represent my original or authorized work, and I agree to the GITH Privacy Policy and Participation Terms.
+              <span style="font-size:12px; line-height:1.5;">
+                I declare that my submissions represent my original or authorized work, and I agree to the GITH <a href="#" data-legal="privacy" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Privacy Policy</a> and <a href="#" data-legal="terms" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Participation Terms</a>.
               </span>
             </label>
             <div class="form-error-msg" id="terms-error" style="display:none;">You must accept the participation terms.</div>
@@ -145,6 +146,9 @@
   <script type="module">
     import { authService } from './js/auth-service.js';
     import { NIGERIAN_STATES } from './js/data.js';
+    import { legalContentService } from './js/legal-content.js';
+
+    legalContentService.initTriggers();
 
     // Populate Nigerian states
     const stateSelect = document.getElementById('state');

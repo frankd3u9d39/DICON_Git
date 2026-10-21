@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/legal.css">
   <!-- Immediate Synchronous Authentication Guard: Blocks render and redirects if not signed in -->
   <script>
     (function () {
@@ -784,6 +785,25 @@
               <a href="/forgot-password" class="btn-hero-action btn-hero-secondary" style="color:var(--dark-ink); border-color:var(--border); display:inline-block;">
                 Request Password Reset
               </a>
+            </div>
+
+            <div style="padding-top:20px; border-top:1px solid var(--border); margin-bottom:24px;">
+              <h3 style="font-size:15px; font-weight:700; margin-bottom:4px;">Institutional Policies & Documents</h3>
+              <p style="font-size:13px; color:var(--muted-gray); margin-bottom:14px;">Review official guidelines, data security safeguards, indemnity provisions, and the GITH charter.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button type="button" class="btn-hero-action btn-hero-secondary" data-legal="privacy" style="color:var(--dark-ink); border-color:var(--border);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  Privacy Policy (Data Security)
+                </button>
+                <button type="button" class="btn-hero-action btn-hero-secondary" data-legal="terms" style="color:var(--dark-ink); border-color:var(--border);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  Terms & Conditions (Indemnity)
+                </button>
+                <button type="button" class="btn-hero-action btn-hero-secondary" data-legal="about" style="color:var(--dark-ink); border-color:var(--border);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  About GITH (11 Sections)
+                </button>
+              </div>
             </div>
 
             <div style="padding-top:20px; border-top:1px solid var(--border);">

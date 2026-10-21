@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/legal.css">
   <!-- Immediate Synchronous Authentication Guard: Blocks render and redirects if not signed in or not admin -->
   <script>
     (function () {
@@ -131,6 +132,12 @@
           <a href="#admin-audit">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             <span>Audit Trail</span>
+          </a>
+        </li>
+        <li class="sidebar-nav-item" data-view="admin-view-settings">
+          <a href="#admin-settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>System Policies & Content</span>
           </a>
         </li>
         <li class="sidebar-nav-item">
@@ -473,6 +480,91 @@
                 <!-- Populated by JS -->
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 7: SYSTEM POLICIES & CONTENT (ADMIN SETTINGS)
+           ==================================================================== -->
+      <section class="dashboard-view" id="admin-view-settings">
+        <!-- Hero Header -->
+        <div class="content-card hero-gradient-card">
+          <div class="hero-left-content">
+            <span class="hero-badge-tag">ADMINISTRATIVE CONFIGURATION</span>
+            <h1 class="hero-main-title">System Policies & Institutional Content</h1>
+            <p class="hero-desc">
+              Manage and update official documents across the GITH platform: Privacy Policy (including Data Security & Breaches), Terms & Conditions (including Indemnity & Dispute Resolution), and the complete 11-section About GITH Institutional Charter. Changes synchronize instantly across public and innovator views.
+            </p>
+          </div>
+          <div class="hero-actions-group">
+            <button class="btn-hero-action btn-hero-secondary" id="btn-admin-preview-public" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.3);">
+              View Public Modal
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-settings-container">
+          <!-- Policy Selector Tabs -->
+          <div class="admin-settings-tabs">
+            <button class="admin-policy-tab active" data-policy="privacy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>Privacy Policy</span>
+            </button>
+            <button class="admin-policy-tab" data-policy="terms">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>Terms & Conditions</span>
+            </button>
+            <button class="admin-policy-tab" data-policy="about">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>About GITH (11 Sections)</span>
+            </button>
+          </div>
+
+          <!-- Editor Card -->
+          <div class="admin-editor-card">
+            <div class="admin-editor-header">
+              <div>
+                <h3 class="admin-editor-title" id="admin-policy-editor-title">Privacy Policy Editor</h3>
+                <div class="admin-editor-sub" id="admin-policy-editor-sub">Live document on public landing, mobile portal, and innovator registration</div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span id="admin-policy-sync-status" class="status-pill pill-submitted" style="background:#DCFCE7; color:#166534; font-size:11px;">
+                  Active & Published
+                </span>
+                <div class="admin-mode-toggle">
+                  <button type="button" class="admin-mode-btn active" id="btn-mode-edit">Edit Raw Text</button>
+                  <button type="button" class="admin-mode-btn" id="btn-mode-preview">Formatted Preview</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Box -->
+            <div id="admin-policy-edit-pane">
+              <textarea id="admin-policy-textarea" class="admin-policy-textarea" spellcheck="false"></textarea>
+            </div>
+
+            <!-- Formatted Preview Box -->
+            <div id="admin-policy-preview-pane" class="admin-preview-box" style="display:none;">
+              <!-- Dynamic Formatted HTML -->
+            </div>
+
+            <div class="admin-editor-footer">
+              <div style="font-size:12px; color:var(--muted-gray);" id="admin-policy-meta-stats">
+                Characters: 0 • Words: 0
+              </div>
+
+              <div class="admin-editor-actions">
+                <button type="button" class="btn-admin-reset" id="btn-admin-policy-reset">
+                  Reset to Default
+                </button>
+                <button type="button" class="btn-admin-save" id="btn-admin-policy-save">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span>Save & Publish Changes</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

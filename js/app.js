@@ -15,6 +15,7 @@ import {
 
 import { storage } from './storage.js';
 import { firebaseService } from './firebase-config.js';
+import { legalContentService } from './legal-content.js';
 
 class AppController {
   constructor() {
@@ -456,10 +457,12 @@ class AppController {
     document.getElementById('btn-register-back').onclick = () => this.goBack();
     document.getElementById('link-reg-terms').onclick = (e) => {
       e.preventDefault();
+      this.renderScreenTerms('terms');
       this.navigateTo('screen-terms');
     };
     document.getElementById('link-reg-privacy').onclick = (e) => {
       e.preventDefault();
+      this.renderScreenTerms('privacy');
       this.navigateTo('screen-terms');
     };
 
@@ -1128,12 +1131,25 @@ class AppController {
   // ---- SETTINGS & FUTURE-READY MODALS (§19, §33) ----
   bindSettings() {
     document.getElementById('set-edit-profile').onclick = () => this.openEditProfile();
-    document.getElementById('set-terms').onclick = () => this.navigateTo('screen-terms');
-    document.getElementById('set-privacy').onclick = () => this.navigateTo('screen-terms');
+    document.getElementById('set-terms').onclick = () => {
+      this.renderScreenTerms('terms');
+      this.navigateTo('screen-terms');
+    };
+    document.getElementById('set-privacy').onclick = () => {
+      this.renderScreenTerms('privacy');
+      this.navigateTo('screen-terms');
+    };
+    const setAbout = document.getElementById('set-about');
+    if (setAbout) {
+      setAbout.onclick = () => {
+        this.renderScreenTerms('about');
+        this.navigateTo('screen-terms');
+      };
+    }
     document.getElementById('set-help').onclick = () => {
       this.openModal(
         "GITH Grassroots Support",
-        "For technical inquiries, patent assistance, or rural cluster facilitation, contact the DICON GITH Support Secretariat at support@gith.ng or visit your nearest State Technical Hub."
+        "For technical inquiries, patent assistance, or rural cluster facilitation, contact the DICON GITH Support Secretariat at support@dicon-gith.gov.ng or visit your nearest State Technical Hub."
       );
     };
     document.getElementById('set-demo').onclick = () => {
@@ -1161,6 +1177,40 @@ class AppController {
         );
       };
     });
+  }
+
+  async renderScreenTerms(type = 'terms') {
+    const titleEl = document.getElementById('screen-terms-header-title');
+    const contentEl = document.getElementById('screen-terms-content');
+    const tabs = document.querySelectorAll('.btn-app-policy-tab');
+
+    tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.appPolicy === type);
+    });
+
+    const titles = {
+      terms: 'Terms & Conditions',
+      privacy: 'Privacy Policy',
+      about: 'About GITH (11 Sections)'
+    };
+    if (titleEl) titleEl.textContent = titles[type] || 'Terms & Policies';
+
+    if (contentEl) {
+      contentEl.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-secondary);">Loading institutional document...</div>';
+      const policyData = await legalContentService.getPolicy(type);
+      contentEl.innerHTML = legalContentService.renderPolicyToHtml(policyData.content);
+      contentEl.scrollTop = 0;
+    }
+
+    if (!this._appPolicyTabsBound) {
+      this._appPolicyTabsBound = true;
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const t = tab.dataset.appPolicy;
+          if (t) this.renderScreenTerms(t);
+        });
+      });
+    }
   }
 
   openModal(title, content) {

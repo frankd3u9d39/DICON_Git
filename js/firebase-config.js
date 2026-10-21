@@ -93,6 +93,23 @@ export class FirebaseService {
     }
     return null;
   }
+
+  async getSetting(key) {
+    if (this.isLiveConnected && this.db) {
+      const doc = await this.db.collection('settings').doc(key).get();
+      return doc.exists ? doc.data() : null;
+    }
+    return null;
+  }
+
+  async saveSetting(key, data) {
+    if (this.isLiveConnected && this.db) {
+      await this.db.collection('settings').doc(key).set({
+        ...data,
+        updatedAt: window.firebase?.firestore?.FieldValue?.serverTimestamp() || new Date().toISOString()
+      }, { merge: true });
+    }
+  }
 }
 
 export const firebaseService = new FirebaseService();

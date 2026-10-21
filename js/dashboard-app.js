@@ -11,6 +11,7 @@ import {
   AVAILABLE_SKILLS,
   PIPELINE_STAGES
 } from './data.js';
+import { legalContentService } from './legal-content.js';
 
 class InnovatorDashboard {
   constructor() {
@@ -42,6 +43,7 @@ class InnovatorDashboard {
     this.bindWizardEvents();
     this.bindProfileEvents();
     this.bindNotificationsEvents();
+    legalContentService.initTriggers();
 
     // 3. Render User Data
     this.renderUserProfile();

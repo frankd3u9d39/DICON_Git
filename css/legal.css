@@ -1,0 +1,635 @@
+/**
+ * DICON GITH — Institutional Charter & Legal Policies Styling
+ * Premium typography, interactive tabs, responsive paper-document view,
+ * and Admin Content Management styling.
+ */
+
+/* ==========================================================================
+   1. UNIVERSAL LEGAL & INSTITUTIONAL MODAL
+   ========================================================================== */
+.gith-legal-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(10, 25, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gith-legal-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gith-legal-modal {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(10, 51, 35, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(8px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gith-legal-modal-backdrop.active .gith-legal-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Modal Header */
+.gith-legal-modal-header {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #0A3323 0%, #0F5132 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.gith-legal-emblem-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #D97706;
+  color: #0A3323;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.gith-legal-header-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.gith-legal-header-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.gith-legal-close-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gith-legal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+/* Tab Bar */
+.gith-legal-tabs {
+  display: flex;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 0 16px;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.gith-legal-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.gith-legal-tab:hover {
+  color: #0A3323;
+  background: rgba(10, 51, 35, 0.04);
+}
+
+.gith-legal-tab.active {
+  color: #0A3323;
+  border-bottom-color: #D97706;
+  background: #FFFFFF;
+}
+
+/* Document Meta Bar */
+.gith-legal-meta-bar {
+  padding: 10px 24px;
+  background: #F1F5F9;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gith-legal-status-pill {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+/* Modal Body / Document Scroll Area */
+.gith-legal-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  background: #FFFFFF;
+  color: #1E293B;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+}
+
+/* Modal Footer */
+.gith-legal-modal-footer {
+  padding: 14px 24px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-gith-legal-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-gith-legal-print:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.btn-gith-legal-dismiss {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: #0A3323;
+  color: #FFFFFF;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-gith-legal-dismiss:hover {
+  background: #0F5132;
+}
+
+/* ==========================================================================
+   2. INSTITUTIONAL DOCUMENT TYPOGRAPHY & ELEMENTS
+   ========================================================================== */
+.legal-doc-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-left: 5px solid #0A3323;
+  padding: 18px 20px;
+  border-radius: 10px;
+  margin-bottom: 26px;
+}
+
+.legal-doc-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #0A3323;
+  color: #D97706;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legal-doc-main-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0A3323;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.legal-doc-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: #166534;
+  margin-top: 3px;
+}
+
+/* Section Header (1. Introduction, 11. DATA SECURITY) */
+.legal-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 26px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.legal-section-num {
+  font-size: 16px;
+  font-weight: 800;
+  color: #D97706;
+}
+
+.legal-section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0A3323;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+/* Sub-header (A. Institutional Direction...) */
+.legal-sub-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.legal-sub-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  background: #FEF3C7;
+  color: #92400E;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.legal-sub-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
+}
+
+/* Paragraphs & Lists */
+.legal-p {
+  font-size: 14px;
+  color: #334155;
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+
+.legal-list {
+  margin: 10px 0 16px 20px;
+  padding: 0;
+}
+
+.legal-list li {
+  font-size: 13.5px;
+  color: #334155;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.legal-safeguard-list li {
+  position: relative;
+  list-style-type: none;
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+.legal-safeguard-list li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: #0A3323;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* Pathway Graphic Flow */
+.legal-pathway-container {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.legal-pathway-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0A3323;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}
+
+.legal-pathway-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.legal-pathway-step {
+  padding: 4px 10px;
+  background: #0A3323;
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.legal-pathway-arrow {
+  color: #D97706;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* Quote Callout */
+.legal-quote-callout {
+  position: relative;
+  background: linear-gradient(135deg, #0A3323 0%, #166534 100%);
+  color: #FFFFFF;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  box-shadow: 0 4px 14px rgba(10, 51, 35, 0.15);
+}
+
+.legal-quote-accent {
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  font-size: 50px;
+  color: rgba(217, 119, 6, 0.35);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.legal-quote-text {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  color: #FEF3C7;
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================================================
+   3. ADMIN CONTENT MANAGEMENT EDITOR STYLES
+   ========================================================================== */
+.admin-settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-settings-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid var(--border, #E2E8F0);
+  padding-bottom: 12px;
+}
+
+.admin-policy-tab {
+  padding: 10px 18px;
+  background: var(--card-bg, #FFFFFF);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark-ink, #0F172A);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.admin-policy-tab:hover {
+  background: #F1F5F9;
+}
+
+.admin-policy-tab.active {
+  background: #0A3323;
+  color: #FFFFFF;
+  border-color: #0A3323;
+  box-shadow: 0 2px 6px rgba(10, 51, 35, 0.2);
+}
+
+.admin-editor-card {
+  background: var(--card-bg, #FFFFFF);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.admin-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-editor-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dark-ink, #0F172A);
+  margin: 0;
+}
+
+.admin-editor-sub {
+  font-size: 12px;
+  color: var(--muted-gray, #64748B);
+  margin-top: 2px;
+}
+
+.admin-mode-toggle {
+  display: flex;
+  background: #F1F5F9;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.admin-mode-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748B;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-mode-btn.active {
+  background: #FFFFFF;
+  color: #0A3323;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.admin-policy-textarea {
+  width: 100%;
+  min-height: 460px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 16px;
+  border: 1px solid var(--border, #CBD5E1);
+  border-radius: 8px;
+  color: var(--dark-ink, #0F172A);
+  background: #F8FAFC;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.admin-policy-textarea:focus {
+  outline: none;
+  border-color: #0A3323;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(10, 51, 35, 0.12);
+}
+
+.admin-editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border, #E2E8F0);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-editor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-admin-save {
+  padding: 10px 22px;
+  background: #0A3323;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(10, 51, 35, 0.2);
+  transition: all 0.15s ease;
+}
+
+.btn-admin-save:hover {
+  background: #0F5132;
+  transform: translateY(-1px);
+}
+
+.btn-admin-reset {
+  padding: 10px 18px;
+  background: #FFFFFF;
+  color: #DC2626;
+  border: 1px solid #FCA5A5;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-admin-reset:hover {
+  background: #FEF2F2;
+}
+
+.admin-preview-box {
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: 8px;
+  padding: 24px;
+  background: #FFFFFF;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Print Styles */
+@media print {
+  .gith-legal-modal-backdrop {
+    position: static;
+    background: transparent;
+    padding: 0;
+  }
+  .gith-legal-modal {
+    box-shadow: none;
+    max-height: none;
+  }
+  .gith-legal-modal-header,
+  .gith-legal-tabs,
+  .gith-legal-modal-footer,
+  .gith-legal-close-btn {
+    display: none !important;
+  }
+  .gith-legal-modal-body {
+    padding: 0;
+  }
+}

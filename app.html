@@ -13,6 +13,7 @@
   
   <!-- App Styles -->
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/legal.css">
   <script>
     (function () {
       var hash = window.location.hash || '';
@@ -346,27 +347,24 @@
     </div>
 
     <!-- ==========================================
-         SCREEN 8: TERMS & PRIVACY
+         SCREEN 8: INSTITUTIONAL CHARTER, TERMS & PRIVACY
          ========================================== -->
     <div class="screen" id="screen-terms">
       <div class="app-header">
         <button class="header-back-btn" id="btn-terms-back">←</button>
-        <h2>Terms & Privacy</h2>
+        <h2 id="screen-terms-header-title">Terms & Policies</h2>
         <div style="width:36px;"></div>
       </div>
-      <div class="screen-wrapper no-nav" style="padding:20px; font-size:13px; color:var(--text-secondary); line-height:1.6;">
-        <h3 style="color:var(--primary-dark); margin-bottom:8px;">1. GITH Platform Mandate</h3>
-        <p style="margin-bottom:14px;">
-          The Grassroot Innovations Talent Hunt (GITH) is initiated under DICON to discover, evaluate, and nurture Nigerian innovators, developers, makers, and technology entrepreneurs.
-        </p>
-        <h3 style="color:var(--primary-dark); margin-bottom:8px;">2. Intellectual Property (IP)</h3>
-        <p style="margin-bottom:14px;">
-          Before submitting confidential technical information, applicants should consider appropriate intellectual-property protection. GITH submission does not itself constitute patent, copyright, trademark or other IP registration. Applicants retain full ownership of their intellectual property.
-        </p>
-        <h3 style="color:var(--primary-dark); margin-bottom:8px;">3. Data Privacy & Handling</h3>
-        <p style="margin-bottom:14px;">
-          All personal and technical records are stored securely within Firestore and Firebase Cloud infrastructure under Nigerian data protection compliance. Evaluators access submitted proposals under strict non-disclosure obligations.
-        </p>
+
+      <!-- Segmented Tab Bar inside Mobile App Screen -->
+      <div class="app-policy-tabs-bar" style="display:flex; background:var(--surface, #F8FAFC); border-bottom:1px solid var(--border, #E2E8F0); padding:8px 12px; gap:6px; overflow-x:auto;">
+        <button type="button" class="btn btn-sm btn-app-policy-tab active" data-app-policy="terms" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">Terms & Conditions</button>
+        <button type="button" class="btn btn-sm btn-app-policy-tab" data-app-policy="privacy" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">Privacy Policy</button>
+        <button type="button" class="btn btn-sm btn-app-policy-tab" data-app-policy="about" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">About GITH (11 Sections)</button>
+      </div>
+
+      <div class="screen-wrapper no-nav" id="screen-terms-content" style="padding:16px 20px; font-size:13.5px; line-height:1.65; overflow-y:auto;">
+        <!-- Populated dynamically with live legal content -->
       </div>
     </div>
 
@@ -1015,6 +1013,10 @@
           </div>
           <div class="settings-item" id="set-privacy" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid var(--border);">
             <div style="font-size:14px; font-weight:600;">Privacy Policy</div>
+            <span>→</span>
+          </div>
+          <div class="settings-item" id="set-about" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid var(--border);">
+            <div style="font-size:14px; font-weight:600;">About GITH (Institutional Charter)</div>
             <span>→</span>
           </div>
           <div class="settings-item" id="set-help" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid var(--border);">

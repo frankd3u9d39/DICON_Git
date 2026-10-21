@@ -16,6 +16,7 @@
   
   <!-- Master Landing Page Stylesheet -->
   <link rel="stylesheet" href="/css/landing.css">
+  <link rel="stylesheet" href="/css/legal.css">
 </head>
 <body>
 
@@ -229,6 +230,7 @@
           <div class="about-cta-group">
             <a href="#how-it-works" class="btn-landing btn-landing-primary">Discover Our Mission</a>
             <a href="/dashboard#submit" class="btn-landing btn-landing-amber">Submit an Innovation</a>
+            <a href="#" class="btn-landing btn-landing-outline" data-legal="about" style="border-color:var(--deep-forest); color:var(--deep-forest);">Institutional Charter (11 Sections)</a>
           </div>
         </div>
       </div>
@@ -513,8 +515,9 @@
           <ul class="footer-links-list">
             <li><a href="#contact">Contact Secretariat</a></li>
             <li><a href="#contact">Help & Support</a></li>
-            <li><a href="/register">Privacy Policy</a></li>
-            <li><a href="/register">Terms & Conditions</a></li>
+            <li><a href="#" id="link-footer-privacy" data-legal="privacy">Privacy Policy</a></li>
+            <li><a href="#" id="link-footer-terms" data-legal="terms">Terms & Conditions</a></li>
+            <li><a href="#" id="link-footer-about" data-legal="about">About GITH Charter</a></li>
           </ul>
         </div>
       </div>
@@ -525,7 +528,7 @@
           © <span id="current-year">2026</span> DICON GITH — Grassroot Innovations Talent Hunt. All rights reserved.
         </div>
         <div style="font-size:12px; color:#9CA3AF;">
-          Federal Republic of Nigeria • Institutional Innovation Platform
+          Defence Industries Corporation of Nigeria (DICON)
         </div>
       </div>
     </div>
@@ -584,6 +587,12 @@
         }
       } catch (err) {}
     });
+  </script>
+
+  <!-- Legal Policies & Institutional Content Handler -->
+  <script type="module">
+    import { legalContentService } from '/js/legal-content.js';
+    legalContentService.initTriggers();
   </script>
 </body>
 </html>

@@ -128,9 +128,9 @@ service cloud.firestore {
     match /states/{id}     { allow read: if true; allow write: if isAdmin(); }
     match /lgas/{id}       { allow read: if true; allow write: if isAdmin(); }
 
-    // ---------- settings ----------
+    // ---------- settings (public read for policies, terms, about; admin write) ----------
     match /settings/{id} {
-      allow read: if signedIn();
+      allow read: if true;
       allow write: if isAdmin();
     }
 
