@@ -96,9 +96,9 @@ Responsible Organization: Defence Industries Corporation of Nigeria (DICON)
 
 Official Address: 45 Ahmadu Bello Way, Kaduna, Kaduna State, Nigeria
 
-Support Email: support@dicon-gith.gov.ng
+Support Email: dicongith@gmail.com
 
-Telephone: +234 62 240 100 / +234 800 GITH DICON
+Telephone / Secretariat: +234 703 592 2044
 
 For personal-data matters, contact the designated GITH Privacy Contact identified in the Privacy Policy.
 
@@ -533,6 +533,11 @@ class LegalContentService {
    * Initializes and opens the Universal Legal & Institutional Modal
    */
   async openModal(initialTab = 'privacy') {
+    if (initialTab === 'about') {
+      window.location.href = '/about';
+      return;
+    }
+
     let modalRoot = document.getElementById('gith-legal-modal');
     if (!modalRoot) {
       modalRoot = document.createElement('div');
@@ -546,8 +551,8 @@ class LegalContentService {
                 <img src="/assets/logo.png" alt="DICON GITH Emblem" class="gith-legal-emblem-img" onerror="this.onerror=null; this.src='assets/logo.png';">
               </div>
               <div>
-                <h2 id="gith-legal-modal-title" class="gith-legal-header-title">Institutional Charter & Legal Policies</h2>
-                <div class="gith-legal-header-sub">Defence Industries Corporation of Nigeria (DICON) • GITH Portal</div>
+                <h2 id="gith-legal-modal-title" class="gith-legal-header-title">Institutional Legal Policies</h2>
+                <div class="gith-legal-header-sub">Defence Industries Corporation of Nigeria (DICON) • Official Portal</div>
               </div>
             </div>
             <button id="gith-legal-modal-close" class="gith-legal-close-btn" aria-label="Close modal">
@@ -565,10 +570,9 @@ class LegalContentService {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
               <span>Terms & Conditions</span>
             </button>
-            <button class="gith-legal-tab" data-tab="about">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-              <span>About GITH (11 Sections)</span>
-            </button>
+            <a href="/about" class="gith-legal-tab" style="margin-left:auto; color:var(--deep-forest, #0A3323); text-decoration:none; font-weight:700;">
+              <span>Read About GITH Page ↗</span>
+            </a>
           </div>
 
           <!-- Document Meta Bar -->
@@ -584,8 +588,11 @@ class LegalContentService {
 
           <!-- Footer -->
           <div class="gith-legal-modal-footer">
-            <div style="font-size:11px; color:#6B7280;">
-              Governing Law: Laws of the Federal Republic of Nigeria
+            <div style="font-size:12px; color:#4B5563;">
+              <span>Laws of Federal Republic of Nigeria • Support: </span>
+              <a href="mailto:dicongith@gmail.com" style="color:#0A3323; font-weight:700; text-decoration:underline;">dicongith@gmail.com</a>
+              <span> | </span>
+              <a href="tel:+2347035922044" style="color:#0A3323; font-weight:700; text-decoration:underline;">+234 703 592 2044</a>
             </div>
             <div style="display:flex; gap:10px;">
               <button type="button" class="btn-gith-legal-print" id="btn-gith-legal-print">
@@ -612,7 +619,7 @@ class LegalContentService {
         window.print();
       };
 
-      modalRoot.querySelectorAll('.gith-legal-tab').forEach(tabBtn => {
+      modalRoot.querySelectorAll('.gith-legal-tab[data-tab]').forEach(tabBtn => {
         tabBtn.onclick = () => {
           this.switchTab(tabBtn.getAttribute('data-tab'));
         };
@@ -629,7 +636,7 @@ class LegalContentService {
     const modalRoot = document.getElementById('gith-legal-modal');
     if (!modalRoot) return;
 
-    modalRoot.querySelectorAll('.gith-legal-tab').forEach(btn => {
+    modalRoot.querySelectorAll('.gith-legal-tab[data-tab]').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabType);
     });
 
@@ -674,6 +681,11 @@ class LegalContentService {
         type = 'about';
       } else if (target.id.includes('privacy')) {
         type = 'privacy';
+      }
+
+      if (type === 'about') {
+        window.location.href = '/about';
+        return;
       }
 
       this.openModal(type);

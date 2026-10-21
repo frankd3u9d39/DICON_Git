@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About GITH — Defence Industries Corporation of Nigeria (DICON)</title>
+  <meta name="description" content="Discover the institutional charter, mandate, and 9-stage innovation development pathway of the Grassroot Innovations Talent Hunt (GITH).">
+  
+  <!-- Favicon & Brand Icons -->
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+
+  <!-- Google Fonts: DM Serif Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Master Stylesheets -->
+  <link rel="stylesheet" href="/css/landing.css">
+  <link rel="stylesheet" href="/css/legal.css">
+
+  <style>
+    /* Dedicated About GITH Page Enhancements */
+    .about-hero {
+      background: linear-gradient(135deg, #072418 0%, #0A3323 50%, #0F5132 100%);
+      color: #FFFFFF;
+      padding: 90px 0 70px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid #D97706;
+    }
+    .about-hero::before {
+      content: "";
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(217, 119, 6, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .about-emblem-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+    .about-emblem-wrap img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 2px;
+    }
+    .about-emblem-wrap span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FEF3C7;
+    }
+    .about-hero-title {
+      font-family: var(--font-serif, "DM Serif Display", serif);
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.15;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      max-width: 860px;
+    }
+    .about-hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 760px;
+      margin-bottom: 36px;
+    }
+    .about-hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .about-nav-quickbar {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E2E8F0;
+      position: sticky;
+      top: 72px;
+      z-index: 90;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+    .about-quickbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px 0;
+      scrollbar-width: none;
+    }
+    .about-quickbar-inner::-webkit-scrollbar {
+      display: none;
+    }
+    .about-quick-pill {
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      background: #F1F5F9;
+      padding: 6px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .about-quick-pill:hover {
+      background: #0A3323;
+      color: #FFFFFF;
+    }
+
+    /* Section Typography & Cards */
+    .about-section {
+      padding: 60px 0;
+      border-bottom: 1px solid #F1F5F9;
+    }
+    .about-section-header {
+      margin-bottom: 32px;
+    }
+    .about-section-number {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #D97706;
+      background: #FEF3C7;
+      padding: 4px 12px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .about-section-title {
+      font-family: var(--font-serif, "DM Serif Display", serif);
+      font-size: clamp(26px, 3.5vw, 36px);
+      color: #0A3323;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .about-section-desc {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #475569;
+      max-width: 820px;
+    }
+
+    /* Pillars Grid */
+    .about-pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .about-pillar-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .about-pillar-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(10, 51, 35, 0.08);
+      border-color: #BBF7D0;
+    }
+    .about-pillar-letter {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: #0A3323;
+      color: #D97706;
+      font-weight: 800;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .about-pillar-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .about-pillar-text {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #64748B;
+    }
+
+    /* Tri-Relationship Grid */
+    .about-tri-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 840px) {
+      .about-tri-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .about-tri-card {
+      background: #F8FAFC;
+      border-top: 4px solid #0A3323;
+      border-radius: 12px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .about-tri-card.highlight {
+      background: #F0FDF4;
+      border-top-color: #D97706;
+    }
+    .about-tri-role {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0A3323;
+      margin-bottom: 8px;
+    }
+    .about-tri-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 12px;
+    }
+    .about-tri-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #475569;
+    }
+
+    /* Pathway Flow */
+    .about-pathway-timeline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 20px 8px;
+      scrollbar-width: thin;
+      margin: 24px 0;
+    }
+    .about-pathway-node {
+      background: #0A3323;
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 110px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(10, 51, 35, 0.2);
+    }
+    .about-pathway-node span:first-child {
+      font-size: 10px;
+      color: #D97706;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .about-pathway-arrow {
+      color: #D97706;
+      font-size: 20px;
+      font-weight: 800;
+      user-select: none;
+    }
+
+    /* Secretariat Contact Banner */
+    .about-contact-card {
+      background: linear-gradient(135deg, #0A3323 0%, #114230 100%);
+      color: #FFFFFF;
+      border-radius: 16px;
+      padding: 44px 40px;
+      margin: 40px 0;
+      box-shadow: 0 20px 40px rgba(10, 51, 35, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    @media (max-width: 840px) {
+      .about-contact-card {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+      }
+    }
+    .about-contact-title {
+      font-family: var(--font-serif, "DM Serif Display", serif);
+      font-size: clamp(24px, 3vw, 34px);
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+    .about-contact-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 24px;
+    }
+    .about-contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .about-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-decoration: none;
+      color: #FFFFFF;
+      transition: all 0.2s ease;
+    }
+    .about-contact-row:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateX(4px);
+    }
+    .about-contact-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #D97706;
+      color: #0A3323;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .about-contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #FEF3C7;
+      margin-bottom: 2px;
+    }
+    .about-contact-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       SECTION 1: SITE HEADER
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="/" class="header-brand" aria-label="DICON GITH Home">
+        <img src="/assets/logo.png" alt="DICON GITH Logo" class="header-logo">
+        <div class="brand-text">
+          <span class="brand-title">DICON GITH</span>
+          <span class="brand-sub">Grassroot Innovations</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/about" class="nav-link active" style="color:var(--deep-forest); font-weight:800;">About GITH</a></li>
+          <li><a href="/#innovation-areas" class="nav-link">Innovation Areas</a></li>
+          <li><a href="/#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="/#opportunities" class="nav-link">Opportunities</a></li>
+          <li><a href="#contact-secretariat" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right Action Items -->
+      <div class="header-actions">
+        <a href="/login" class="header-login-link">Login</a>
+        <a href="/register" class="btn-landing btn-landing-amber">Create Account</a>
+        <button class="mobile-menu-toggle" id="btn-mobile-menu" aria-label="Toggle Navigation Menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-drawer">
+      <a href="/">Home</a>
+      <a href="/about" style="font-weight:800; color:var(--deep-forest);">About GITH (Institutional Charter)</a>
+      <a href="/#innovation-areas">Innovation Areas</a>
+      <a href="/#how-it-works">How It Works</a>
+      <a href="/#opportunities">Opportunities</a>
+      <a href="#contact-secretariat">Contact Secretariat</a>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+        <a href="/login" class="btn-landing btn-landing-outline" style="text-align:center;">Login</a>
+        <a href="/register" class="btn-landing btn-landing-amber" style="text-align:center;">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       SECTION 2: ABOUT HERO BANNER
+       ========================================================================== -->
+  <section class="about-hero">
+    <div class="container">
+      <div class="about-emblem-wrap">
+        <img src="/assets/logo.png" alt="DICON Emblem">
+        <span>Federal Republic of Nigeria • Defence Industries Corporation of Nigeria</span>
+      </div>
+      <h1 class="about-hero-title">Institutional Charter & Operational Framework</h1>
+      <p class="about-hero-sub">
+        Grassroot Innovations Talent Hunt (GITH) is a national initiative systematically discovering, documenting, verifying, and connecting grassroots innovators with Nigeria's defense, industrial, and technology development ecosystems.
+      </p>
+      <div class="about-hero-actions">
+        <a href="#section-introduction" class="btn-landing btn-landing-amber">Read the 11 Sections ↓</a>
+        <a href="/register" class="btn-landing btn-landing-outline" style="color:#FFFFFF; border-color:#FFFFFF;">Join the Talent Hunt →</a>
+        <a href="#contact-secretariat" class="btn-landing btn-landing-outline" style="color:#FEF3C7; border-color:#D97706;">Contact Inquiries Desk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Sticky Jump Bar -->
+  <div class="about-nav-quickbar">
+    <div class="container">
+      <div class="about-quickbar-inner">
+        <span style="font-size:12px; font-weight:800; color:#0A3323; text-transform:uppercase; margin-right:8px;">Jump To:</span>
+        <a href="#section-introduction" class="about-quick-pill">1. Introduction</a>
+        <a href="#section-dicon-role" class="about-quick-pill">2. DICON Role</a>
+        <a href="#section-relationship" class="about-quick-pill">3. Relationship</a>
+        <a href="#section-scope" class="about-quick-pill">4. Capabilities</a>
+        <a href="#section-participants" class="about-quick-pill">5. Who Can Join</a>
+        <a href="#section-pathway" class="about-quick-pill">6. 9-Stage Pathway</a>
+        <a href="#section-vision-mission" class="about-quick-pill">7-9. Vision & Mission</a>
+        <a href="#section-institutional-bridge" class="about-quick-pill">10. Bridge</a>
+        <a href="#section-commitment" class="about-quick-pill">11. Commitment</a>
+        <a href="#contact-secretariat" class="about-quick-pill" style="background:#DCFCE7; color:#166534;">Contact Details</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SECTION 3: THE 11 SECTIONS OF GITH
+       ========================================================================== -->
+  <main class="container" style="padding-top:20px; padding-bottom:60px;">
+
+    <!-- 1. Introduction -->
+    <section class="about-section" id="section-introduction">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 01</span>
+        <h2 class="about-section-title">Introduction to GITH</h2>
+        <p class="about-section-desc">
+          Grassroot Innovations Talent Hunt (GITH) is an innovation discovery and talent development initiative designed to identify, document, assess, nurture, and promote talented innovators, inventors, problem-solvers, developers, researchers, students, artisans, makers, and technology enthusiasts across Nigeria.
+        </p>
+      </div>
+      <div style="background:#F8FAFC; border-left:4px solid #0A3323; padding:20px 24px; border-radius:0 10px 10px 0; margin-top:16px;">
+        <p style="font-size:15px; line-height:1.7; color:#334155; margin:0;">
+          GITH is founded on the recognition that valuable ideas, technical skills, inventive abilities, and practical solutions exist in communities throughout the country. However, many innovators lack access to institutional support, technical expertise, development facilities, mentorship, and networks required to advance their ideas. GITH bridges this gap by establishing a structured pathway through which grassroots innovators are systematically discovered, documented, and connected to national development pipelines.
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. DICON's Institutional Role -->
+    <section class="about-section" id="section-dicon-role">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 02</span>
+        <h2 class="about-section-title">DICON’s Institutional Role & Mandate</h2>
+        <p class="about-section-desc">
+          DICON provides the institutional anchor for GITH, subject to its approved mandate and governance arrangements. GITH serves as a grassroots discovery mechanism, while DICON provides the institutional context for technical assessment, refinement, and engagement with advanced facilities.
+        </p>
+      </div>
+
+      <div class="about-pillars-grid">
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">A</div>
+          <h3 class="about-pillar-title">Institutional Direction & Coordination</h3>
+          <p class="about-pillar-text">Providing strategic governance, institutional alignment, and establishing high standards for talent development matching national technological priorities.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">B</div>
+          <h3 class="about-pillar-title">Technical Assessment & Evaluation</h3>
+          <p class="about-pillar-text">Facilitating access to defense and engineering experts to evaluate functionality, feasibility, build quality, and real-world applicability.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">C</div>
+          <h3 class="about-pillar-title">Innovation Development Pathways</h3>
+          <p class="about-pillar-text">Establishing structured milestones through which promising concepts progress through prototyping, testing, technical refinement, and research collaboration.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">D</div>
+          <h3 class="about-pillar-title">Technical Mentorship & Capacity</h3>
+          <p class="about-pillar-text">Pairing innovators with seasoned engineers, military technologists, and industry specialists to upgrade skills and build production-grade prototypes.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">E</div>
+          <h3 class="about-pillar-title">Infrastructure & Institutional Linkages</h3>
+          <p class="about-pillar-text">Opening authorized access to state-of-the-art workshops, precision laboratories, defense fabrication units, and research facilities.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">F</div>
+          <h3 class="about-pillar-title">Technology Transfer & Application</h3>
+          <p class="about-pillar-text">Supporting pathways for pilot deployment, industrial adoption, intellectual property safeguarding, and potential commercialization.</p>
+        </div>
+        <div class="about-pillar-card">
+          <div class="about-pillar-letter">G</div>
+          <h3 class="about-pillar-title">Innovation Records & Institutional Learning</h3>
+          <p class="about-pillar-text">Maintaining an authenticated nationwide registry of grassroots capabilities to inform policy, research planning, and national self-reliance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Relationship between GITH and DICON -->
+    <section class="about-section" id="section-relationship">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 03</span>
+        <h2 class="about-section-title">The Relationship Between GITH & DICON</h2>
+        <p class="about-section-desc">
+          The synergy operates through a clear division of complementary functions designed to prevent talented inventors from being overlooked.
+        </p>
+      </div>
+
+      <div class="about-tri-grid">
+        <div class="about-tri-card">
+          <div class="about-tri-role">Discovery Arm</div>
+          <h3 class="about-tri-title">GITH Discovers Talent</h3>
+          <p class="about-tri-text">
+            Reaches into communities, technical colleges, makerspaces, and rural clusters across all 36 States and the FCT to identify innovators, document inventions, and register technical capabilities.
+          </p>
+        </div>
+        <div class="about-tri-card highlight">
+          <div class="about-tri-role">Institutional Anchor</div>
+          <h3 class="about-tri-title">DICON Directs & Refines</h3>
+          <p class="about-tri-text">
+            Within its defense and industrial mandate, DICON provides technical scrutiny, access to engineering facilities, mentorship, and high-level evaluation for national security and economic impact.
+          </p>
+        </div>
+        <div class="about-tri-card">
+          <div class="about-tri-role">Ecosystem Enablers</div>
+          <h3 class="about-tri-title">Wider Innovation Network</h3>
+          <p class="about-tri-text">
+            Universities, research institutes, industrial manufacturers, patent agencies, technology hubs, and investors provide specialized resources to scale viable solutions nationwide.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. What GITH Does -->
+    <section class="about-section" id="section-scope">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 04</span>
+        <h2 class="about-section-title">Core Objectives & Capabilities</h2>
+        <p class="about-section-desc">
+          GITH is structured to perform 12 mission-critical activities for Nigerian inventors:
+        </p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">01. Discover Hidden Talent</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Uncovering inventive minds outside major metropolitan tech centers.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">02. Document Prototypes</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Capturing schematics, bill of materials, working mechanisms, and test logs.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">03. Structured National Database</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Maintaining a verified national inventory of indigenous innovations.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">04. Grassroots Participation</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Empowering technical colleges, roadside fabricators, and artisans.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">05. Presentation Platform</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Giving inventors an official, high-visibility platform to showcase solutions.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">06. Rigorous Verification</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Performing preliminary screening, integrity checks, and peer reviews.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">07. Technical Investigation</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Selecting high-potential designs for lab validation and stress-testing.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">08. Development Linkages</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Connecting eligible builders with institutional grants and equipment.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">09. Incubation & Prototyping</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Guiding crude prototypes into refined, commercially viable hardware.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">10. Institutional Collaboration</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Forging ties between defense researchers and local maker communities.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">11. National Spotlights</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Demonstrating Nigerian ingenuity at defense exhibitions and expos.</p>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:18px; border-radius:10px;">
+          <strong style="color:#0A3323;">12. Tech Commercialization</strong>
+          <p style="font-size:13px; color:#64748B; margin-top:6px; line-height:1.5;">Paving pathways toward patenting, mass manufacturing, and adoption.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Who Can Participate -->
+    <section class="about-section" id="section-participants">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 05</span>
+        <h2 class="about-section-title">Who Can Participate?</h2>
+        <p class="about-section-desc">
+          GITH welcomes innovators from all technical backgrounds and walks of life. An innovation does NOT have to be a finished commercial product to qualify!
+        </p>
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">🎓 Students & Young Innovators</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">⚙️ Engineers & Technicians</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">🛠️ Artisans, Fabricators & Welders</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">💡 Independent Inventors & Tinkers</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">🔬 Academic & Applied Researchers</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">💻 Software & Embedded Hardware Builders</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">🌱 Agriculture & Agro-Processing Innovators</span>
+        <span style="background:#FFFFFF; border:1px solid #CBD5E1; padding:10px 18px; border-radius:8px; font-size:14px; font-weight:700; color:#0A3323;">🏫 Technical Colleges & Universities</span>
+      </div>
+    </section>
+
+    <!-- 6. The 9-Stage Pathway -->
+    <section class="about-section" id="section-pathway">
+      <div class="about-section-header">
+        <span class="about-section-number">Section 06</span>
+        <h2 class="about-section-title">The 9-Stage Innovation Development Pathway</h2>
+        <p class="about-section-desc">
+          GITH operates a structured sequence ensuring rigorous evaluation, progressive mentorship, and realistic scaling for every submitted solution:
+        </p>
+      </div>
+
+      <div class="about-pathway-timeline">
+        <div class="about-pathway-node"><span>STAGE 01</span><span>DISCOVER</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 02</span><span>DOCUMENT</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 03</span><span>VERIFY</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 04</span><span>ASSESS</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node" style="background:#D97706; color:#0A3323;"><span style="color:#0A3323;">STAGE 05</span><span>SELECT</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 06</span><span>DEVELOP</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 07</span><span>TEST</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node"><span>STAGE 08</span><span>CONNECT</span></div>
+        <div class="about-pathway-arrow">→</div>
+        <div class="about-pathway-node" style="background:#166534;"><span>STAGE 09</span><span>DEPLOY</span></div>
+      </div>
+
+      <div style="background:#F0FDF4; border:1px solid #BBF7D0; padding:18px 24px; border-radius:10px; font-size:13.5px; color:#166534; line-height:1.6;">
+        <strong>Institutional Progression Note:</strong> Progression across stages is not automatic. Each phase depends on technical readiness, safety standards, assessment scoring, resource availability, and applicable institutional approvals.
+      </div>
+    </section>
+
+    <!-- 7, 8, 9: Vision, Mission & Philosophy -->
+    <section class="about-section" id="section-vision-mission">
+      <div class="about-section-header">
+        <span class="about-section-number">Sections 07 – 09</span>
+        <h2 class="about-section-title">Vision, Mission & Guiding Philosophy</h2>
+      </div>
+
+      <div class="about-tri-grid">
+        <div class="about-tri-card">
+          <div class="about-tri-role">Our Vision</div>
+          <h3 class="about-tri-title">A National Discovery Network</h3>
+          <p class="about-tri-text">
+            To establish a nationwide grassroots innovation discovery network that connects Nigeria’s untapped talent with institutional expertise and opportunities to transform promising ideas into practical solutions.
+          </p>
+        </div>
+        <div class="about-tri-card highlight">
+          <div class="about-tri-role">Our Mission</div>
+          <h3 class="about-tri-title">Structured Pathways to Impact</h3>
+          <p class="about-tri-text">
+            To systematically discover, document, assess, and nurture grassroots innovators across Nigeria while creating structured pathways through which promising innovations access technical guidance, institutional support, mentorship, and wider networks.
+          </p>
+        </div>
+        <div class="about-tri-card">
+          <div class="about-tri-role">Guiding Philosophy</div>
+          <h3 class="about-tri-title">Innovation Knows No Boundary</h3>
+          <p class="about-tri-text">
+            Innovation should be discovered wherever it exists. An innovative solution may emerge from a rural workshop, school lab, or roadside artisan. Its origin should never preclude serious institutional evaluation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 & 11: Institutional Bridge & Commitment -->
+    <section class="about-section" id="section-institutional-bridge">
+      <div class="about-section-header">
+        <span class="about-section-number">Sections 10 & 11</span>
+        <h2 class="about-section-title">From Grassroots to Institutional Reality</h2>
+        <p class="about-section-desc">
+          Building Nigeria's self-reliance by transforming crude grassroots inventions into robust industrial assets.
+        </p>
+      </div>
+
+      <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:28px; box-shadow:0 4px 12px rgba(0,0,0,0.03); line-height:1.7; color:#334155; font-size:15px;">
+        <p>
+          By combining grassroots discovery with institutional coordination and appropriate technical development pathways, GITH contributes directly to a more connected, sovereign, and self-sufficient Nigerian defense and industrial ecosystem.
+        </p>
+        <p style="margin-bottom:0;">
+          <strong>Our Commitment:</strong> GITH promotes an innovation discovery process that is transparent, accessible, intellectually safeguarded, and focused on practical, high-impact problem solving for the Federal Republic of Nigeria.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         OFFICIAL CONTACT & INQUIRIES DESK
+         ========================================================================== -->
+    <div class="about-contact-card" id="contact-secretariat">
+      <div>
+        <div style="display:inline-block; font-size:11px; font-weight:800; background:#D97706; color:#0A3323; padding:4px 10px; border-radius:4px; text-transform:uppercase; margin-bottom:12px;">Official Secretariat</div>
+        <h2 class="about-contact-title">Contact DICON GITH Desk</h2>
+        <p class="about-contact-desc">
+          For institutional inquiries, patent assistance, innovator onboarding, technical hub partnerships, or general queries, reach out directly to the Programme Secretariat:
+        </p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="mailto:dicongith@gmail.com" class="btn-landing btn-landing-amber" style="padding:10px 20px;">Email Secretariat</a>
+          <a href="tel:+2347035922044" class="btn-landing btn-landing-outline" style="color:#FFFFFF; border-color:#FFFFFF; padding:10px 20px;">Call Hotline</a>
+          <a href="/register" class="btn-landing btn-landing-outline" style="color:#FEF3C7; border-color:#D97706; padding:10px 20px;">Create Account</a>
+        </div>
+      </div>
+
+      <div class="about-contact-items">
+        <a href="mailto:dicongith@gmail.com" class="about-contact-row">
+          <div class="about-contact-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <div>
+            <div class="about-contact-label">Official Email</div>
+            <div class="about-contact-value">dicongith@gmail.com</div>
+          </div>
+        </a>
+
+        <a href="tel:+2347035922044" class="about-contact-row">
+          <div class="about-contact-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <div>
+            <div class="about-contact-label">Hotline & WhatsApp Support</div>
+            <div class="about-contact-value">+234 703 592 2044</div>
+          </div>
+        </a>
+
+        <div class="about-contact-row" style="cursor:default;">
+          <div class="about-contact-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </div>
+          <div>
+            <div class="about-contact-label">Anchor Institution</div>
+            <div class="about-contact-value">DICON HQ, 45 Ahmadu Bello Way, Kaduna, Nigeria</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       SECTION 4: FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Brand Summary Column -->
+        <div class="footer-brand-wrap">
+          <div class="footer-logo-row">
+            <img src="/assets/logo.png" alt="DICON GITH Logo" class="footer-logo">
+            <div>
+              <div class="footer-brand-title">DICON GITH</div>
+              <div class="footer-brand-sub">Grassroot Innovations</div>
+            </div>
+          </div>
+          <p class="footer-desc">
+            Discovering Nigeria's innovators from the grassroots. From Ideas to Impact.
+          </p>
+          <div style="margin-top:14px; font-size:13px; color:#94A3B8;">
+            Direct Secretariat Inquiries:<br>
+            <strong style="color:#FEF3C7;">dicongith@gmail.com</strong> • <strong style="color:#FEF3C7;">+234 703 592 2044</strong>
+          </div>
+        </div>
+
+        <!-- Column 1: Explore -->
+        <div>
+          <h4 class="footer-col-title">Explore</h4>
+          <ul class="footer-links-list">
+            <li><a href="/about">About GITH</a></li>
+            <li><a href="/#innovation-areas">Innovation Areas</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="/#opportunities">Innovation Spotlight</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Participate -->
+        <div>
+          <h4 class="footer-col-title">Participate</h4>
+          <ul class="footer-links-list">
+            <li><a href="/register">Create Profile</a></li>
+            <li><a href="/dashboard#submit">Submit Innovation</a></li>
+            <li><a href="/login">Login to Portal</a></li>
+            <li><a href="/dashboard#innovations">My Applications</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Information & Contact -->
+        <div>
+          <h4 class="footer-col-title">Information & Contact</h4>
+          <ul class="footer-links-list">
+            <li><a href="#contact-secretariat">Contact Secretariat</a></li>
+            <li><a href="mailto:dicongith@gmail.com">Email: dicongith@gmail.com</a></li>
+            <li><a href="tel:+2347035922044">Phone: +234 703 592 2044</a></li>
+            <li><a href="#" id="link-footer-privacy" data-legal="privacy">Privacy Policy</a></li>
+            <li><a href="#" id="link-footer-terms" data-legal="terms">Terms & Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom-bar">
+        <div>
+          © <span id="current-year">2026</span> DICON GITH — Grassroot Innovations Talent Hunt. All rights reserved.
+        </div>
+        <div style="font-size:12px; color:#9CA3AF;">
+          Defence Industries Corporation of Nigeria (DICON)
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { legalContentService } from './js/legal-content.js';
+    legalContentService.initTriggers();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('btn-mobile-menu');
+    const drawer = document.getElementById('mobile-drawer');
+    if (menuBtn && drawer) {
+      menuBtn.addEventListener('click', () => {
+        drawer.classList.toggle('active');
+        menuBtn.textContent = drawer.classList.contains('active') ? '✕' : '☰';
+      });
+    }
+
+    // Dynamic Year
+    const yearEl = document.getElementById('current-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -58,6 +58,8 @@ const server = http.createServer((req, res) => {
     reqPath = '/login.html';
   } else if (reqPath === '/register') {
     reqPath = '/register.html';
+  } else if (reqPath === '/about') {
+    reqPath = '/about.html';
   } else if (reqPath === '/forgot-password') {
     reqPath = '/forgot-password.html';
   } else if (reqPath === '/dashboard' || reqPath.startsWith('/dashboard/')) {

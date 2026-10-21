@@ -54,22 +54,51 @@
     <!-- Right Registration Form Panel -->
     <main class="auth-form-panel">
       <div class="auth-form-container">
+        <!-- Mobile Brand Header -->
+        <div class="auth-mobile-brand">
+          <a href="/" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+            <img src="/assets/logo.png" alt="DICON GITH Logo" style="height:40px; width:auto; background:#fff; border-radius:6px; padding:2px;">
+            <div>
+              <div style="font-size:16px; font-weight:800; color:#0A3323; line-height:1.1;">DICON GITH</div>
+              <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#D97706; letter-spacing:0.06em;">Grassroot Innovations</div>
+            </div>
+          </a>
+        </div>
+
         <div class="auth-form-header">
           <h2 class="auth-title">Create Account</h2>
           <p class="auth-subtext">Register as a grassroots innovator to submit your prototypes.</p>
+        </div>
+
+        <!-- Stepper Progress Bar -->
+        <div class="reg-stepper-wrap" aria-label="Registration Progress">
+          <div class="reg-stepper-progress">
+            <div class="reg-stepper-bar" id="reg-progress-bar" style="width: 50%;"></div>
+          </div>
+          <div class="reg-stepper-badges">
+            <span class="reg-stepper-pill active" id="badge-step-1">
+              <span class="reg-step-num">1</span>
+              <span>Personal Details</span>
+            </span>
+            <span class="reg-stepper-pill" id="badge-step-2">
+              <span class="reg-step-num">2</span>
+              <span>Region & Security</span>
+            </span>
+          </div>
         </div>
 
         <!-- Feedback Banners -->
         <div id="auth-error-banner" class="auth-banner-error" role="alert"></div>
 
         <form id="register-form" novalidate>
-          <div class="form-group">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" id="fullName" class="form-control" placeholder="e.g. Amina Yusuf or Engr. David Okafor" required>
-            <div class="form-error-msg" id="name-error">Please enter your full name.</div>
-          </div>
+          <!-- STEP 1: Personal & Contact Details -->
+          <div class="reg-step-panel active" id="step-panel-1">
+            <div class="form-group">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input type="text" id="fullName" class="form-control" placeholder="e.g. Amina Yusuf or Engr. David Okafor" required autocomplete="name">
+              <div class="form-error-msg" id="name-error">Please enter your full name (minimum 3 characters).</div>
+            </div>
 
-          <div class="form-row">
             <div class="form-group">
               <label for="email" class="form-label">Email Address</label>
               <input type="email" id="email" class="form-control" placeholder="name@domain.com" required autocomplete="email">
@@ -77,66 +106,87 @@
             </div>
 
             <div class="form-group">
-              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <label for="phoneNumber" class="form-label">Phone Number (WhatsApp preferred)</label>
               <input type="tel" id="phoneNumber" class="form-control" placeholder="0801 234 5678" required autocomplete="tel">
-              <div class="form-error-msg" id="phone-error">Phone number is required.</div>
+              <div class="form-error-msg" id="phone-error">Phone number is required (min 10 digits).</div>
             </div>
+
+            <button type="button" id="btn-next-step" class="btn-primary-action" style="margin-top:10px;">
+              <span>Continue to Region & Security</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
           </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="state" class="form-label">State of Residence</label>
-              <select id="state" class="form-control" required>
-                <option value="">Select State</option>
-              </select>
-              <div class="form-error-msg" id="state-error">Please select your state.</div>
-            </div>
-
-            <div class="form-group">
-              <label for="lga" class="form-label">Local Govt Area (LGA)</label>
-              <input type="text" id="lga" class="form-control" placeholder="e.g. Ikeja, Zaria, Kano Municipal" required>
-              <div class="form-error-msg" id="lga-error">LGA is required.</div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="password" class="form-label">Password</label>
-              <div class="form-input-wrap">
-                <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password" aria-describedby="password-error">
-                <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">Show</button>
+          <!-- STEP 2: Location & Password Security -->
+          <div class="reg-step-panel" id="step-panel-2">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="state" class="form-label">State of Residence</label>
+                <select id="state" class="form-control" required>
+                  <option value="">Select State</option>
+                </select>
+                <div class="form-error-msg" id="state-error">Please select your state.</div>
               </div>
-              <div class="form-error-msg" id="password-error" style="display:none;">Minimum 8 characters required.</div>
-            </div>
 
-            <div class="form-group">
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <div class="form-input-wrap">
-                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password" aria-describedby="confirm-error">
-                <button type="button" id="toggle-confirm" class="password-toggle-btn" aria-label="Toggle confirm password visibility">Show</button>
+              <div class="form-group">
+                <label for="lga" class="form-label">Local Govt Area (LGA)</label>
+                <input type="text" id="lga" class="form-control" placeholder="e.g. Ikeja, Zaria" required>
+                <div class="form-error-msg" id="lga-error">LGA is required.</div>
               </div>
-              <div class="form-error-msg" id="confirm-error" style="display:none;">Passwords must match.</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="form-input-wrap">
+                  <input type="password" id="password" class="form-control" placeholder="Min. 8 characters" required autocomplete="new-password">
+                  <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">Show</button>
+                </div>
+                <div class="form-error-msg" id="password-error" style="display:none;">Minimum 8 characters required.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <div class="form-input-wrap">
+                  <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password">
+                  <button type="button" id="toggle-confirm" class="password-toggle-btn" aria-label="Toggle confirm password visibility">Show</button>
+                </div>
+                <div class="form-error-msg" id="confirm-error" style="display:none;">Passwords must match.</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top:2px; margin-bottom:20px;">
+              <label class="checkbox-wrap" style="align-items:flex-start;">
+                <input type="checkbox" id="terms-consent" required style="margin-top:3px;">
+                <span style="font-size:12px; line-height:1.5;">
+                  I declare that my submissions represent my original or authorized work, and I agree to the GITH <a href="#" data-legal="privacy" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Privacy Policy</a> and <a href="#" data-legal="terms" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Participation Terms</a>.
+                </span>
+              </label>
+              <div class="form-error-msg" id="terms-error" style="display:none;">You must accept the participation terms.</div>
+            </div>
+
+            <div class="reg-step-actions">
+              <button type="button" id="btn-prev-step" class="btn-secondary-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Back</span>
+              </button>
+              <button type="submit" id="submit-btn" class="btn-primary-action" style="flex:1;">
+                <span id="btn-text">Create Account</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
             </div>
           </div>
-
-          <div class="form-group" style="margin-top:4px; margin-bottom:24px;">
-            <label class="checkbox-wrap" style="align-items:flex-start;">
-              <input type="checkbox" id="terms-consent" required style="margin-top:3px;">
-              <span style="font-size:12px; line-height:1.5;">
-                I declare that my submissions represent my original or authorized work, and I agree to the GITH <a href="#" data-legal="privacy" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Privacy Policy</a> and <a href="#" data-legal="terms" style="color:var(--deep-forest, #0A3323); font-weight:700; text-decoration:underline;">Participation Terms</a>.
-              </span>
-            </label>
-            <div class="form-error-msg" id="terms-error" style="display:none;">You must accept the participation terms.</div>
-          </div>
-
-          <button type="submit" id="submit-btn" class="btn-primary-action">
-            <span id="btn-text">Create Account</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
         </form>
 
         <div class="auth-footer-prompt">
           Already have an account? <a href="/login">Sign in</a>
+        </div>
+
+        <!-- Secretariat Contact Assistance -->
+        <div class="auth-help-contact" style="margin-top:20px; padding:12px 14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; font-size:12px; color:#64748B; text-align:center;">
+          Need assistance? Contact DICON Secretariat:<br>
+          <a href="mailto:dicongith@gmail.com" style="color:#0A3323; font-weight:700;">dicongith@gmail.com</a> • 
+          <a href="tel:+2347035922044" style="color:#0A3323; font-weight:700;">+234 703 592 2044</a>
         </div>
       </div>
     </main>
@@ -199,17 +249,23 @@
     const confirmError = document.getElementById('confirm-error');
     const termsError = document.getElementById('terms-error');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorBanner.style.display = 'none';
+    // Progressive 2-Step Form Controls
+    const stepPanel1 = document.getElementById('step-panel-1');
+    const stepPanel2 = document.getElementById('step-panel-2');
+    const btnNextStep = document.getElementById('btn-next-step');
+    const btnPrevStep = document.getElementById('btn-prev-step');
+    const progressBar = document.getElementById('reg-progress-bar');
+    const badgeStep1 = document.getElementById('badge-step-1');
+    const badgeStep2 = document.getElementById('badge-step-2');
 
-      let hasError = false;
+    function validateStep1() {
+      let valid = true;
 
       // Validate Full Name
       if (!fullNameInput.value.trim() || fullNameInput.value.trim().length < 3) {
         fullNameInput.classList.add('is-invalid');
         nameError.style.display = 'block';
-        hasError = true;
+        valid = false;
       } else {
         fullNameInput.classList.remove('is-invalid');
         nameError.style.display = 'none';
@@ -222,12 +278,12 @@
         emailInput.classList.add('is-invalid');
         emailError.textContent = 'Please enter a valid email address.';
         emailError.style.display = 'block';
-        hasError = true;
+        valid = false;
       } else if (emailVal.toLowerCase() === 'admin@dicon.gov.ng' || emailVal.toLowerCase().endsWith('@dicon.gov.ng')) {
         emailInput.classList.add('is-invalid');
         emailError.textContent = 'Official @dicon.gov.ng emails cannot register for public innovator accounts.';
         emailError.style.display = 'block';
-        hasError = true;
+        valid = false;
       } else {
         emailInput.classList.remove('is-invalid');
         emailError.style.display = 'none';
@@ -238,11 +294,58 @@
       if (!cleanPhone || cleanPhone.length < 10) {
         phoneInput.classList.add('is-invalid');
         phoneError.style.display = 'block';
-        hasError = true;
+        valid = false;
       } else {
         phoneInput.classList.remove('is-invalid');
         phoneError.style.display = 'none';
       }
+
+      return valid;
+    }
+
+    if (btnNextStep) {
+      btnNextStep.addEventListener('click', () => {
+        errorBanner.style.display = 'none';
+        if (validateStep1()) {
+          stepPanel1.classList.remove('active');
+          stepPanel2.classList.add('active');
+          badgeStep1.classList.remove('active');
+          badgeStep1.classList.add('completed');
+          badgeStep2.classList.add('active');
+          progressBar.style.width = '100%';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    if (btnPrevStep) {
+      btnPrevStep.addEventListener('click', () => {
+        errorBanner.style.display = 'none';
+        stepPanel2.classList.remove('active');
+        stepPanel1.classList.add('active');
+        badgeStep2.classList.remove('active');
+        badgeStep1.classList.remove('completed');
+        badgeStep1.classList.add('active');
+        progressBar.style.width = '50%';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+
+      // Ensure Step 1 is valid
+      if (!validateStep1()) {
+        stepPanel2.classList.remove('active');
+        stepPanel1.classList.add('active');
+        badgeStep2.classList.remove('active');
+        badgeStep1.classList.add('active');
+        progressBar.style.width = '50%';
+        return;
+      }
+
+      let hasError = false;
 
       // Validate State
       if (!stateSelect.value) {
@@ -300,7 +403,7 @@
       try {
         await authService.register({
           fullName: fullNameInput.value.trim(),
-          email: emailVal,
+          email: emailInput.value.trim(),
           phoneNumber: phoneInput.value.trim(),
           password: passInput.value,
           state: stateSelect.value,

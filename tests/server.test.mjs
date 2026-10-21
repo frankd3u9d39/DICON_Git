@@ -56,6 +56,10 @@ test('Server: Starts and closes cleanly for test suite', async (t) => {
   assert.equal(forgotRes.statusCode, 200);
   assert.match(forgotRes.body, /Reset Password/i);
 
+  const aboutRes = await makeRequest('/about');
+  assert.equal(aboutRes.statusCode, 200);
+  assert.match(aboutRes.body, /About GITH|Institutional Charter/i);
+
   const dashRes = await makeRequest('/dashboard');
   assert.equal(dashRes.statusCode, 200);
   assert.match(dashRes.body, /Innovator Portal/i);
