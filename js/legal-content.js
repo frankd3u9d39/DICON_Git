@@ -417,7 +417,9 @@ class LegalContentService {
       // Main Document Header
       if (i === 0 && line.toUpperCase().includes('DICON') || line.startsWith('ABOUT GITH')) {
         html += `<div class="legal-doc-banner">
-          <div class="legal-doc-emblem">★</div>
+          <div class="legal-doc-emblem">
+            <img src="/assets/logo.png" alt="DICON GITH Emblem" class="legal-doc-emblem-img" onerror="this.onerror=null; this.src='assets/logo.png';">
+          </div>
           <div>
             <h1 class="legal-doc-main-title">${this.escapeHtml(line)}</h1>
             <div class="legal-doc-sub">Federal Republic of Nigeria • Defence Industries Corporation of Nigeria</div>
@@ -540,7 +542,9 @@ class LegalContentService {
         <div class="gith-legal-modal" role="dialog" aria-modal="true" aria-labelledby="gith-legal-modal-title">
           <div class="gith-legal-modal-header">
             <div style="display:flex; align-items:center; gap:12px;">
-              <div class="gith-legal-emblem-badge">★</div>
+              <div class="gith-legal-emblem-badge">
+                <img src="/assets/logo.png" alt="DICON GITH Emblem" class="gith-legal-emblem-img" onerror="this.onerror=null; this.src='assets/logo.png';">
+              </div>
               <div>
                 <h2 id="gith-legal-modal-title" class="gith-legal-header-title">Institutional Charter & Legal Policies</h2>
                 <div class="gith-legal-header-sub">Defence Industries Corporation of Nigeria (DICON) • GITH Portal</div>
