@@ -608,6 +608,9 @@ class AppController {
     document.getElementById('edit-state').value = user.state || '';
     document.getElementById('edit-lga').value = user.lga || '';
     document.getElementById('edit-community').value = user.community || '';
+    if (document.getElementById('edit-postcode')) {
+      document.getElementById('edit-postcode').value = user.postcode || '';
+    }
     document.getElementById('edit-occupation').value = user.occupation || '';
     document.getElementById('edit-institution').value = user.institution || '';
     document.getElementById('edit-bio').value = user.bio || '';
@@ -623,6 +626,7 @@ class AppController {
     const state = document.getElementById('edit-state').value;
     const lga = document.getElementById('edit-lga').value.trim();
     const community = document.getElementById('edit-community').value.trim();
+    const postcode = document.getElementById('edit-postcode')?.value?.trim() || '';
     const occupation = document.getElementById('edit-occupation').value.trim();
     const institution = document.getElementById('edit-institution').value.trim();
     const bio = document.getElementById('edit-bio').value.trim();
@@ -639,6 +643,7 @@ class AppController {
       state,
       lga,
       community,
+      postcode,
       occupation,
       institution,
       bio,
@@ -885,6 +890,7 @@ class AppController {
       category: document.getElementById('inno-category').value,
       state: document.getElementById('inno-state').value,
       lga: document.getElementById('inno-lga').value.trim(),
+      postcode: document.getElementById('inno-postcode')?.value?.trim() || '',
       teamName: document.getElementById('inno-team').value.trim(),
       problemDescription: document.getElementById('inno-prob-desc').value.trim(),
       targetUsers: document.getElementById('inno-prob-users').value.trim(),
@@ -907,6 +913,9 @@ class AppController {
     if (data.category) document.getElementById('inno-category').value = data.category;
     if (data.state) document.getElementById('inno-state').value = data.state;
     if (data.lga) document.getElementById('inno-lga').value = data.lga;
+    if (data.postcode && document.getElementById('inno-postcode')) {
+      document.getElementById('inno-postcode').value = data.postcode;
+    }
     if (data.teamName) document.getElementById('inno-team').value = data.teamName;
     if (data.problemDescription) document.getElementById('inno-prob-desc').value = data.problemDescription;
     if (data.targetUsers) document.getElementById('inno-prob-users').value = data.targetUsers;

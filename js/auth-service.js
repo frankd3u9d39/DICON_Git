@@ -250,7 +250,7 @@ class AuthService {
    * Register a new Innovator account
    * Note: Public registration ALWAYS assigns role: 'innovator'
    */
-  async register({ fullName, email, phoneNumber, phone, password, state, lga }) {
+  async register({ fullName, email, phoneNumber, phone, password, state, lga, postcode }) {
     await this.init();
 
     const normalizedEmail = (email || '').trim().toLowerCase();
@@ -311,6 +311,7 @@ class AuthService {
       phoneNumber: (phoneNumber || phone || '').trim(),
       state: state || '',
       lga: lga || '',
+      postcode: postcode || '',
       community: '',
       role: 'innovator', // Strictly enforced
       isActive: true,

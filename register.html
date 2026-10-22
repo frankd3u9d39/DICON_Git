@@ -135,6 +135,23 @@
               </div>
             </div>
 
+            <!-- NIPOST National Digital Alphanumeric Postcode (NDAPS) -->
+            <div class="form-group" style="margin-bottom:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; flex-wrap:wrap; gap:4px;">
+                <label for="postcode" class="form-label" style="margin-bottom:0;">
+                  Digital Postcode (NDAPS) <span style="font-weight:400; color:var(--muted-gray); font-size:11px;">(Optional)</span>
+                </label>
+                <a href="https://postcode.gov.ng/find" target="_blank" rel="noopener noreferrer" style="font-size:11.5px; font-weight:700; color:var(--deep-forest, #0A3323); text-decoration:underline; display:inline-flex; align-items:center; gap:4px;">
+                  <span>Lookup on NIPOST (postcode.gov.ng)</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+              </div>
+              <input type="text" id="postcode" class="form-control" placeholder="e.g. FC 02 A09 DB 09" maxlength="18">
+              <p style="font-size:11px; color:var(--muted-gray); margin-top:4px; line-height:1.4;">
+                Nigeria's 11-character digital alphanumeric postcode (NDAPS) pinpoints your exact workshop, hub, or residence for verified field inspections. Checking is 100% free on NIPOST.
+              </p>
+            </div>
+
             <div class="form-row">
               <div class="form-group">
                 <label for="password" class="form-label">Password</label>
@@ -407,7 +424,8 @@
           phoneNumber: phoneInput.value.trim(),
           password: passInput.value,
           state: stateSelect.value,
-          lga: lgaInput.value.trim()
+          lga: lgaInput.value.trim(),
+          postcode: document.getElementById('postcode')?.value?.trim() || ''
         });
 
         btnText.textContent = 'Account Created! Redirecting...';
