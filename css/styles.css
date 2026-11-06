@@ -166,6 +166,56 @@ body {
   background: var(--border);
 }
 
+/* Prominent back arrow styling for all screens */
+.header-back-btn:focus {
+  outline: 2px solid #0A3323;
+  outline-offset: 2px;
+}
+
+/* NIPOST Postcode Lookup Button */
+.btn-nipost-lookup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  background: #0A3323;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-nipost-lookup:hover {
+  background: #06231B;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 51, 35, 0.25);
+}
+
+.btn-nipost-lookup:active {
+  transform: translateY(0);
+}
+
+/* Show/Hide Password Toggle Button */
+.password-toggle-btn {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #0A3323;
+  transition: all 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
 /* Institutional Logo Badge */
 .gith-logo-badge {
   display: flex;

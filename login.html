@@ -86,7 +86,7 @@
             <label for="password" class="form-label">Password</label>
             <div class="form-input-wrap">
               <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" aria-describedby="password-error">
-              <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">Show</button>
+              <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility" style="padding:6px 10px; font-size:11px; font-weight:700; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; cursor:pointer; color:#0A3323;">👁️ Show</button>
             </div>
             <div class="form-error-msg" id="password-error" style="display:none;">Password is required.</div>
           </div>
@@ -105,8 +105,9 @@
           </button>
         </form>
 
-        <div class="auth-footer-prompt">
-          New to GITH? <a href="/register">Create an account</a>
+        <div class="auth-footer-prompt" style="margin-top:18px; padding:14px; background:#f1f5f9; border-radius:8px; border:1px solid #cbd5e2;">
+          <strong style="color:#0A3323;">New to GITH?</strong><br>
+          <a href="/register" style="display:inline-block; margin-top:6px; padding:8px 16px; background:#0A3323; color:#fff; text-decoration:none; border-radius:6px; font-weight:700; font-size:14px;">Create an Account →</a>
         </div>
 
         <div class="auth-help-contact" style="margin-top:20px; padding:12px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; font-size:12px; color:#64748B; text-align:center;">

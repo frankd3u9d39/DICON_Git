@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>DICON GITH — Grassroot Innovations Talent Hunt</title>
   <meta name="description" content="Discovering Nigeria's Innovators from the Grassroots. DICON Grassroot Innovations Talent Hunt (GITH) Phase 1 Application.">
-  
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <!-- App Styles -->
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/legal.css">
@@ -30,14 +28,17 @@
       }
       document.documentElement.style.display = 'none';
     })();
-  </script>
+      document.getElementById('toggle-login-password').addEventListener('click', function() {
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
 </head>
 <body>
-
-
   <!-- Toast Notification Hub -->
   <div id="toast-container" aria-live="polite"></div>
-
   <!-- Modal Sheet Overlay (Future-Ready Features & Confirmations) -->
   <div class="modal-overlay" id="app-modal">
     <div class="modal-sheet">
@@ -51,10 +52,8 @@
       </div>
     </div>
   </div>
-
   <!-- Primary Application Container -->
   <div id="app-container">
-
     <!-- ==========================================
          SCREEN 1: SPLASH SCREEN
          ========================================== -->
@@ -68,14 +67,12 @@
       <p style="font-size:14px; font-weight:700; color:var(--accent-gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Grassroot Innovations Talent Hunt</p>
       <p style="font-size:13px; color:rgba(255,255,255,0.8); max-width:280px; line-height:1.4; margin-bottom:8px;">Discovering Nigeria's Innovators from the Grassroots</p>
       <p style="font-size:12px; font-style:italic; color:rgba(255,255,255,0.6); margin-bottom:36px;">From Ideas to Impact.</p>
-
       <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
         <div style="width:32px; height:32px; border:3px solid rgba(255,255,255,0.2); border-top-color:var(--accent-gold); border-radius:50%; animation:spin 0.8s linear infinite;"></div>
         <span style="font-size:11px; color:rgba(255,255,255,0.6);">Initializing Secure Session...</span>
       </div>
       <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
     </div>
-
     <!-- ==========================================
          SCREEN 2: WELCOME SCREEN
          ========================================== -->
@@ -98,7 +95,6 @@
             From local workshops and community hubs to national technological impact. Submit your innovation today.
           </p>
         </div>
-
         <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; margin:24px 0;">
           <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
             <div style="background:var(--primary-subtle); color:var(--primary); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">✓</div>
@@ -113,14 +109,12 @@
             <div style="font-size:13px; font-weight:600;">National Prototype Development</div>
           </div>
         </div>
-
         <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn btn-primary" id="btn-welcome-start">Get Started</button>
           <button class="btn btn-secondary" id="btn-welcome-login">I Already Have an Account</button>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 3: ONBOARDING (4 SLIDES)
          ========================================== -->
@@ -130,7 +124,6 @@
         <div style="display:flex; justify-content:flex-end; padding:16px 20px;">
           <button id="btn-onboarding-skip" style="background:none; border:none; color:var(--text-muted); font-size:13px; font-weight:600; cursor:pointer;">Skip</button>
         </div>
-
         <!-- Slider Container -->
         <div style="overflow:hidden; width:100%;">
           <div class="onboarding-slider" id="onboarding-slider">
@@ -176,7 +169,6 @@
             </div>
           </div>
         </div>
-
         <!-- Dots & Navigation -->
         <div style="padding:24px; display:flex; flex-direction:column; align-items:center;">
           <div class="onboarding-dots">
@@ -185,12 +177,10 @@
             <span class="onboarding-dot" data-index="2"></span>
             <span class="onboarding-dot" data-index="3"></span>
           </div>
-
           <button class="btn btn-primary" id="btn-onboarding-next">Next</button>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 4: LOGIN
          ========================================== -->
@@ -201,68 +191,57 @@
           <h2 style="font-size:22px; font-weight:800; color:var(--primary-dark); margin-top:14px;">Innovator Sign In</h2>
           <p style="font-size:13px; color:var(--text-secondary);">Enter your credentials to access your GITH dashboard.</p>
         </div>
-
         <form id="form-login">
           <div class="form-group">
             <label class="form-label" for="login-email">Email Address <span class="required">*</span></label>
             <input type="email" class="form-input" id="login-email" required placeholder="e.g. innovator@example.ng">
           </div>
-
           <div class="form-group">
             <label class="form-label" for="login-password">Password <span class="required">*</span></label>
-            <input type="password" class="form-input" id="login-password" required placeholder="••••••••">
+              <button type='button' class='password-toggle-btn' id='toggle-login-password' style='margin-top:6px;'>??? Show</button>
           </div>
-
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <label style="font-size:12px; display:flex; align-items:center; gap:6px; cursor:pointer;">
               <input type="checkbox" id="login-remember"> Remember me
             </label>
             <a href="#" id="link-forgot-password" style="font-size:12px; font-weight:600; color:var(--primary); text-decoration:none;">Forgot Password?</a>
           </div>
-
           <button type="submit" class="btn btn-primary" style="margin-bottom:12px;">Sign In</button>
           <button type="button" class="btn btn-secondary" id="btn-quick-demo-login">Demo Innovator One-Click Sign In</button>
         </form>
-
         <div style="margin-top:auto; padding-top:24px; text-align:center; font-size:13px; color:var(--text-secondary);">
-          Don't have an account? <a href="#" id="link-to-register" style="font-weight:700; color:var(--primary); text-decoration:none;">Register Now</a>
+          Don't have an account? <a href="#register" id="link-to-register" style="font-weight:700; color:var(--primary); text-decoration:none;">Register Now ? ?</a>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 5: REGISTER
          ========================================== -->
     <div class="screen" id="screen-register">
       <div class="screen-wrapper no-nav" style="padding:24px;">
         <div style="margin-bottom:20px;">
-          <button class="header-back-btn" id="btn-register-back">←</button>
+          <button class="header-back-btn" id="btn-register-back" style="width:46px; height:46px; font-size:22px; background:#fff; border:2px solid #0A3323; box-shadow:0 2px 8px rgba(0,0,0,0.1);">←</button>
           <h2 style="font-size:22px; font-weight:800; color:var(--primary-dark); margin-top:14px;">Innovator Registration</h2>
           <p style="font-size:13px; color:var(--text-secondary);">Create your grassroots innovation profile.</p>
           <div style="display:inline-block; margin-top:8px;" class="status-badge submitted">Role: Innovator (Self-Registration)</div>
         </div>
-
         <form id="form-register">
           <div class="form-group">
             <label class="form-label" for="reg-fullname">Full Name <span class="required">*</span></label>
             <input type="text" class="form-input" id="reg-fullname" required placeholder="e.g. Aminu Bello">
           </div>
-
           <div class="form-group">
             <label class="form-label" for="reg-email">Email Address <span class="required">*</span></label>
             <input type="email" class="form-input" id="reg-email" required placeholder="e.g. aminu@example.ng">
           </div>
-
           <div class="form-group">
             <label class="form-label" for="reg-phone">Phone Number <span class="required">*</span></label>
             <input type="tel" class="form-input" id="reg-phone" required placeholder="e.g. +234 803 000 0000">
           </div>
-
           <div class="form-group">
             <label class="form-label" for="reg-password">Password (min 6 characters) <span class="required">*</span></label>
             <input type="password" class="form-input" id="reg-password" minlength="6" required placeholder="••••••••">
           </div>
-
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
             <div class="form-group">
               <label class="form-label" for="reg-state">State of Residence <span class="required">*</span></label>
@@ -275,33 +254,27 @@
               <input type="text" class="form-input" id="reg-lga" required placeholder="e.g. Kaduna North">
             </div>
           </div>
-
           <div class="form-group">
             <label class="form-label" for="reg-community">Community / Ward</label>
             <input type="text" class="form-input" id="reg-community" placeholder="e.g. Unguwan Rimi">
           </div>
-
           <div class="form-group">
             <label class="form-label" for="reg-occupation">Occupation / Vocation</label>
             <input type="text" class="form-input" id="reg-occupation" placeholder="e.g. Hardware Technician, Student, Maker">
           </div>
-
           <div style="margin:16px 0;">
             <label style="font-size:12px; display:flex; align-items:flex-start; gap:8px; line-height:1.4; color:var(--text-secondary); cursor:pointer;">
               <input type="checkbox" id="reg-terms-check" required style="margin-top:2px;">
               <span>I accept the <a href="#" id="link-reg-terms" style="color:var(--primary); font-weight:600;">Terms & Conditions</a> and <a href="#" id="link-reg-privacy" style="color:var(--primary); font-weight:600;">Privacy Policy</a> of the GITH platform.</span>
             </label>
           </div>
-
           <button type="submit" class="btn btn-primary" id="btn-submit-register">Create Account</button>
         </form>
-
         <div style="margin-top:20px; text-align:center; font-size:13px; color:var(--text-secondary);">
           Already registered? <a href="#" id="link-to-login" style="font-weight:700; color:var(--primary); text-decoration:none;">Sign In</a>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 6: FORGOT PASSWORD
          ========================================== -->
@@ -312,7 +285,6 @@
         <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px;">
           Enter your registered email address to receive password reset instructions.
         </p>
-
         <form id="form-forgot">
           <div class="form-group">
             <label class="form-label" for="forgot-email">Registered Email <span class="required">*</span></label>
@@ -322,7 +294,6 @@
         </form>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 7: OTP / EMAIL VERIFICATION
          ========================================== -->
@@ -336,18 +307,15 @@
           We have sent an authentication verification link to:
         </p>
         <div id="verify-user-email" style="font-weight:700; color:var(--primary); margin-bottom:24px; font-size:14px;">user@example.ng</div>
-
         <p style="font-size:12px; color:var(--text-muted); margin-bottom:24px;">
           Please tap the link in the email to activate your account. Check your spam folder if you do not see it.
         </p>
-
         <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn btn-primary" id="btn-verified-refresh">I've Verified My Email</button>
           <button class="btn btn-secondary" id="btn-resend-verification">Resend Email</button>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 8: INSTITUTIONAL CHARTER, TERMS & PRIVACY
          ========================================== -->
@@ -357,19 +325,16 @@
         <h2 id="screen-terms-header-title">Terms & Policies</h2>
         <div style="width:36px;"></div>
       </div>
-
       <!-- Segmented Tab Bar inside Mobile App Screen -->
       <div class="app-policy-tabs-bar" style="display:flex; background:var(--surface, #F8FAFC); border-bottom:1px solid var(--border, #E2E8F0); padding:8px 12px; gap:6px; overflow-x:auto;">
         <button type="button" class="btn btn-sm btn-app-policy-tab active" data-app-policy="terms" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">Terms & Conditions</button>
         <button type="button" class="btn btn-sm btn-app-policy-tab" data-app-policy="privacy" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">Privacy Policy</button>
         <button type="button" class="btn btn-sm btn-app-policy-tab" data-app-policy="about" style="padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;">About GITH (11 Sections)</button>
       </div>
-
       <div class="screen-wrapper no-nav" id="screen-terms-content" style="padding:16px 20px; font-size:13.5px; line-height:1.65; overflow-y:auto;">
         <!-- Populated dynamically with live legal content -->
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 9: HOME DASHBOARD
          ========================================== -->
@@ -391,7 +356,6 @@
           </button>
         </div>
       </div>
-
       <div class="screen-wrapper">
         <!-- Hero Greeting Card -->
         <div class="card card-hero">
@@ -400,13 +364,11 @@
           </div>
           <h2 style="font-size:22px; font-weight:800; margin-bottom:4px;" id="home-greeting">Hello, Innovator</h2>
           <p class="card-subtitle" style="margin-bottom:18px;">Welcome to GITH. Discovering Nigeria's Innovators from the Grassroots.</p>
-          
           <div style="display:flex; gap:10px;">
             <button class="btn btn-accent btn-sm" id="btn-hero-submit" style="flex:1;">Submit Innovation</button>
             <button class="btn btn-outline-white btn-sm" id="btn-hero-apps" style="flex:1;">My Applications</button>
           </div>
         </div>
-
         <!-- Conditional Draft Card -->
         <div class="card card-draft" id="home-draft-card" style="display:none;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -418,7 +380,6 @@
             <button class="btn btn-accent btn-sm" id="btn-resume-draft">Continue</button>
           </div>
         </div>
-
         <!-- My Innovation Journey Status Card (§8) -->
         <div class="card">
           <div class="card-title">
@@ -426,7 +387,6 @@
             <span class="status-badge submitted">Phase 1 Live</span>
           </div>
           <p class="card-subtitle" style="margin-bottom:14px;">National grassroots talent identification stages</p>
-
           <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
             <div style="background:var(--primary-subtle); border:1px solid rgba(15,81,50,0.2); border-radius:var(--radius-sm); padding:10px; text-align:center;">
               <div style="font-size:14px; font-weight:800; color:var(--primary);">1. Profile</div>
@@ -454,7 +414,6 @@
             </div>
           </div>
         </div>
-
         <!-- Featured GITH Message Card -->
         <div class="card">
           <div style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
@@ -465,7 +424,6 @@
             "Nigeria's technological sovereignty begins in our local communities, fabrication yards, and technical hubs. DICON GITH is your gateway to national scale."
           </p>
         </div>
-
         <!-- Upcoming Opportunities Card -->
         <div class="card">
           <div class="card-title">
@@ -483,7 +441,6 @@
             </div>
           </div>
         </div>
-
         <!-- GITH Statistics Card (§8) -->
         <div class="card">
           <div class="card-title">
@@ -511,7 +468,6 @@
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 10 & 11: PROFILE & EDIT PROFILE
          ========================================== -->
@@ -520,7 +476,6 @@
         <h2>My Innovator Profile</h2>
         <button class="btn btn-secondary btn-sm" id="btn-profile-edit-toggle">Edit</button>
       </div>
-
       <div class="screen-wrapper">
         <!-- Profile Card -->
         <div class="card" style="text-align:center; padding:24px 20px;">
@@ -528,11 +483,9 @@
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" id="profile-avatar" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; border:3px solid var(--primary);">
             <span class="status-badge submitted" style="position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); font-size:9px; white-space:nowrap;">Innovator</span>
           </div>
-
           <h3 style="font-size:18px; font-weight:800;" id="profile-name">Engr. Aminu Bello</h3>
           <p style="font-size:13px; color:var(--text-muted);" id="profile-occupation">Hardware Systems Engineer</p>
           <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;" id="profile-location">Kaduna North, Kaduna State</p>
-
           <!-- Completion Progress Bar -->
           <div style="margin-top:20px; background:var(--surface-alt); padding:12px; border-radius:var(--radius-md);">
             <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:6px;">
@@ -544,7 +497,6 @@
             </div>
           </div>
         </div>
-
         <!-- Personal Details -->
         <div class="card">
           <h4 style="font-size:14px; font-weight:700; margin-bottom:12px; color:var(--primary-dark);">Personal Information</h4>
@@ -573,7 +525,6 @@
             </div>
           </div>
         </div>
-
         <!-- Skills (§9) -->
         <div class="card">
           <h4 style="font-size:14px; font-weight:700; margin-bottom:8px; color:var(--primary-dark);">Skills & Technical Competencies</h4>
@@ -583,7 +534,6 @@
         </div>
       </div>
     </div>
-
     <!-- Edit Profile Subscreen -->
     <div class="screen" id="screen-edit-profile">
       <div class="app-header">
@@ -636,26 +586,23 @@
             <label class="form-label" for="edit-bio">Biography</label>
             <textarea class="form-textarea" id="edit-bio" rows="3"></textarea>
           </div>
-
           <div class="form-group">
             <label class="form-label">Select Your Skills (Multiple)</label>
             <div class="chips-container" id="edit-skills-selector">
               <!-- Rendered dynamically -->
             </div>
           </div>
-
           <button type="submit" class="btn btn-primary" style="margin-top:12px;">Save Profile Changes</button>
         </form>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 12: SUBMIT INNOVATION (MULTI-STEP)
          ========================================== -->
     <div class="screen" id="screen-submit">
       <!-- Stepper Header -->
       <div class="stepper-header">
-        <button class="header-back-btn" id="btn-submit-step-back">←</button>
+        <button class="header-back-btn" id="btn-submit-step-back" style="width:46px; height:46px; font-size:22px; background:#fff; border:2px solid #0A3323; box-shadow:0 2px 8px rgba(0,0,0,0.1);">←</button>
         <div style="text-align:center;">
           <h2 style="font-size:15px; font-weight:800;" id="submit-step-title">1. Innovation Info</h2>
           <span style="font-size:11px; color:var(--text-muted);" id="submit-step-counter">Step 1 of 6</span>
@@ -665,10 +612,8 @@
       <div class="stepper-progress-bar">
         <div class="stepper-progress-fill" id="submit-progress-fill" style="width:16.6%;"></div>
       </div>
-
       <div class="screen-wrapper no-nav" style="padding:20px;">
         <form id="form-submit-innovation">
-
           <!-- STEP 1: INNOVATION INFORMATION -->
           <div class="form-step active" id="step-1">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">Innovation Information</h3>
@@ -676,14 +621,12 @@
               <label class="form-label" for="inno-name">Innovation / Project Name <span class="required">*</span></label>
               <input type="text" class="form-input" id="inno-name" required placeholder="e.g. Solar Cold-Storage Hub">
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-category">Innovation Category <span class="required">*</span></label>
               <select class="form-select" id="inno-category" required>
                 <option value="">Select Category</option>
               </select>
             </div>
-
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
               <div class="form-group">
                 <label class="form-label" for="inno-state">State of Innovation <span class="required">*</span></label>
@@ -694,7 +637,6 @@
                 <input type="text" class="form-input" id="inno-lga" required placeholder="e.g. Zaria">
               </div>
             </div>
-
             <!-- NIPOST Digital Postcode (NDAPS) -->
             <div class="form-group">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:4px;">
@@ -711,13 +653,11 @@
                 Enter your 11-digit NIPOST alphanumeric postcode to pinpoint your project, workshop, or fabrication yard.
               </span>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-team">Team / Organization Name (Optional)</label>
               <input type="text" class="form-input" id="inno-team" placeholder="e.g. AgriTech Innovators Club">
             </div>
           </div>
-
           <!-- STEP 2: PROBLEM -->
           <div class="form-step" id="step-2">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">The Problem Statement</h3>
@@ -725,18 +665,15 @@
               <label class="form-label" for="inno-prob-desc">What problem are you solving? <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-prob-desc" required placeholder="Describe the specific grassroots problem in detail..."></textarea>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-prob-users">Who experiences this problem? <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-prob-users" required placeholder="Describe the targeted communities, businesses, or people..."></textarea>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-prob-importance">Why is this problem important to solve? <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-prob-importance" required placeholder="Economic, health, defense, or social impact..."></textarea>
             </div>
           </div>
-
           <!-- STEP 3: SOLUTION -->
           <div class="form-step" id="step-3">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">The Proposed Solution</h3>
@@ -744,18 +681,15 @@
               <label class="form-label" for="inno-sol-desc">Describe your innovation. <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-sol-desc" required placeholder="Explain your technology, device, algorithm, or methodology..."></textarea>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-sol-how">How does it work? <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-sol-how" required placeholder="Operational mechanism, technical components, inputs, and outputs..."></textarea>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-sol-diff">What makes your innovation different / unique? <span class="required">*</span></label>
               <textarea class="form-textarea" id="inno-sol-diff" required placeholder="Compared to existing tools or foreign alternatives..."></textarea>
             </div>
           </div>
-
           <!-- STEP 4: DEVELOPMENT STAGE -->
           <div class="form-step" id="step-4">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">Development Stage</h3>
@@ -767,14 +701,12 @@
             </div>
             <input type="hidden" id="inno-selected-stage" value="Prototype">
           </div>
-
           <!-- STEP 5: SUPPORTING MATERIAL & MEDIA -->
           <div class="form-step" id="step-5">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">Supporting Media & Documents</h3>
             <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
               Upload photographs, prototype diagrams, or project documents.
             </p>
-
             <div class="form-group">
               <label class="form-label">Innovation / Prototype Photograph</label>
               <div class="upload-zone" id="dropzone-photo">
@@ -785,12 +717,10 @@
               <input type="file" id="file-photo-input" accept="image/*" style="display:none;">
               <div id="photo-preview-container"></div>
             </div>
-
             <div class="form-group">
               <label class="form-label" for="inno-video-link">Demonstration Video Link (YouTube, Drive, or Loom)</label>
               <input type="url" class="form-input" id="inno-video-link" placeholder="https://youtu.be/...">
             </div>
-
             <div class="form-group">
               <label class="form-label">Supporting Document (PDF)</label>
               <div class="upload-zone" id="dropzone-doc">
@@ -802,11 +732,9 @@
               <div id="doc-preview-container"></div>
             </div>
           </div>
-
           <!-- STEP 6: INTELLECTUAL PROPERTY & DECLARATION -->
           <div class="form-step" id="step-6">
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">Intellectual Property & Declaration</h3>
-            
             <div class="form-group">
               <label class="form-label">Have you protected this innovation?</label>
               <div class="chips-container" id="inno-ip-chips">
@@ -814,7 +742,6 @@
               </div>
               <input type="hidden" id="inno-selected-ip" value="Not Yet">
             </div>
-
             <div class="form-group" style="margin-top:16px;">
               <label class="form-label">Do you require intellectual property support?</label>
               <div style="display:flex; gap:16px; margin-top:6px;">
@@ -826,12 +753,10 @@
                 </label>
               </div>
             </div>
-
             <!-- Institutional IP Notice (§10 Step 6) -->
             <div style="background:#FFFBEB; border:1px solid #FCD34D; border-radius:var(--radius-md); padding:12px; margin:16px 0; font-size:12px; color:#92400E; line-height:1.4;">
               <strong>Notice:</strong> Before submitting confidential technical information, applicants should consider appropriate intellectual-property protection. GITH submission does not itself constitute patent, copyright, trademark or other IP registration.
             </div>
-
             <!-- APPLICANT DECLARATION (§11) -->
             <div class="card" style="margin:20px 0 10px 0; padding:16px; background:var(--surface-alt);">
               <h4 style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--primary-dark); margin-bottom:6px;">
@@ -846,7 +771,6 @@
               </label>
             </div>
           </div>
-
           <!-- Stepper Bottom Controls -->
           <div style="display:flex; gap:12px; margin-top:20px;">
             <button type="button" class="btn btn-secondary" id="btn-submit-prev" style="display:none; flex:1;">Back</button>
@@ -856,7 +780,6 @@
         </form>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 13: CONFIRMATION / SUCCESS
          ========================================== -->
@@ -865,24 +788,20 @@
         <div style="width:76px; height:76px; border-radius:50%; background:var(--success-subtle); color:var(--primary); display:flex; align-items:center; justify-content:center; margin:0 auto 20px auto; border:3px solid var(--primary);">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
-
         <h2 style="font-size:22px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">INNOVATION SUBMITTED SUCCESSFULLY</h2>
         <p style="font-size:14px; color:var(--text-secondary); line-height:1.4; margin-bottom:20px;">
           Your innovation has been successfully submitted to GITH.
         </p>
-
         <div style="background:var(--surface); border:2px dashed var(--primary); border-radius:var(--radius-lg); padding:16px; margin-bottom:28px;">
           <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Application Reference Number</div>
           <div style="font-size:20px; font-weight:800; color:var(--primary); margin-top:4px; letter-spacing:1px;" id="confirm-ref-number">GITH-2026-004281</div>
         </div>
-
         <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="btn btn-primary" id="btn-confirm-view-app">View Application</button>
           <button class="btn btn-secondary" id="btn-confirm-home">Go To Dashboard</button>
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 14: MY APPLICATIONS
          ========================================== -->
@@ -891,20 +810,17 @@
         <h2>My Applications</h2>
         <button class="btn btn-primary btn-sm" id="btn-apps-new">+ New</button>
       </div>
-
       <div class="screen-wrapper">
         <div style="padding:16px 18px 6px 18px;">
           <p style="font-size:13px; color:var(--text-secondary);">
             Track all your grassroots innovation proposals submitted to DICON.
           </p>
         </div>
-
         <div id="applications-list-container">
           <!-- Rendered dynamically -->
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 15: APPLICATION STATUS
          ========================================== -->
@@ -914,7 +830,6 @@
         <h2>Application Status</h2>
         <div style="width:36px;"></div>
       </div>
-
       <div class="screen-wrapper">
         <div class="card card-hero">
           <div style="font-size:11px; font-weight:700; color:var(--accent-gold); text-transform:uppercase; letter-spacing:0.8px;">Application Reference</div>
@@ -924,7 +839,6 @@
             <span class="status-badge submitted" id="status-badge-text">SUBMITTED</span>
           </div>
         </div>
-
         <div class="card">
           <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin-bottom:14px;">National Evaluation Pipeline</h4>
           <div class="timeline" id="status-timeline-container">
@@ -933,7 +847,6 @@
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 16: INNOVATION DETAILS (READ-ONLY)
          ========================================== -->
@@ -943,7 +856,6 @@
         <h2>Innovation Details</h2>
         <button class="btn btn-secondary btn-sm" id="btn-details-track">Track</button>
       </div>
-
       <div class="screen-wrapper">
         <div class="card" style="border-left:4px solid var(--primary);">
           <div style="display:flex; justify-content:space-between; align-items:flex-start;">
@@ -959,7 +871,6 @@
             <div><strong>Submitted:</strong> <span id="details-date">Feb 14, 2026</span></div>
           </div>
         </div>
-
         <!-- Problem Card -->
         <div class="card">
           <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:6px;">The Problem</h4>
@@ -969,7 +880,6 @@
             <p style="color:var(--text-secondary); margin-top:2px;" id="details-users"></p>
           </div>
         </div>
-
         <!-- Solution Card -->
         <div class="card">
           <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:6px;">The Solution & Uniqueness</h4>
@@ -983,7 +893,6 @@
             <p style="color:var(--text-secondary); margin-top:2px;" id="details-uniqueness"></p>
           </div>
         </div>
-
         <!-- Stage & IP -->
         <div class="card">
           <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">Technical Maturity & IP</h4>
@@ -998,14 +907,12 @@
             </div>
           </div>
         </div>
-
         <!-- Notice -->
         <div style="margin:12px 18px; font-size:11px; color:var(--text-muted); text-align:center;">
           🔒 Application locked for screening. Edits are disabled in Phase 1.
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 17: NOTIFICATIONS
          ========================================== -->
@@ -1014,14 +921,12 @@
         <h2>Notifications</h2>
         <button class="btn btn-secondary btn-sm" id="btn-notif-mark-all">Mark All Read</button>
       </div>
-
       <div class="screen-wrapper">
         <div id="notifications-list-container">
           <!-- Rendered dynamically -->
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 18: SETTINGS
          ========================================== -->
@@ -1030,7 +935,6 @@
         <h2>Settings & Platform</h2>
         <div style="width:36px;"></div>
       </div>
-
       <div class="screen-wrapper">
         <div class="card" style="padding:10px 0;">
           <div class="settings-item" id="set-edit-profile" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid var(--border);">
@@ -1062,7 +966,6 @@
             <span>🚪</span>
           </div>
         </div>
-
         <!-- Future Architecture Modules (Screens 18-23 §3) -->
         <div class="card">
           <h4 style="font-size:13px; font-weight:800; color:var(--primary-dark); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">
@@ -1079,7 +982,6 @@
         </div>
       </div>
     </div>
-
     <!-- ==========================================
          SCREEN 29: BOTTOM NAVIGATION BAR
          ========================================== -->
@@ -1089,41 +991,59 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span>Home</span>
         </a>
-
         <a href="#" class="nav-item" data-target="screen-applications" id="nav-btn-apps">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
           <span>Applications</span>
         </a>
-
         <!-- Central Highlighted Submit FAB (§29) -->
         <a href="#" class="nav-item nav-item-fab" data-target="screen-submit" id="nav-btn-submit" aria-label="Submit Innovation">
           <div class="nav-fab-btn">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </div>
         </a>
-
         <a href="#" class="nav-item" data-target="screen-notifications" id="nav-btn-notif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           <span>Alerts</span>
           <span class="nav-badge" id="nav-notif-badge" style="display:none;">0</span>
         </a>
-
         <a href="#" class="nav-item" data-target="screen-profile" id="nav-btn-profile">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>Profile</span>
         </a>
       </div>
     </nav>
-
   </div>
-
   <!-- Firebase Web SDK v10 -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js"></script>
-
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
   <!-- Application Logic (ES Module) -->
-  <script type="module" src="js/app.js"></script>
+      const pwd = document.getElementById('login-password');
+      const isPwd = pwd.type === 'password';
+      pwd.type = isPwd ? 'text' : 'password';
+      this.textContent = isPwd ? '??? Hide' : '??? Show';
+    });
+</script>
 </body>
 </html>

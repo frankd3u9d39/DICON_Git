@@ -1,18 +1,1 @@
-{
-  "framework": null,
-  "buildCommand": null,
-  "outputDirectory": null,
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/login", "destination": "/login.html" },
-    { "source": "/register", "destination": "/register.html" },
-    { "source": "/forgot-password", "destination": "/forgot-password.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/dashboard/:path*", "destination": "/dashboard.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/admin/:path*", "destination": "/admin.html" },
-    { "source": "/app", "destination": "/dashboard.html" },
-    { "source": "/app/:path*", "destination": "/dashboard.html" }
-  ]
-}
+﻿{ "framework": "none", "buildCommand": "npm run start", "outputDirectory": ".", "cleanUrls": true, "trailingSlash": false, "rewrites": [ { "source": "/login", "destination": "/login.html" }, { "source": "/register", "destination": "/register.html" }, { "source": "/forgot-password", "destination": "/forgot-password.html" }, { "source": "/dashboard", "destination": "/dashboard.html" }, { "source": "/admin", "destination": "/admin.html" }, { "source": "/app", "destination": "/dashboard.html" }, { "source": "/(.*)", "destination": "/index.html" } ] }
